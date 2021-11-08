@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: bkn-booking
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+      show-sql: false
+  datasource:
+    url: jdbc:postgresql://localhost:5434/bkn-booking
+    username: postgres
+    password: PGFamo2369
+
+server:
+  port: ${PORT:0}
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    service-url:
+      defaultZone: http://bkn-eureka-server:8761/eureka
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 10000
+    httpclient:
+      disableSslValidation: true
+      enabled: false
+    okhttp:
+      enabled: true
+
+info:
+  app:
+    name: '@project.name@'
+    description: '@project.description@'
+    version: '@project.version@'
