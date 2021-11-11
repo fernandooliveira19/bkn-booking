@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -17,7 +15,9 @@ import java.time.LocalDate;
 @Table(name="launch" )
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Launch {
 
     @Id

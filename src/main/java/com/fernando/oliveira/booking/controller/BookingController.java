@@ -41,7 +41,7 @@ public class BookingController {
     public ResponseEntity<DetailBookingResponse> create(@RequestBody @Valid CreateBookingRequest request){
 
       Booking bookingToCreate = bookingMapper.createRequestToEntity(request);
-      Booking bookingCreated = bookingService.create(bookingToCreate);
+      Booking bookingCreated = bookingService.createBooking(bookingToCreate);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new DetailBookingResponse());
 

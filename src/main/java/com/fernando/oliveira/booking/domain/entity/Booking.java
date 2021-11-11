@@ -3,9 +3,7 @@ package com.fernando.oliveira.booking.domain.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -17,7 +15,9 @@ import java.util.List;
 @Table(name="booking" )
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Booking {
 
     @Id
@@ -44,10 +44,10 @@ public class Booking {
     @Column(name="AMOUNT", nullable=false)
     private BigDecimal totalAmount;
 
-    @Column(name="ADULTS", nullable=false)
+    @Column(name="ADULTS")
     private Integer adults;
 
-    @Column(name="CHILDREN", nullable=false)
+    @Column(name="CHILDREN")
     private Integer children;
 
     @Column(name="BOOKING_STATUS", nullable=false)

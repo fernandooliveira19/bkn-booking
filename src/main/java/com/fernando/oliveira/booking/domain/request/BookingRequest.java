@@ -30,14 +30,12 @@ public class BookingRequest implements Serializable {
     @NotNull(message = "Nome é obrigatório")
     private BigDecimal totalAmount;
 
-    @ApiModelProperty(name="adults", value="Quantidade de adultos", example="3", required = true)
-    @NotNull(message = "Quantidade de adultos é obrigatório")
+    @ApiModelProperty(name="adults", value="Quantidade de adultos", example="3")
     @Min(value = 1, message = "Quantidade de adultos deve ser maior que 1")
     @Max(value = 8, message = "Quantidade de adultos deve ser até 8")
     private Integer adults;
 
-    @ApiModelProperty(name="children", value="Quantidade de crianças", example="2", required = true)
-    @NotNull(message = "Quantidade de crianças é obrigatório")
+    @ApiModelProperty(name="children", value="Quantidade de crianças", example="2")
     @Max(value = 8, message = "Quantidade de crianças deve ser até 7")
     private Integer children;
 

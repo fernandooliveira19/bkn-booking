@@ -15,7 +15,7 @@ public interface BookingService {
 
     List<Booking> search(LocalDateTime checkIn, LocalDateTime checkOut, String travelerName, BookingStatusEnum bookingStatusEnum, PaymentStatusEnum paymentStatusEnum);
 
-    Booking create(Booking booking);
+    Booking createBooking(Booking booking);
 
     Booking update(Booking booking);
 
