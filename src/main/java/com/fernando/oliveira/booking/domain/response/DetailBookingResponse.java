@@ -32,8 +32,8 @@ public class DetailBookingResponse {
 
     private BigDecimal pendingAmount;
 
-    private Integer adultsQuantity;
+    private Integer adults;
 
-    private Integer childrenQuantity;
+    private Integer children;
 
 }

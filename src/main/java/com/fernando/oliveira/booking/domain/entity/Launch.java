@@ -44,9 +44,11 @@ public class Launch {
     private LocalDate scheduleDate;
 
     @Column(name="PAYMENT_TYPE", nullable=false)
+    @Enumerated(EnumType.STRING)
     private PaymentTypeEnum paymentType;
 
     @Column(name="PAYMENT_STATUS", nullable=false)
+    @Enumerated(EnumType.STRING)
     private PaymentStatusEnum paymentStatus;
 
 

@@ -4,10 +4,12 @@ import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
+import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -41,7 +43,7 @@ public class BookingServiceImpl implements BookingService{
 
     @Override
     public List<Booking> findAll() {
-        return null;
+        return bookingRepository.findAll();
     }
 
     @Override
@@ -85,8 +87,41 @@ public class BookingServiceImpl implements BookingService{
 
 
     public void validateCreateBooking(Booking booking){
-        if(booking.getLaunchs() == null || booking.getLaunchs().isEmpty()){
+
+        List<Booking> otherBookings = bookingRepository.findBookingsByDate(booking.getCheckIn(), booking.getCheckOut());
+
+        if(!otherBookings.isEmpty()){
+
+            if(booking.getId() == null){
+                throw new BookingException("Já existe outra reserva para o mesmo periodo");
+            }
+            for(Booking bkn: otherBookings){
+                if(!bkn.getId().equals(booking.getId())){
+                    throw new BookingException("Já existe outra reserva para o mesmo periodo");
+                }
+            }
 
         }
+
+        if(booking.getLaunchs() == null || booking.getLaunchs().isEmpty()){
+            throw new BookingException("Reserva não possui lançamentos");
+        }
+
+    }
+    public void validateTotalAmount(Booking booking){
+        BigDecimal totalAmount = booking.getTotalAmount();
+        BigDecimal amount = BigDecimal.ZERO;
+        for(Launch launch : booking.getLaunchs()){
+            amount.add(launch.getAmount());
+        }
+
+        if(!totalAmount.equals(amount)){
+            throw new BookingException("Soma dos lançamentos estão diferentes do valor total da reserva");
+        }
+    }
+
+    public void validateBookingDate(Booking booking){
+        LocalDateTime checkIn = booking.getCheckIn();
+
     }
 }

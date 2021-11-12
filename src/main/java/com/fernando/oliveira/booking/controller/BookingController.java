@@ -12,12 +12,11 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Api(tags="Booking endpoint")
 @RestController
@@ -42,8 +41,22 @@ public class BookingController {
 
       Booking bookingToCreate = bookingMapper.createRequestToEntity(request);
       Booking bookingCreated = bookingService.createBooking(bookingToCreate);
+      DetailBookingResponse response = bookingMapper.bookingToDetailBookingResponse(bookingCreated);
+      return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new DetailBookingResponse());
+    }
 
+    @ApiOperation(value = "Retorna lista de todas reservas")
+    @ApiResponses(value = {
+            @ApiResponse(code = 403, message = "Você não possui permissão para acessar esse recurso"),
+            @ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
+    @GetMapping
+    public ResponseEntity<List<DetailBookingResponse>> findAll(){
+
+        List<Booking> bookings = bookingService.findAll();
+        List<DetailBookingResponse> response = bookings.stream()
+                .map(e -> bookingMapper.bookingToDetailBookingResponse(e))
+                .collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

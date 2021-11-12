@@ -11,8 +11,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-@Table(name="booking" )
+@Entity(name="booking")
+@Table(name="BOOKING" )
 @Getter
 @Setter
 @Builder
@@ -51,9 +51,11 @@ public class Booking {
     private Integer children;
 
     @Column(name="BOOKING_STATUS", nullable=false)
+    @Enumerated(EnumType.STRING)
     private BookingStatusEnum bookingStatus;
 
     @Column(name="PAYMENT_STATUS", nullable=false)
+    @Enumerated(EnumType.STRING)
     private PaymentStatusEnum paymentStatus;
 
     @Column(name="INSERT_DATE", nullable=false, updatable = false)
