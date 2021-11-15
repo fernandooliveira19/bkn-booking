@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingServiceImpl implements BookingService{
@@ -25,10 +26,10 @@ public class BookingServiceImpl implements BookingService{
     @Override
     public Booking createBooking(Booking booking) {
 
-        validateCreateBooking(booking);
-        setBookingStatus(booking);
-        setPaymentStatus(booking);
+        validateBooking(booking);
 
+        defineBookingStatus(booking);
+        definePaymentStatus(booking);
         booking.setInsertDate(LocalDateTime.now());
 
         Booking bookingSaved = bookingRepository.save(booking);
@@ -36,14 +37,28 @@ public class BookingServiceImpl implements BookingService{
         bookingSaved.getLaunchs().stream()
              .forEach( e -> launchService.createLaunch(e, bookingSaved));
 
+        calculateAmountPending(bookingSaved);
+
         return bookingSaved;
     }
 
+    private void calculateAmountPending(Booking booking) {
+        BigDecimal amountPending = booking.getLaunchs().stream()
+                .filter(e -> e.getPaymentStatus().equals(PaymentStatusEnum.PENDING))
+                .map(Launch::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        booking.setAmountPending(amountPending);
+
+    }
 
 
     @Override
     public List<Booking> findAll() {
-        return bookingRepository.findAll();
+        return bookingRepository.findAll()
+                .stream()
+
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -60,10 +75,24 @@ public class BookingServiceImpl implements BookingService{
 
     @Override
     public Booking update(Booking booking) {
-        return null;
+
+        validateBooking(booking);
+
+        defineBookingStatus(booking);
+        definePaymentStatus(booking);
+
+        Booking bookingUpdated = bookingRepository.save(booking);
+
+        bookingUpdated.getLaunchs().stream()
+                .forEach( e -> launchService.updateLaunch(e));
+
+        calculateAmountPending(bookingUpdated);
+
+        return bookingUpdated;
+
     }
 
-    public void setBookingStatus(Booking booking) {
+    public void defineBookingStatus(Booking booking) {
 
         booking.setBookingStatus(BookingStatusEnum.PRE_RESERVED);
 
@@ -75,7 +104,7 @@ public class BookingServiceImpl implements BookingService{
 
     }
 
-    public void setPaymentStatus(Booking booking){
+    public void definePaymentStatus(Booking booking){
         booking.setPaymentStatus(PaymentStatusEnum.PAID);
 
         booking.getLaunchs().stream().forEach(e ->{
@@ -86,7 +115,7 @@ public class BookingServiceImpl implements BookingService{
     }
 
 
-    public void validateCreateBooking(Booking booking){
+    public void validateBooking(Booking booking){
 
         List<Booking> otherBookings = bookingRepository.findBookingsByDate(booking.getCheckIn(), booking.getCheckOut());
 
@@ -107,21 +136,18 @@ public class BookingServiceImpl implements BookingService{
             throw new BookingException("Reserva não possui lançamentos");
         }
 
-    }
-    public void validateTotalAmount(Booking booking){
-        BigDecimal totalAmount = booking.getTotalAmount();
-        BigDecimal amount = BigDecimal.ZERO;
-        for(Launch launch : booking.getLaunchs()){
-            amount.add(launch.getAmount());
-        }
-
-        if(!totalAmount.equals(amount)){
+        if(!booking.getTotalAmount().equals(getTotalAmountByLaunchs(booking.getLaunchs()))){
             throw new BookingException("Soma dos lançamentos estão diferentes do valor total da reserva");
         }
-    }
-
-    public void validateBookingDate(Booking booking){
-        LocalDateTime checkIn = booking.getCheckIn();
 
     }
+    public BigDecimal getTotalAmountByLaunchs(List<Launch> launchs){
+
+        return launchs.stream()
+                .map(Launch::getAmount)
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+    }
+
+
 }

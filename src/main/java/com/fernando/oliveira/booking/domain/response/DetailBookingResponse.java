@@ -1,5 +1,6 @@
 package com.fernando.oliveira.booking.domain.response;
 
+import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import io.swagger.annotations.ApiModel;
@@ -9,6 +10,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -35,5 +37,7 @@ public class DetailBookingResponse {
     private Integer adults;
 
     private Integer children;
+
+    private List<DetailLaunchResponse> launchs;
 
 }

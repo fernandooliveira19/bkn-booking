@@ -68,4 +68,7 @@ public class Booking {
 
     @Column(name="RATING")
     private Integer rating;
+
+    @Transient
+    private BigDecimal amountPending;
 }

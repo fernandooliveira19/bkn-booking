@@ -6,4 +6,6 @@ import com.fernando.oliveira.booking.domain.entity.Launch;
 public interface LaunchService {
 
     Launch createLaunch(Launch launch, Booking booking);
+
+    Launch updateLaunch(Launch launch);
 }

@@ -17,4 +17,9 @@ public class LaunchServiceImpl implements LaunchService{
         launch.setBooking(booking);
         return launchRepository.save(launch);
     }
+
+    @Override
+    public Launch updateLaunch(Launch launch) {
+       return launchRepository.save(launch);
+    }
 }
