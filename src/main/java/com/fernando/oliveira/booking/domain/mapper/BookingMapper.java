@@ -2,6 +2,7 @@ package com.fernando.oliveira.booking.domain.mapper;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
+import com.fernando.oliveira.booking.domain.request.UpdateBookingRequest;
 import com.fernando.oliveira.booking.domain.response.DetailBookingResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,4 +16,6 @@ public interface BookingMapper {
     Booking createRequestToEntity(CreateBookingRequest request);
 
     DetailBookingResponse bookingToDetailBookingResponse(Booking booking);
+
+    Booking updateRequestToEntity(UpdateBookingRequest request);
 }

@@ -17,10 +17,5 @@ public interface BookingService {
 
     Booking createBooking(Booking booking);
 
-    Booking update(Booking booking);
-
-
-
-
-
+    Booking updateBooking(Booking bookingToUpdate, Long id);
 }

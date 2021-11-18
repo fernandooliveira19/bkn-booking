@@ -3,6 +3,7 @@ package com.fernando.oliveira.booking.controller;
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
 import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
+import com.fernando.oliveira.booking.domain.request.UpdateBookingRequest;
 import com.fernando.oliveira.booking.domain.response.DetailBookingResponse;
 import com.fernando.oliveira.booking.service.BookingService;
 import io.swagger.annotations.Api;
@@ -58,5 +59,21 @@ public class BookingController {
                 .map(e -> bookingMapper.bookingToDetailBookingResponse(e))
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+    @ApiOperation(value = "Realiza atualização de reserva")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Reserva atualizada com sucesso"),
+            @ApiResponse(code = 400, message = "Dados de cadastro inválidos"),
+            @ApiResponse(code = 403, message = "Você não possui permissão para acessar esse recurso"),
+            @ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<DetailBookingResponse> update(@RequestBody @Valid UpdateBookingRequest request,
+                                                        @PathVariable("id") Long id){
+
+        Booking bookingToUpdate = bookingMapper.updateRequestToEntity(request);
+        Booking bookingUpdated = bookingService.updateBooking(bookingToUpdate, id);
+        DetailBookingResponse response = bookingMapper.bookingToDetailBookingResponse(bookingUpdated);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
     }
 }

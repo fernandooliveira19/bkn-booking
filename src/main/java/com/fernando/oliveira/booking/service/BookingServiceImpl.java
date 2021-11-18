@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -74,14 +75,23 @@ public class BookingServiceImpl implements BookingService{
 
 
     @Override
-    public Booking update(Booking booking) {
+    public Booking updateBooking(Booking booking, Long id) {
 
         validateBooking(booking);
 
         defineBookingStatus(booking);
         definePaymentStatus(booking);
 
-        Booking bookingUpdated = bookingRepository.save(booking);
+        Optional<Booking> result = bookingRepository.findById(id).stream().findFirst();
+
+        if(!result.isPresent())
+            throw new BookingException("Não foi encontrado reserva atraves do id: " + id);
+
+        Booking bookingToUpdate = result.get();
+
+        setBookingData(bookingToUpdate, booking);
+
+        Booking bookingUpdated = bookingRepository.save(bookingToUpdate);
 
         bookingUpdated.getLaunchs().stream()
                 .forEach( e -> launchService.updateLaunch(e));
@@ -90,6 +100,20 @@ public class BookingServiceImpl implements BookingService{
 
         return bookingUpdated;
 
+    }
+
+    private void setBookingData(Booking bookingToUpdate, Booking booking) {
+       bookingToUpdate.setBookingStatus(booking.getBookingStatus());
+        bookingToUpdate.setPaymentStatus(booking.getPaymentStatus());
+        bookingToUpdate.setAmountPending(booking.getAmountPending());
+        bookingToUpdate.setLastUpdate(LocalDateTime.now());
+        bookingToUpdate.setAdults(booking.getAdults());
+        bookingToUpdate.setChildren(booking.getChildren());
+        bookingToUpdate.setCheckIn(booking.getCheckIn());
+        bookingToUpdate.setCheckOut(booking.getCheckOut());
+        bookingToUpdate.setLaunchs(booking.getLaunchs());
+        bookingToUpdate.setTotalAmount(booking.getTotalAmount());
+        bookingToUpdate.setTravelerId(booking.getTravelerId());
     }
 
     public void defineBookingStatus(Booking booking) {
