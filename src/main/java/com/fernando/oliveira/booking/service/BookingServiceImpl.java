@@ -58,7 +58,7 @@ public class BookingServiceImpl implements BookingService{
     public List<Booking> findAll() {
         return bookingRepository.findAll()
                 .stream()
-
+                .map((e) -> defineBookingDetails(e))
                 .collect(Collectors.toList());
     }
 
@@ -108,6 +108,11 @@ public class BookingServiceImpl implements BookingService{
 
     public Booking detailBooking(Long id){
         Booking booking = findById(id);
+
+        return  defineBookingDetails(booking);
+    }
+
+    public Booking defineBookingDetails(Booking booking){
         defineBookingStatus(booking);
         definePaymentStatus(booking);
         defineAmountPending(booking);
