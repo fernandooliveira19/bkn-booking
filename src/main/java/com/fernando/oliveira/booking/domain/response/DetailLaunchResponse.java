@@ -1,5 +1,6 @@
 package com.fernando.oliveira.booking.domain.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DetailLaunchResponse implements Serializable {
 
     private Long id;

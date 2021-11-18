@@ -18,4 +18,6 @@ public interface BookingService {
     Booking createBooking(Booking booking);
 
     Booking updateBooking(Booking bookingToUpdate, Long id);
+
+    Booking detailBooking(Long id);
 }

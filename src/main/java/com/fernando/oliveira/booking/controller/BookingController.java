@@ -76,4 +76,19 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
     }
+
+    @ApiOperation(value = "Realiza busca de reserva por id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Reserva retornada com sucesso"),
+            @ApiResponse(code = 400, message = "Dados inválidos"),
+            @ApiResponse(code = 403, message = "Você não possui permissão para acessar esse recurso"),
+            @ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<DetailBookingResponse> detail(@PathVariable("id") Long id){
+
+        Booking booking = bookingService.detailBooking(id);
+        DetailBookingResponse response = bookingMapper.bookingToDetailBookingResponse(booking);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+
+    }
 }

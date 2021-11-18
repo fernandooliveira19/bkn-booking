@@ -38,12 +38,12 @@ public class BookingServiceImpl implements BookingService{
         bookingSaved.getLaunchs().stream()
              .forEach( e -> launchService.createLaunch(e, bookingSaved));
 
-        calculateAmountPending(bookingSaved);
+        defineAmountPending(bookingSaved);
 
         return bookingSaved;
     }
 
-    private void calculateAmountPending(Booking booking) {
+    private void defineAmountPending(Booking booking) {
         BigDecimal amountPending = booking.getLaunchs().stream()
                 .filter(e -> e.getPaymentStatus().equals(PaymentStatusEnum.PENDING))
                 .map(Launch::getAmount)
@@ -82,12 +82,7 @@ public class BookingServiceImpl implements BookingService{
         defineBookingStatus(booking);
         definePaymentStatus(booking);
 
-        Optional<Booking> result = bookingRepository.findById(id).stream().findFirst();
-
-        if(!result.isPresent())
-            throw new BookingException("Não foi encontrado reserva atraves do id: " + id);
-
-        Booking bookingToUpdate = result.get();
+        Booking bookingToUpdate = findById(id);
 
         setBookingData(bookingToUpdate, booking);
 
@@ -96,10 +91,27 @@ public class BookingServiceImpl implements BookingService{
         bookingUpdated.getLaunchs().stream()
                 .forEach( e -> launchService.updateLaunch(e));
 
-        calculateAmountPending(bookingUpdated);
+        defineAmountPending(bookingUpdated);
 
         return bookingUpdated;
 
+    }
+
+    public Booking findById(Long id) {
+
+        Optional<Booking> result = bookingRepository.findById(id);
+
+        return result
+                .orElseThrow(() -> new BookingException("Não foi encontrado reserva pelo id: "  + id));
+
+    }
+
+    public Booking detailBooking(Long id){
+        Booking booking = findById(id);
+        defineBookingStatus(booking);
+        definePaymentStatus(booking);
+        defineAmountPending(booking);
+        return booking;
     }
 
     private void setBookingData(Booking bookingToUpdate, Booking booking) {

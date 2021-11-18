@@ -1,5 +1,6 @@
 package com.fernando.oliveira.booking.domain.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
@@ -16,13 +17,14 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @ApiModel(value = "Detalhe de reserva")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DetailBookingResponse {
 
     private LocalDateTime checkIn;
 
     private LocalDateTime checkOut;
 
-    private String travelerName;
+    private Long travelerId;
 
     private BookingStatusEnum bookingStatus;
 
@@ -32,7 +34,7 @@ public class DetailBookingResponse {
 
     private BigDecimal totalAmount;
 
-    private BigDecimal pendingAmount;
+    private BigDecimal amountPending;
 
     private Integer adults;
 
