@@ -170,7 +170,7 @@ public class BookingServiceImpl implements BookingService{
         }
 
         if(booking.getLaunchs() == null || booking.getLaunchs().isEmpty()){
-            throw new BookingException("Reserva não possui lançamentos");
+            throw new BookingException("Reserva deve possuir lançamentos");
         }
 
         if(!booking.getTotalAmount().equals(getTotalAmountByLaunchs(booking.getLaunchs()))){

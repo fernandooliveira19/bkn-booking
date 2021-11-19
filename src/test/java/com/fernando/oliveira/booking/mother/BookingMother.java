@@ -15,6 +15,24 @@ public class BookingMother {
 
     }
 
+    private static final LocalDateTime CHECK_IN = LocalDateTime.of(2021, 10, 15,12,30,0);
+    private static final LocalDateTime CHECK_OUT = LocalDateTime.of(2021, 10, 20,18,30,0);
+    private static final BigDecimal TOTAL_AMOUNT = BigDecimal.valueOf(1500.0);
+    private static final Long TRAVELER_ID = 1L;
+    private static final Integer ADULTS = 4;
+    private static final Integer CHILDREN = 2;
+
+    public static Booking getBooking(){
+        return Booking.builder()
+                .checkIn(CHECK_IN)
+                .checkOut(CHECK_OUT)
+                .totalAmount(TOTAL_AMOUNT)
+                .travelerId(TRAVELER_ID)
+                .adults(ADULTS)
+                .children(CHILDREN)
+                .build();
+    }
+
     public static Booking getBookingToSave(LocalDateTime checkIn, LocalDateTime checkOut,
                                            BigDecimal totalAmount,
                                            Long travelerId,
