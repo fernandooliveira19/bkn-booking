@@ -24,6 +24,9 @@ public class BookingServiceImpl implements BookingService{
     @Autowired
     private LaunchService launchService;
 
+    @Autowired
+    private TravelerService travelerService;
+
     @Override
     public Booking createBooking(Booking booking) {
 
@@ -87,8 +90,6 @@ public class BookingServiceImpl implements BookingService{
         bookingUpdated.getLaunchs().stream()
                 .forEach( e -> launchService.updateLaunch(e));
 
-
-
         return bookingUpdated;
 
     }
@@ -109,6 +110,7 @@ public class BookingServiceImpl implements BookingService{
     }
 
     public Booking defineBookingDetails(Booking booking){
+        defineTraveler(booking);
         defineBookingStatus(booking);
         definePaymentStatus(booking);
         defineAmountPending(booking);
@@ -126,7 +128,7 @@ public class BookingServiceImpl implements BookingService{
         bookingToUpdate.setCheckOut(booking.getCheckOut());
         bookingToUpdate.setLaunchs(booking.getLaunchs());
         bookingToUpdate.setTotalAmount(booking.getTotalAmount());
-        bookingToUpdate.setTravelerId(booking.getTravelerId());
+        bookingToUpdate.setTraveler(booking.getTraveler());
     }
 
     public void defineBookingStatus(Booking booking) {
@@ -184,6 +186,10 @@ public class BookingServiceImpl implements BookingService{
                 .map(Launch::getAmount)
         .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+    }
+
+    private void defineTraveler(Booking booking){
+        booking.setTraveler(travelerService.findById(booking.getTraveler().getId()));
     }
 
 

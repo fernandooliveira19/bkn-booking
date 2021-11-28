@@ -13,9 +13,11 @@ public interface BookingMapper {
 
     @Mapping(source = "checkIn", target = "checkIn", dateFormat = "yyyy-MM-dd HH:mm")
     @Mapping(source = "checkOut", target = "checkOut", dateFormat = "yyyy-MM-dd HH:mm")
+    @Mapping(source = "travelerId", target = "traveler.id")
     Booking createRequestToEntity(CreateBookingRequest request);
 
     DetailBookingResponse bookingToDetailBookingResponse(Booking booking);
 
+    @Mapping(source = "travelerId", target = "traveler.id")
     Booking updateRequestToEntity(UpdateBookingRequest request);
 }

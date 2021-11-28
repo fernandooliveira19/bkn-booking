@@ -15,19 +15,63 @@ public class BookingMother {
 
     }
 
-    private static final LocalDateTime CHECK_IN = LocalDateTime.of(2021, 10, 15,12,30,0);
-    private static final LocalDateTime CHECK_OUT = LocalDateTime.of(2021, 10, 20,18,30,0);
-    private static final BigDecimal TOTAL_AMOUNT = BigDecimal.valueOf(1500.0);
-    private static final Long TRAVELER_ID = 1L;
+    private static final LocalDateTime CHECK_IN_01 = LocalDateTime.of(2021, Month.OCTOBER, 15,12,30,0);
+    private static final LocalDateTime CHECK_OUT_01 = LocalDateTime.of(2021, Month.OCTOBER, 20,18,30,0);
+    private static final BigDecimal TOTAL_AMOUNT_01 = BigDecimal.valueOf(1500.0);
+    private static final Long TRAVELER_ID_01 = 1L;
+    private static final Long BOOKING_ID_01 = 10L;
+
+    private static final LocalDateTime CHECK_IN_02 = LocalDateTime.of(2021, Month.OCTOBER, 21,12,30,0);
+    private static final LocalDateTime CHECK_OUT_02 = LocalDateTime.of(2021, Month.OCTOBER, 25,18,30,0);
+    private static final BigDecimal TOTAL_AMOUNT_02 = BigDecimal.valueOf(1500.0);
+    private static final Long TRAVELER_ID_02 = 2L;
+    private static final Long BOOKING_ID_02 = 20L;
+
+    private static final LocalDateTime CHECK_IN_03 = LocalDateTime.of(2021, Month.OCTOBER, 26,12,30,0);
+    private static final LocalDateTime CHECK_OUT_03 = LocalDateTime.of(2021, Month.OCTOBER, 30,18,30,0);
+    private static final BigDecimal TOTAL_AMOUNT_03 = BigDecimal.valueOf(1500.0);
+    private static final Long TRAVELER_ID_03 = 3L;
+    private static final Long BOOKING_ID_03 = 30L;
+
     private static final Integer ADULTS = 4;
     private static final Integer CHILDREN = 2;
 
-    public static Booking getBooking(){
+    public static Booking getFirstBooking(){
         return Booking.builder()
-                .checkIn(CHECK_IN)
-                .checkOut(CHECK_OUT)
-                .totalAmount(TOTAL_AMOUNT)
-                .travelerId(TRAVELER_ID)
+                .checkIn(CHECK_IN_01)
+                .checkOut(CHECK_OUT_01)
+                .totalAmount(TOTAL_AMOUNT_01)
+                .adults(ADULTS)
+                .children(CHILDREN)
+                .build();
+    }
+    public static Booking getFirstBookingSaved(){
+        return Booking.builder()
+                .id(BOOKING_ID_01)
+                .insertDate(LocalDateTime.now())
+                .checkIn(CHECK_IN_01)
+                .checkOut(CHECK_OUT_01)
+                .totalAmount(TOTAL_AMOUNT_01)
+                .adults(ADULTS)
+                .children(CHILDREN)
+                .build();
+    }
+
+    public static Booking getSecondBooking(){
+        return Booking.builder()
+                .checkIn(CHECK_IN_02)
+                .checkOut(CHECK_OUT_02)
+                .totalAmount(TOTAL_AMOUNT_02)
+                .adults(ADULTS)
+                .children(CHILDREN)
+                .build();
+    }
+
+    public static Booking getThirdBooking(){
+        return Booking.builder()
+                .checkIn(CHECK_IN_03)
+                .checkOut(CHECK_OUT_03)
+                .totalAmount(TOTAL_AMOUNT_03)
                 .adults(ADULTS)
                 .children(CHILDREN)
                 .build();
@@ -43,7 +87,6 @@ public class BookingMother {
                 .checkIn(checkIn)
                 .checkOut(checkOut)
                 .totalAmount(totalAmount)
-                .travelerId(travelerId)
                 .adults(adults)
                 .children(children)
                 .launchs(launchs)
@@ -56,7 +99,6 @@ public class BookingMother {
                 .checkIn(checkIn)
                 .checkOut(checkOut)
                 .totalAmount(totalAmount)
-                .travelerId(travelerId)
                 .adults(adults)
                 .children(children)
                 .launchs(launchs)

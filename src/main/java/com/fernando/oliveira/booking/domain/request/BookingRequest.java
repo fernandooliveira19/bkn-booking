@@ -39,6 +39,9 @@ public class BookingRequest implements Serializable {
     @Max(value = 8, message = "Quantidade de crianças deve ser até 7")
     private Integer children;
 
+    @ApiModelProperty(name="observation", value="Observação", example="Teve um desconto relativo a quantidade de dias")
+    private String observation;
+
     private List<LaunchRequest> launchs;
 
 

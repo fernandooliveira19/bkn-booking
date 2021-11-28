@@ -19,7 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Api(tags="Booking endpoint")
+@Api(tags="Bookings")
 @RestController
 @RequestMapping(value = "/v1/bookings")
 public class BookingController {

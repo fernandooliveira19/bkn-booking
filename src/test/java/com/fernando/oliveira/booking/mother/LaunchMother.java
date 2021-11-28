@@ -7,12 +7,16 @@ import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Month;
+import java.util.Arrays;
+import java.util.List;
 
 public class LaunchMother {
 
     private LaunchMother(){
 
     }
+
 
     public static Launch getLaunchToSave(BigDecimal amount,
                                               PaymentTypeEnum paymentType,
@@ -28,6 +32,43 @@ public class LaunchMother {
                 .build();
     }
 
+    public static Launch getFirstLaunchFromFirstBooking(){
+        return Launch.builder()
+                .amount(BigDecimal.valueOf(1000.0))
+                .scheduleDate(LocalDate.of(2021, Month.OCTOBER, 10))
+                .paymentStatus(PaymentStatusEnum.PAID)
+                .paymentDate(LocalDate.of(2021, Month.OCTOBER, 10))
+                .paymentType(PaymentTypeEnum.PIX)
+                .build();
+
+    }
+
+    public static Launch getSecondLaunchFromFirstBooking(){
+        return Launch.builder()
+                .amount(BigDecimal.valueOf(300.0))
+                .scheduleDate(LocalDate.of(2021, Month.OCTOBER, 10))
+                .paymentStatus(PaymentStatusEnum.PENDING)
+                .paymentDate(null)
+                .paymentType(PaymentTypeEnum.PIX)
+                .build();
+
+    }
+
+    public static Launch getThirdLaunchFromFirstBooking(){
+        return Launch.builder()
+                .amount(BigDecimal.valueOf(200.0))
+                .scheduleDate(LocalDate.of(2021, Month.OCTOBER, 15))
+                .paymentStatus(PaymentStatusEnum.PENDING)
+                .paymentDate(null)
+                .paymentType(PaymentTypeEnum.PIX)
+                .build();
+
+    }
+
+    public static List<Launch> getLaunchsFromFirstBooking(){
+        return Arrays.asList(getFirstLaunchFromFirstBooking(), getSecondLaunchFromFirstBooking(), getThirdLaunchFromFirstBooking());
+    }
+
     public static Launch getLaunchSaved(Booking booking,
                                         BigDecimal amount,
                                         PaymentTypeEnum paymentType,
@@ -35,7 +76,6 @@ public class LaunchMother {
                                         LocalDate scheduleDate,
                                         LocalDate paymentDate){
         return Launch.builder()
-                .id(101L)
                 .booking(booking)
                 .amount(amount)
                 .paymentType(paymentType)

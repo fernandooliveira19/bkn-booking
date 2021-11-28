@@ -25,9 +25,12 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import static com.fernando.oliveira.booking.mother.BookingMother.getBookingToSave;
+import static com.fernando.oliveira.booking.mother.BookingMother.getFirstBooking;
 import static com.fernando.oliveira.booking.mother.LaunchMother.getLaunchToSave;
+import static com.fernando.oliveira.booking.mother.LaunchMother.getLaunchsFromFirstBooking;
 import static org.assertj.core.api.Assertions.fail;
 import static org.assertj.core.api.BDDAssertions.then;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -50,29 +53,17 @@ public class BookingServiceUnitTest {
 
     @Test
     void givenValidRequestWhenCreateBookingThenCreateBookingReservedWithPending(){
-        LocalDateTime checkIn = LocalDateTime.of(2021, Month.OCTOBER,8,10,0);
-        LocalDateTime checkOut = LocalDateTime.of(2021, Month.DECEMBER,16,18,0);
-        Long travelerId = 1L;
-        BigDecimal totalAmount = BigDecimal.valueOf(1500.0);
-        Integer adults = 2;
-        Integer children = 3;
 
-        Launch firstLaunch = getLaunchToSave(BigDecimal.valueOf(1000.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PAID, LocalDate.of(2021, 10,10), LocalDate.of(2021,10,10) );
-        Launch secondLaunch = getLaunchToSave(BigDecimal.valueOf(300.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PENDING, LocalDate.of(2021, 11,10), null );
-        Launch thirdLaunch = getLaunchToSave(BigDecimal.valueOf(200.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PENDING, LocalDate.of(2021, 12,10), null );
+        Booking bookingToSave = getFirstBooking();
+        bookingToSave.setLaunchs(getLaunchsFromFirstBooking());
 
-        Booking bookingToSave = getBookingToSave(checkIn, checkOut, totalAmount,travelerId, adults, children, Arrays.asList(firstLaunch, secondLaunch, thirdLaunch));
-        Launch firstLaunchSaved = LaunchMother.getLaunchSaved(bookingToSave,firstLaunch.getAmount(), firstLaunch.getPaymentType(), firstLaunch.getPaymentStatus(), firstLaunch.getScheduleDate(), firstLaunch.getPaymentDate());
-        firstLaunchSaved.setId(101L);
-        Launch secondLaunchSaved = LaunchMother.getLaunchSaved(bookingToSave,secondLaunch.getAmount(), secondLaunch.getPaymentType(), secondLaunch.getPaymentStatus(), secondLaunch.getScheduleDate(), secondLaunch.getPaymentDate());
-        secondLaunchSaved.setId(102L);
-        Launch thirdLaunchSaved = LaunchMother.getLaunchSaved(bookingToSave,thirdLaunch.getAmount(), thirdLaunch.getPaymentType(), thirdLaunch.getPaymentStatus(), thirdLaunch.getScheduleDate(), thirdLaunch.getPaymentDate());
-        thirdLaunchSaved.setId(103L);
-
-        Booking bookingSaved = BookingMother.getBookingSaved(checkIn, checkOut, totalAmount,travelerId, adults, children, Arrays.asList(firstLaunchSaved, secondLaunchSaved, thirdLaunchSaved), BookingStatusEnum.RESERVED, PaymentStatusEnum.PENDING);
+        Booking bookingSaved = BookingMother.getFirstBookingSaved();
+        bookingSaved.setLaunchs(LaunchMother.getLaunchsFromFirstBooking());
+        bookingSaved.setBookingStatus(BookingStatusEnum.RESERVED);
+        bookingSaved.setPaymentStatus(PaymentStatusEnum.PENDING);
 
         when(bookingRepository.save(Mockito.any(Booking.class))).thenReturn(bookingSaved);
-        when(launchService.createLaunch(Mockito.any(Launch.class), Mockito.any(Booking.class))).thenReturn(firstLaunchSaved);
+        when(launchService.createLaunch(Mockito.any(Launch.class), Mockito.any(Booking.class))).thenReturn(LaunchMother.getLaunchSaved(bookingSaved,BigDecimal.valueOf(200.0),PaymentTypeEnum.PIX,PaymentStatusEnum.PAID, LocalDate.of(2021, Month.OCTOBER, 10),LocalDate.of(2021, Month.OCTOBER, 10) ));
 
         Booking result = bookingService.createBooking(bookingToSave);
 
@@ -95,7 +86,10 @@ public class BookingServiceUnitTest {
         Launch thirdLaunch = getLaunchToSave(BigDecimal.valueOf(200.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PAID, LocalDate.of(2021, 12,10), LocalDate.of(2021,10,10) );
 
         Booking bookingToSave = getBookingToSave(checkIn, checkOut, totalAmount,travelerId, adults, children, Arrays.asList(firstLaunch, secondLaunch, thirdLaunch));
-        Booking bookingSaved = BookingMother.getBookingSaved(checkIn, checkOut, totalAmount,travelerId, adults, children, Arrays.asList(firstLaunch, secondLaunch, thirdLaunch), BookingStatusEnum.RESERVED, PaymentStatusEnum.PAID);
+        Booking bookingSaved = BookingMother.getFirstBookingSaved();
+        bookingSaved.setBookingStatus(BookingStatusEnum.RESERVED);
+        bookingSaved.setPaymentStatus(PaymentStatusEnum.PAID);
+        bookingSaved.setLaunchs(Arrays.asList(firstLaunch, secondLaunch, thirdLaunch));
 
         when(bookingRepository.save(Mockito.any(Booking.class))).thenReturn(bookingSaved);
         when(launchService.createLaunch(Mockito.any(Launch.class), Mockito.any(Booking.class))).thenReturn(firstLaunch);
@@ -159,17 +153,63 @@ public class BookingServiceUnitTest {
 
     @Test
     void givenValidRequestWhenUpdateBookingThenReturnBookingUpdated(){
+        LocalDateTime checkIn = LocalDateTime.of(2021, Month.OCTOBER,15,12,30);
+        LocalDateTime checkOut = LocalDateTime.of(2021, Month.OCTOBER,20,18,30);
+        Long travelerId = 1L;
+        BigDecimal totalAmount = BigDecimal.valueOf(1500.0);
+        Integer adults = 2;
+        Integer children = 3;
+
+        Launch firstLaunch = LaunchMother.getFirstLaunchFromFirstBooking();
+        Launch secondLaunch = LaunchMother.getSecondLaunchFromFirstBooking();
+        Launch thirdLaunch = LaunchMother.getThirdLaunchFromFirstBooking();
+        Long bookingId = 1L;
+
+        Booking booking = BookingMother.getBookingToSave(
+                checkIn, checkOut, totalAmount,travelerId, adults, children, Arrays.asList(firstLaunch, secondLaunch, thirdLaunch));
+        booking.setId(bookingId);
+        Booking bookingToUpdate = BookingMother.getFirstBooking();
+        firstLaunch.setBooking(bookingToUpdate);
+        bookingToUpdate.setLaunchs(Arrays.asList(firstLaunch, secondLaunch, thirdLaunch));
+
+        Booking bookingUpdated = BookingMother.getFirstBookingSaved();
+        firstLaunch.setId(10L);
+        secondLaunch.setId(20L);
+        thirdLaunch.setId(30L);
+        bookingUpdated.setLaunchs(Arrays.asList(firstLaunch, secondLaunch,thirdLaunch));
+        bookingUpdated.setBookingStatus(BookingStatusEnum.RESERVED);
+        bookingUpdated.setPaymentStatus(PaymentStatusEnum.PENDING);
+        bookingUpdated.setAmountPending(BigDecimal.valueOf(500.0));
+
+        when(bookingRepository.findBookingsByDate(Mockito.any(LocalDateTime.class),any(LocalDateTime.class))).thenReturn(Arrays.asList());
+        when(bookingRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(bookingToUpdate));
+        when(bookingRepository.save(Mockito.any(Booking.class))).thenReturn(bookingUpdated);
+
+        Booking result = bookingService.updateBooking(booking, bookingId);
+
+        then(result.getCheckIn()).isEqualTo(checkIn);
+        then(result.getCheckOut()).isEqualTo(checkOut);
+        then(result.getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
+        then(result.getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
+        then(result.getAmountPending()).isEqualTo(BigDecimal.valueOf(500.0));
 
     }
 
     @Test
     void givenNonExistentIdWhenConsultBookingThenReturnExceptionMessage(){
+        Long bookingId = 123L;
+        try{
+            bookingService.findById(bookingId);
+            fail("Não foi encontrado reserva pelo id: "+ bookingId, BookingException.class);
+        }catch (BookingException e){
+            then(e.getMessage()).isEqualTo("Não foi encontrado reserva pelo id: "+ bookingId);
+        }
 
     }
 
     @Test
     void givenBookingWithoutLaunchWhenCreateBookingThenReturnExceptionMessage(){
-        Booking booking = BookingMother.getBooking();
+        Booking booking = BookingMother.getFirstBooking();
         try {
             bookingService.createBooking(booking);
             fail("Reserva deve possuir lançamentos",BookingException.class );
@@ -179,7 +219,7 @@ public class BookingServiceUnitTest {
     }
     @Test
     void givenBookingWithoutLaunchWhenUpdateBookingThenReturnExceptionMessage(){
-        Booking booking = BookingMother.getBooking();
+        Booking booking = BookingMother.getFirstBooking();
         try {
             bookingService.updateBooking(booking, 1L);
             fail("Reserva deve possuir lançamentos",BookingException.class );
@@ -190,7 +230,7 @@ public class BookingServiceUnitTest {
 
     @Test
     void givenLaunchWithLessAmountWhenCreateBookingThenReturnExceptionMessage(){
-        Booking booking = BookingMother.getBooking();
+        Booking booking = BookingMother.getFirstBooking();
         Launch firstLaunch = getLaunchToSave(BigDecimal.valueOf(1000.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PAID, LocalDate.of(2021, 10,10), LocalDate.of(2021,10,10) );
         Launch secondLaunch = getLaunchToSave(BigDecimal.valueOf(300.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PENDING, LocalDate.of(2021, 11,10), null );
         Launch thirdLaunch = getLaunchToSave(BigDecimal.valueOf(100.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PENDING, LocalDate.of(2021, 12,10), null );

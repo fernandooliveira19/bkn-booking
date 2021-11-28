@@ -12,7 +12,7 @@
 	<artifactId>bkn-booking</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>bkn-booking</name>
-	<description>Project Booking for Booking Project</description>
+	<description>Project Booking</description>
 
 	<properties>
 		<java.version>11</java.version>

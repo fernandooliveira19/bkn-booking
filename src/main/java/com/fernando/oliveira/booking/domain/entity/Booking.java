@@ -28,8 +28,9 @@ public class Booking {
     @OneToMany(mappedBy = "booking")
     private List<Launch> launchs;
 
-    @Column(name="TRAVELER_ID", nullable=false)
-    private Long travelerId;
+    @ManyToOne
+    @JoinColumn(name="TRAVELER_ID", nullable=false)
+    private Traveler traveler;
 
     @Column(name="CHECK_IN", nullable=false)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -71,4 +72,7 @@ public class Booking {
 
     @Column(name="AMOUNT_PENDING")
     private BigDecimal amountPending;
+
+    @Column(name="OBSERVATION")
+    private String observation;
 }
