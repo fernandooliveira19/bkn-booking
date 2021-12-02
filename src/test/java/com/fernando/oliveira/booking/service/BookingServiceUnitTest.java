@@ -8,8 +8,10 @@ import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
 import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.mother.BookingMother;
 import com.fernando.oliveira.booking.mother.LaunchMother;
+import com.fernando.oliveira.booking.mother.TravelerMother;
 import com.fernando.oliveira.booking.repository.BookingRepository;
 import com.fernando.oliveira.booking.repository.LaunchRepository;
+import com.fernando.oliveira.booking.repository.TravelerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -50,6 +52,11 @@ public class BookingServiceUnitTest {
     @Mock
     private LaunchRepository launchRepository;
 
+    @Mock
+    private TravelerServiceImpl travelerService;
+
+    @Mock
+    private TravelerRepository travelerRepository;
 
     @Test
     void givenValidRequestWhenCreateBookingThenCreateBookingReservedWithPending(){
@@ -62,8 +69,9 @@ public class BookingServiceUnitTest {
         bookingSaved.setBookingStatus(BookingStatusEnum.RESERVED);
         bookingSaved.setPaymentStatus(PaymentStatusEnum.PENDING);
 
-        when(bookingRepository.save(Mockito.any(Booking.class))).thenReturn(bookingSaved);
-        when(launchService.createLaunch(Mockito.any(Launch.class), Mockito.any(Booking.class))).thenReturn(LaunchMother.getLaunchSaved(bookingSaved,BigDecimal.valueOf(200.0),PaymentTypeEnum.PIX,PaymentStatusEnum.PAID, LocalDate.of(2021, Month.OCTOBER, 10),LocalDate.of(2021, Month.OCTOBER, 10) ));
+        when(travelerService.findById(anyLong())).thenReturn(TravelerMother.getTravelerSaved01());
+        when(bookingRepository.save(any(Booking.class))).thenReturn(bookingSaved);
+        when(launchService.createLaunch(any(Launch.class), any(Booking.class))).thenReturn(LaunchMother.getLaunchSaved(bookingSaved,BigDecimal.valueOf(200.0),PaymentTypeEnum.PIX,PaymentStatusEnum.PAID, LocalDate.of(2021, Month.OCTOBER, 10),LocalDate.of(2021, Month.OCTOBER, 10) ));
 
         Booking result = bookingService.createBooking(bookingToSave);
 
@@ -85,14 +93,15 @@ public class BookingServiceUnitTest {
         Launch secondLaunch = getLaunchToSave(BigDecimal.valueOf(300.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PAID, LocalDate.of(2021, 11,10), LocalDate.of(2021,10,10) );
         Launch thirdLaunch = getLaunchToSave(BigDecimal.valueOf(200.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PAID, LocalDate.of(2021, 12,10), LocalDate.of(2021,10,10) );
 
-        Booking bookingToSave = getBookingToSave(checkIn, checkOut, totalAmount,travelerId, adults, children, Arrays.asList(firstLaunch, secondLaunch, thirdLaunch));
+        Booking bookingToSave = getBookingToSave(checkIn, checkOut, totalAmount,travelerId, adults, children, Arrays.asList(firstLaunch, secondLaunch, thirdLaunch), TravelerMother.getTravelerSaved01());
         Booking bookingSaved = BookingMother.getFirstBookingSaved();
         bookingSaved.setBookingStatus(BookingStatusEnum.RESERVED);
         bookingSaved.setPaymentStatus(PaymentStatusEnum.PAID);
         bookingSaved.setLaunchs(Arrays.asList(firstLaunch, secondLaunch, thirdLaunch));
 
-        when(bookingRepository.save(Mockito.any(Booking.class))).thenReturn(bookingSaved);
-        when(launchService.createLaunch(Mockito.any(Launch.class), Mockito.any(Booking.class))).thenReturn(firstLaunch);
+        when(travelerService.findById(anyLong())).thenReturn(TravelerMother.getTravelerToSaved01());
+        when(bookingRepository.save(any(Booking.class))).thenReturn(bookingSaved);
+        when(launchService.createLaunch(any(Launch.class), any(Booking.class))).thenReturn(firstLaunch);
 
         Booking result = bookingService.createBooking(bookingToSave);
 
@@ -114,11 +123,11 @@ public class BookingServiceUnitTest {
         Launch secondLaunch = getLaunchToSave(BigDecimal.valueOf(300.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PENDING, LocalDate.of(2021, 11,10), null );
         Launch thirdLaunch = getLaunchToSave(BigDecimal.valueOf(200.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PENDING, LocalDate.of(2021, 12,10), null );
 
-        Booking bookingToSave = getBookingToSave(checkIn, checkOut, totalAmount,travelerId, adults, children, Arrays.asList(firstLaunch, secondLaunch, thirdLaunch));
+        Booking bookingToSave = getBookingToSave(checkIn, checkOut, totalAmount,travelerId, adults, children, Arrays.asList(firstLaunch, secondLaunch, thirdLaunch), TravelerMother.getTravelerSaved01());
         Booking bookingSaved = BookingMother.getBookingSaved(checkIn, checkOut, totalAmount,travelerId, adults, children, Arrays.asList(firstLaunch, secondLaunch, thirdLaunch), BookingStatusEnum.PRE_RESERVED, PaymentStatusEnum.PENDING);
 
-        when(bookingRepository.save(Mockito.any(Booking.class))).thenReturn(bookingSaved);
-        when(launchService.createLaunch(Mockito.any(Launch.class), Mockito.any(Booking.class))).thenReturn(firstLaunch);
+        when(bookingRepository.save(any(Booking.class))).thenReturn(bookingSaved);
+        when(launchService.createLaunch(any(Launch.class), any(Booking.class))).thenReturn(firstLaunch);
 
         Booking result = bookingService.createBooking(bookingToSave);
 
@@ -166,7 +175,7 @@ public class BookingServiceUnitTest {
         Long bookingId = 1L;
 
         Booking booking = BookingMother.getBookingToSave(
-                checkIn, checkOut, totalAmount,travelerId, adults, children, Arrays.asList(firstLaunch, secondLaunch, thirdLaunch));
+                checkIn, checkOut, totalAmount,travelerId, adults, children, Arrays.asList(firstLaunch, secondLaunch, thirdLaunch),TravelerMother.getTravelerSaved01());
         booking.setId(bookingId);
         Booking bookingToUpdate = BookingMother.getFirstBooking();
         firstLaunch.setBooking(bookingToUpdate);
@@ -181,9 +190,9 @@ public class BookingServiceUnitTest {
         bookingUpdated.setPaymentStatus(PaymentStatusEnum.PENDING);
         bookingUpdated.setAmountPending(BigDecimal.valueOf(500.0));
 
-        when(bookingRepository.findBookingsByDate(Mockito.any(LocalDateTime.class),any(LocalDateTime.class))).thenReturn(Arrays.asList());
-        when(bookingRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(bookingToUpdate));
-        when(bookingRepository.save(Mockito.any(Booking.class))).thenReturn(bookingUpdated);
+        when(bookingRepository.findBookingsByDate(any(LocalDateTime.class),any(LocalDateTime.class))).thenReturn(Arrays.asList());
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(bookingToUpdate));
+        when(bookingRepository.save(any(Booking.class))).thenReturn(bookingUpdated);
 
         Booking result = bookingService.updateBooking(booking, bookingId);
 

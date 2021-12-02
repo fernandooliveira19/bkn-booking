@@ -8,3 +8,11 @@ spring:
     username: sa
     password:
     driverClassName: org.h2.Driver
+
+info:
+  app:
+    name: '@project.name@'
+    description: '@project.description@'
+    version: '@project.version@'
+
+

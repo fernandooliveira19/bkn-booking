@@ -17,39 +17,95 @@ public class TravelerMother {
 	private TravelerMother() {
 		
 	}
-	
-	private static final Long TRAVELER_ID = 12345L;
-	private static final String TRAVELER_NAME = "Joao da Silva";
-	private static final String TRAVELER_EMAIL = "joao.silva@teste.com";
-	private static final String TRAVELER_DOCUMENT = "12345678900";
-	
 
-	private static final Integer PREFIX_PHONE= 11;
-	private static final String NUMBER_PHONE = "98888-7777";
-	
-	public static CreateTravelerRequest getCreateTravelerRequest() {
+	private static final String TRAVELER_01_NAME = "Ana Maria";
+	private static final String TRAVELER_01_EMAIL = "ana_maria@gmail.com";
+	private static final String TRAVELER_01_DOCUMENT = "50042806739";
+	private static final Integer TRAVELER_01_PREFIX_PHONE= 11;
+	private static final String TRAVELER_01_NUMBER_PHONE = "98888-1111";
+
+	private static final String TRAVELER_02_NAME = "Joao Carlos";
+	private static final String TRAVELER_02_EMAIL = "joao_carlos@gmail.com";
+	private static final String TRAVELER_02_DOCUMENT = "18421484869";
+	private static final Integer TRAVELER_02_PREFIX_PHONE= 22;
+	private static final String TRAVELER_02_NUMBER_PHONE = "98888-2222";
+
+	private static final String TRAVELER_03_NAME = "Maria da Silva";
+	private static final String TRAVELER_03_EMAIL = "maria_silva@gmail.com";
+	private static final Integer TRAVELER_03_PREFIX_PHONE= 33;
+	private static final String TRAVELER_03_NUMBER_PHONE = "98888-3333";
+
+	private static final String TRAVELER_05_NAME = "Carlos Maia";
+	private static final String TRAVELER_05_EMAIL = "carlos_maia@gmail.com";
+	private static final Integer TRAVELER_05_PREFIX_PHONE= 55;
+	private static final String TRAVELER_05_NUMBER_PHONE = "98888-5555";
+
+	public static CreateTravelerRequest getCreateTraveler01Request() {
 		CreateTravelerRequest request = new CreateTravelerRequest();
-		request.setName(TRAVELER_NAME);
-		request.setEmail(TRAVELER_EMAIL);
-		request.setPrefixPhone(PREFIX_PHONE);
-		request.setNumberPhone(NUMBER_PHONE);
+		request.setName(TRAVELER_01_NAME);
+		request.setEmail(TRAVELER_01_EMAIL);
+		request.setPrefixPhone(TRAVELER_01_PREFIX_PHONE);
+		request.setNumberPhone(TRAVELER_01_NUMBER_PHONE);
 		return request;
 	}
 
+	public static CreateTravelerRequest getCreateTraveler02Request() {
+		CreateTravelerRequest request = new CreateTravelerRequest();
+		request.setName(TRAVELER_02_NAME);
+		request.setEmail(TRAVELER_02_EMAIL);
+		request.setPrefixPhone(TRAVELER_02_PREFIX_PHONE);
+		request.setNumberPhone(TRAVELER_02_NUMBER_PHONE);
+		return request;
+	}
 
+	public static CreateTravelerRequest getCreateTraveler05Request() {
+		CreateTravelerRequest request = new CreateTravelerRequest();
+		request.setName(TRAVELER_05_NAME);
+		request.setEmail(TRAVELER_05_EMAIL);
+		request.setPrefixPhone(TRAVELER_05_PREFIX_PHONE);
+		request.setNumberPhone(TRAVELER_05_NUMBER_PHONE);
+		return request;
+	}
 
-	
-	public static TravelerDetailResponse getCreateTravelerResponse() {
+	public static TravelerDetailResponse getDetailTraveler01Response() {
 
 		TravelerDetailResponse response = new TravelerDetailResponse();
-		response.setName(TRAVELER_NAME);
-		response.setEmail(TRAVELER_EMAIL);
-		response.setPrefixPhone(PREFIX_PHONE);
-		response.setNumberPhone(NUMBER_PHONE);
-		response.setId(TRAVELER_ID);
-		
+		response.setName(TRAVELER_01_NAME);
+		response.setEmail(TRAVELER_01_EMAIL);
+		response.setPrefixPhone(TRAVELER_01_PREFIX_PHONE);
+		response.setNumberPhone(TRAVELER_01_NUMBER_PHONE);
+		response.setId(1L);
+		response.setStatus(StatusEnum.ACTIVE.getCode());
 		return response;
 			
+	}
+
+	public static TravelerDetailResponse getDetailTraveler02Response() {
+
+		TravelerDetailResponse response = new TravelerDetailResponse();
+		response.setName(TRAVELER_02_NAME);
+		response.setEmail(TRAVELER_02_EMAIL);
+		response.setPrefixPhone(TRAVELER_02_PREFIX_PHONE);
+		response.setNumberPhone(TRAVELER_02_NUMBER_PHONE);
+		response.setId(2L);
+		response.setStatus(StatusEnum.ACTIVE.getCode());
+
+		return response;
+
+	}
+
+	public static TravelerDetailResponse getDetailTraveler03Response() {
+
+		TravelerDetailResponse response = new TravelerDetailResponse();
+		response.setName(TRAVELER_03_NAME);
+		response.setEmail(TRAVELER_03_EMAIL);
+		response.setPrefixPhone(TRAVELER_03_PREFIX_PHONE);
+		response.setNumberPhone(TRAVELER_03_NUMBER_PHONE);
+		response.setId(3L);
+		response.setStatus(StatusEnum.ACTIVE.getCode());
+
+		return response;
+
 	}
 
     public static String getCreateRequestJsonValue(CreateTravelerRequest request) throws JsonProcessingException {
@@ -59,62 +115,57 @@ public class TravelerMother {
         return writer.writeValueAsString(request);
     }
 
-    public static Traveler getTraveler(){
-		return Traveler.builder()
-				.name(TRAVELER_NAME)
-				.email(TRAVELER_EMAIL)
-				.document(TRAVELER_DOCUMENT)
-				.prefixPhone(PREFIX_PHONE)
-				.numberPhone(NUMBER_PHONE)
-				.build();
-	}
-
-	public static Traveler getTravelerSaved(){
-		return Traveler.builder()
-				.id(TRAVELER_ID)
-				.name(TRAVELER_NAME)
-				.email(TRAVELER_EMAIL)
-				.document(TRAVELER_DOCUMENT)
-				.prefixPhone(PREFIX_PHONE)
-				.numberPhone(NUMBER_PHONE)
-				.status(StatusEnum.ACTIVE.getCode())
-				.build();
-	}
-
-	public static Traveler getTravelerUpdated(){
-		return Traveler.builder()
-				.id(TRAVELER_ID)
-				.name(TRAVELER_NAME)
-				.email(TRAVELER_EMAIL)
-				.document(TRAVELER_DOCUMENT)
-				.prefixPhone(PREFIX_PHONE)
-				.numberPhone(NUMBER_PHONE)
-				.status(StatusEnum.ACTIVE.getCode())
-				.build();
-	}
-
-    public static TravelerDetailResponse getDetailTravelerResponse() {
-		TravelerDetailResponse response = new TravelerDetailResponse();
-		response.setName(TRAVELER_NAME);
-		response.setEmail(TRAVELER_EMAIL);
-		response.setPrefixPhone(PREFIX_PHONE);
-		response.setNumberPhone(NUMBER_PHONE);
-		response.setId(TRAVELER_ID);
-
-		return response;
-    }
-
 	public static List<Traveler> getTravelerList() {
-		Traveler traveler01 = getTraveler();
-		Traveler traveler02 = Traveler.builder()
-				.name("Giovanna")
-				.email("giovanna1209@gmail.com")
-				.document("12345")
+
+		return Arrays.asList(getTravelerSaved01(), getTravelerSaved02(), getTravelerSaved03());
+
+	}
+
+	public static Traveler getTravelerToSaved01(){
+		return Traveler.builder()
+				.name(TRAVELER_01_NAME)
+				.email(TRAVELER_01_EMAIL)
+				.prefixPhone(TRAVELER_01_PREFIX_PHONE)
+				.numberPhone(TRAVELER_01_NUMBER_PHONE)
+				.document(TRAVELER_01_DOCUMENT)
+				.build();
+	}
+
+	public static Traveler getTravelerSaved01(){
+		return Traveler.builder()
+				.id(1L)
+				.name(TRAVELER_01_NAME)
+				.email(TRAVELER_01_EMAIL)
+				.prefixPhone(TRAVELER_01_PREFIX_PHONE)
+				.numberPhone(TRAVELER_01_NUMBER_PHONE)
+				.document(TRAVELER_01_DOCUMENT)
 				.status(StatusEnum.ACTIVE.getCode())
-				.prefixPhone(12)
-				.numberPhone("98888-6666").build();
+				.build();
+	}
+	public static Traveler getTravelerSaved02(){
+		return Traveler.builder()
+				.id(2L)
+				.name(TRAVELER_02_NAME)
+				.email(TRAVELER_02_EMAIL)
+				.prefixPhone(TRAVELER_02_PREFIX_PHONE)
+				.numberPhone(TRAVELER_02_NUMBER_PHONE)
+				.document(TRAVELER_02_DOCUMENT)
+				.status(StatusEnum.ACTIVE.getCode())
+				.build();
+	}
 
-		return Arrays.asList(traveler01, traveler02);
+	public static Traveler getTravelerSaved03(){
+		return Traveler.builder()
+				.id(3L)
+				.name(TRAVELER_03_NAME)
+				.email(TRAVELER_03_EMAIL)
+				.prefixPhone(TRAVELER_03_PREFIX_PHONE)
+				.numberPhone(TRAVELER_03_NUMBER_PHONE)
+				.status(StatusEnum.ACTIVE.getCode())
+				.build();
+	}
 
+	public static List<TravelerDetailResponse> getAllListTravelerDetailResponse(){
+		return Arrays.asList(getDetailTraveler01Response(), getDetailTraveler02Response(), getDetailTraveler03Response());
 	}
 }

@@ -2,6 +2,7 @@ package com.fernando.oliveira.booking.mother;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
+import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 
@@ -36,6 +37,8 @@ public class BookingMother {
     private static final Integer ADULTS = 4;
     private static final Integer CHILDREN = 2;
 
+    private static final Long TRAVELER_ID = 1L;
+
     public static Booking getFirstBooking(){
         return Booking.builder()
                 .checkIn(CHECK_IN_01)
@@ -43,6 +46,7 @@ public class BookingMother {
                 .totalAmount(TOTAL_AMOUNT_01)
                 .adults(ADULTS)
                 .children(CHILDREN)
+                .traveler(getTraveler())
                 .build();
     }
     public static Booking getFirstBookingSaved(){
@@ -82,7 +86,8 @@ public class BookingMother {
                                            Long travelerId,
                                            Integer adults,
                                            Integer children,
-                                           List<Launch> launchs) {
+                                           List<Launch> launchs,
+                                           Traveler traveler) {
         return Booking.builder()
                 .checkIn(checkIn)
                 .checkOut(checkOut)
@@ -90,6 +95,7 @@ public class BookingMother {
                 .adults(adults)
                 .children(children)
                 .launchs(launchs)
+                .traveler(traveler)
                 .build();
     }
 
@@ -107,5 +113,11 @@ public class BookingMother {
                 .insertDate(LocalDateTime.of(2021, Month.AUGUST,22, 9, 39))
                 .build();
 
+    }
+
+    public static Traveler getTraveler(){
+        return Traveler.builder()
+                .id(TRAVELER_ID)
+                .build();
     }
 }
