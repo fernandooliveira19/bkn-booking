@@ -2,9 +2,9 @@ package com.fernando.oliveira.booking.integration;
 
 import com.fernando.oliveira.booking.domain.enums.StatusEnum;
 import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
+import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
+import com.fernando.oliveira.booking.domain.response.ExceptionResponse;
 import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
-import com.fernando.oliveira.booking.mother.TravelerMother;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,22 +12,20 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
 
+import static com.fernando.oliveira.booking.mother.TravelerMother.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Sql(scripts={"classpath:scripts/load-database.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = {"classpath:scripts/load-database.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = {"classpath:scripts/clean.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class TravelerIntegrationTest {
 
@@ -37,19 +35,15 @@ public class TravelerIntegrationTest {
     @LocalServerPort
     private int port;
 
-    @Autowired
-    private MockMvc mockMvc;
-
-
     private static final String TRAVELER_MAPPING = "/v1/travelers";
 
     @Test
-    void shouldReturnTravelerWhenConsultTravelerById(){
+    void shouldReturnTravelerWhenConsultTravelerById() {
 
         ResponseEntity<TravelerDetailResponse> result = restTemplate
                 .getForEntity(
-                TRAVELER_MAPPING + "/1",
-                TravelerDetailResponse.class);
+                        TRAVELER_MAPPING + "/1",
+                        TravelerDetailResponse.class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(result.getBody().getName()).isEqualTo("Ana Maria");
@@ -60,15 +54,16 @@ public class TravelerIntegrationTest {
     }
 
     @Test
-    void shouldReturnTravelerListWhenFindAll(){
+    void shouldReturnTravelerListWhenFindAll() {
 
-        ResponseEntity<TravelerDetailResponse[] > result = restTemplate
+        ResponseEntity<TravelerDetailResponse[]> result = restTemplate
                 .getForEntity(
                         TRAVELER_MAPPING, TravelerDetailResponse[].class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         TravelerDetailResponse[] response = result.getBody();
+        assertThat(response.length).isEqualTo(4);
 
         assertThat(response[0].getId()).isEqualTo(1L);
         assertThat(response[0].getName()).isEqualTo("Ana Maria");
@@ -101,16 +96,16 @@ public class TravelerIntegrationTest {
     }
 
     @Test
-    void shouldReturnTravelerDetailsWhenCreateTraveler(){
+    void shouldReturnTravelerDetailsWhenCreateTraveler() {
 
-        CreateTravelerRequest request = TravelerMother.getCreateTraveler05Request();
+        CreateTravelerRequest request = getCreateTraveler05Request();
 
         ResponseEntity<TravelerDetailResponse> result = restTemplate
                 .postForEntity(
                         TRAVELER_MAPPING,
                         request,
                         TravelerDetailResponse.class
-                        );
+                );
 
         assertThat(result.getBody().getId()).isEqualTo(5L);
         assertThat(result.getBody().getStatus()).isEqualTo(StatusEnum.ACTIVE.getCode());
@@ -118,22 +113,91 @@ public class TravelerIntegrationTest {
     }
 
     @Test
-    @Disabled
-    void shouldReturnExceptionMessageWhenCreateTravelerWithDuplicateName(){
-        CreateTravelerRequest request = TravelerMother.getCreateTraveler02Request();
-        request.setName("Ana Maria");
+    void shouldReturnExceptionMessageWhenCreateTravelerWithDuplicateName() {
+        CreateTravelerRequest request = getCreateTraveler02Request();
 
-        try {
-            ResponseEntity<TravelerDetailResponse> result = restTemplate
-                    .postForEntity(
-                            TRAVELER_MAPPING,
-                            request,
-                            TravelerDetailResponse.class
-                    );
-        }catch(Exception e){
-            assertThat(e.getMessage()).isEqualTo("Já existe viajante cadastrado com mesmo nome ou email");
-        }
+        ResponseEntity<ExceptionResponse> result = restTemplate
+                .postForEntity(
+                        TRAVELER_MAPPING, request, ExceptionResponse.class);
 
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+        assertThat(result.getBody().getMessage()).isEqualTo("Já existe outro viajante cadastrado com mesmo nome ou email");
 
     }
+
+    @Test
+    void shouldReturnActiveTravelerList() {
+
+        ResponseEntity<TravelerDetailResponse[]> result = restTemplate
+                .getForEntity(
+                        TRAVELER_MAPPING + "/actives/", TravelerDetailResponse[].class);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        TravelerDetailResponse[] response = result.getBody();
+
+        assertThat(response.length).isEqualTo(3);
+
+    }
+
+    @Test
+    void shouldInactiveTravalerById() {
+        Long travelerId = 1L;
+
+        restTemplate
+                .put(TRAVELER_MAPPING + "/1/inactive", travelerId);
+
+        ResponseEntity<TravelerDetailResponse[]> result = restTemplate
+                .getForEntity(
+                        TRAVELER_MAPPING + "/actives/", TravelerDetailResponse[].class);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        TravelerDetailResponse[] response = result.getBody();
+
+        assertThat(response.length).isEqualTo(2);
+
+    }
+
+    @Test
+    void shouldUpdateTraveler(){
+
+        UpdateTravelerRequest request = getUpdateTraveler01Request();
+        request.setName("Mauro Cesar");
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UpdateTravelerRequest> httpEntity = new HttpEntity<>(request, headers);
+
+        ResponseEntity<TravelerDetailResponse> result = restTemplate
+                .exchange(TRAVELER_MAPPING,
+                        HttpMethod.PUT,
+                        httpEntity,TravelerDetailResponse.class
+                );
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(result.getBody().getName()).isEqualTo("Mauro Cesar");
+        assertThat(result.getBody().getId()).isEqualTo(1L);
+
+    }
+
+
+
+    @Test
+    void shouldReturnTravelerByName(){
+
+        String name = "Ana";
+        ResponseEntity<TravelerDetailResponse[]> result = restTemplate
+                .getForEntity(
+                        TRAVELER_MAPPING + "/find?name=" + name, TravelerDetailResponse[].class);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        TravelerDetailResponse[] response = result.getBody();
+        assertThat(response.length).isEqualTo(1);
+
+        assertThat(response[0].getId()).isEqualTo(1L);
+        assertThat(response[0].getName()).isEqualTo("Ana Maria");
+        assertThat(response[0].getEmail()).isEqualTo("ana_maria@gmail.com");
+        assertThat(response[0].getNumberPhone()).isEqualTo("98888-1111");
+        assertThat(response[0].getPrefixPhone()).isEqualTo(11);
+        assertThat(response[0].getStatus()).isEqualTo(StatusEnum.ACTIVE.getCode());
+    }
+
 }

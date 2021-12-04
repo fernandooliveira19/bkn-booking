@@ -6,3 +6,4 @@ INSERT INTO public.traveler (id, document, email, name, number_phone, prefix_pho
 VALUES(3,'', 'maria_silva@gmail.com', 'Maria da Silva', '98888-3333', 33, 'A');
 INSERT INTO public.traveler (id, document, email, name, number_phone, prefix_phone, status)
 VALUES(4,'', 'beatriz_lisboa@gmail.com', 'Beatriz Lisboa', '98888-4444', 44, 'I');
+

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.StatusEnum;
 import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
+import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
 import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
 
 import java.util.Arrays;
@@ -167,5 +168,16 @@ public class TravelerMother {
 
 	public static List<TravelerDetailResponse> getAllListTravelerDetailResponse(){
 		return Arrays.asList(getDetailTraveler01Response(), getDetailTraveler02Response(), getDetailTraveler03Response());
+	}
+
+	public static UpdateTravelerRequest getUpdateTraveler01Request() {
+		UpdateTravelerRequest request = new UpdateTravelerRequest();
+		request.setName(TRAVELER_01_NAME);
+		request.setEmail(TRAVELER_01_EMAIL);
+		request.setPrefixPhone(TRAVELER_01_PREFIX_PHONE);
+		request.setNumberPhone(TRAVELER_01_NUMBER_PHONE);
+		request.setId(1L);
+		request.setStatus(StatusEnum.INACTIVE.getCode());
+		return request;
 	}
 }
