@@ -2,6 +2,7 @@ package com.fernando.oliveira.booking.domain.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
+import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,7 +25,7 @@ public class DetailLaunchResponse implements Serializable {
 
     private LocalDate scheduleDate;
 
-    private String paymentType;
+    private PaymentTypeEnum paymentType;
 
-    private String paymentStatus;
+    private PaymentStatusEnum paymentStatus;
 }

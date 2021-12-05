@@ -16,6 +16,7 @@ public interface BookingMapper {
     @Mapping(source = "travelerId", target = "traveler.id")
     Booking createRequestToEntity(CreateBookingRequest request);
 
+    @Mapping(source = "traveler.id", target = "travelerId")
     DetailBookingResponse bookingToDetailBookingResponse(Booking booking);
 
     @Mapping(source = "travelerId", target = "traveler.id")
