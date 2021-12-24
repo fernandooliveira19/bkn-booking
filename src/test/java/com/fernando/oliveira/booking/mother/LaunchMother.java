@@ -4,6 +4,7 @@ import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
+import com.fernando.oliveira.booking.domain.request.LaunchRequest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -83,5 +84,20 @@ public class LaunchMother {
                 .paymentStatus(paymentStatus)
                 .paymentDate(paymentDate)
                 .build();
+    }
+
+    public static LaunchRequest getLaunchRequest(BigDecimal amount,
+                                                 String scheduleDate,
+                                                 String paymentType,
+                                                 String paymentStatus,
+                                                 String paymentDate) {
+        LaunchRequest request = new LaunchRequest();
+        request.setAmount(amount);
+        request.setPaymentType(paymentType);
+        request.setScheduleDate(scheduleDate);
+        request.setPaymentStatus(paymentStatus);
+        request.setPaymentDate(paymentDate);
+
+        return request;
     }
 }

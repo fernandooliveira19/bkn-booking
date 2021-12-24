@@ -3,8 +3,11 @@ package com.fernando.oliveira.booking.integration;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
+import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
+import com.fernando.oliveira.booking.domain.request.LaunchRequest;
 import com.fernando.oliveira.booking.domain.response.DetailBookingResponse;
-import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
+import com.fernando.oliveira.booking.mother.BookingMother;
+import com.fernando.oliveira.booking.mother.LaunchMother;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -71,28 +75,28 @@ public class BookingIntegrationTest {
         assertThat(response.getChildren()).isEqualTo(2);
         assertThat(response.getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
         assertThat(response.getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
-        assertThat(response.getCheckIn()).isEqualTo(LocalDateTime.of(2021, 10,15,10,0 ));
-        assertThat(response.getCheckOut()).isEqualTo(LocalDateTime.of(2021, 10,25,18,30 ));
+        assertThat(response.getCheckIn()).isEqualTo(LocalDateTime.of(2021, 10,01,10,0 ));
+        assertThat(response.getCheckOut()).isEqualTo(LocalDateTime.of(2021, 10,30,18,30 ));
         assertThat(response.getTotalAmount()).isEqualByComparingTo(BigDecimal.valueOf(1500.00));
         assertThat(response.getAmountPending()).isEqualByComparingTo(BigDecimal.valueOf(200.00));
 
         assertThat(response.getLaunchs().get(0).getId()).isEqualTo(100);
         assertThat(response.getLaunchs().get(0).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(1000.00));
-        assertThat(response.getLaunchs().get(0).getScheduleDate()).isEqualTo(LocalDate.of(2021,9,10));
+        assertThat(response.getLaunchs().get(0).getScheduleDate()).isEqualTo(LocalDate.of(2021,10,10));
         assertThat(response.getLaunchs().get(0).getPaymentType()).isEqualTo(PaymentTypeEnum.PIX);
         assertThat(response.getLaunchs().get(0).getPaymentStatus()).isEqualTo(PaymentStatusEnum.PAID);
-        assertThat(response.getLaunchs().get(0).getPaymentDate()).isEqualTo(LocalDate.of(2021,9,10));
+        assertThat(response.getLaunchs().get(0).getPaymentDate()).isEqualTo(LocalDate.of(2021,10,10));
 
         assertThat(response.getLaunchs().get(1).getId()).isEqualTo(101);
         assertThat(response.getLaunchs().get(1).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(300.00));
-        assertThat(response.getLaunchs().get(1).getScheduleDate()).isEqualTo(LocalDate.of(2021,9,20));
+        assertThat(response.getLaunchs().get(1).getScheduleDate()).isEqualTo(LocalDate.of(2021,10,20));
         assertThat(response.getLaunchs().get(1).getPaymentType()).isEqualTo(PaymentTypeEnum.TRANSFER);
         assertThat(response.getLaunchs().get(1).getPaymentStatus()).isEqualTo(PaymentStatusEnum.PAID);
-        assertThat(response.getLaunchs().get(1).getPaymentDate()).isEqualTo(LocalDate.of(2021,9,20));
+        assertThat(response.getLaunchs().get(1).getPaymentDate()).isEqualTo(LocalDate.of(2021,10,20));
 
         assertThat(response.getLaunchs().get(2).getId()).isEqualTo(102);
         assertThat(response.getLaunchs().get(2).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(200.00));
-        assertThat(response.getLaunchs().get(2).getScheduleDate()).isEqualTo(LocalDate.of(2021,9,30));
+        assertThat(response.getLaunchs().get(2).getScheduleDate()).isEqualTo(LocalDate.of(2021,10,30));
         assertThat(response.getLaunchs().get(2).getPaymentType()).isEqualTo(PaymentTypeEnum.LOCAL);
         assertThat(response.getLaunchs().get(2).getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
         assertThat(response.getLaunchs().get(2).getPaymentDate()).isNull();
@@ -101,10 +105,127 @@ public class BookingIntegrationTest {
     @Test
     void shouldCreateReservedBookingWithPaymentPending(){
 
+       Long travelerId = 1L;
+       String checkIn = "2021-09-01 10:00";
+       String checkOut = "2021-09-30 18:00";;
+       BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
+       LaunchRequest launch01 = LaunchMother.getLaunchRequest(
+                BigDecimal.valueOf(1000.0),
+                "2021-09-01",
+                PaymentTypeEnum.PIX.name(),
+                PaymentStatusEnum.PAID.name(),
+                "2021-08-01");
+        LaunchRequest launch02 = LaunchMother.getLaunchRequest(
+                BigDecimal.valueOf(1000.0),
+                "2021-09-01",
+                PaymentTypeEnum.PIX.name(),
+                PaymentStatusEnum.PENDING.name(),
+                null);
+
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest(1L,checkIn.toString(), checkOut.toString(), totalAmount, Arrays.asList(launch01, launch02));
+
+
+        ResponseEntity<DetailBookingResponse> result = restTemplate
+                .postForEntity(
+                        BOOKING_MAPPING, request, DetailBookingResponse.class);
+
+        assertThat(result.getBody().getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
+        assertThat(result.getBody().getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
+
+
     }
 
     @Test
     void shouldCreateReservedBookingWithPaymentDone(){
+        Long travelerId = 1L;
+        String checkIn = "2021-09-01 10:00";
+        String checkOut = "2021-09-30 18:00";;
+        BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
+        LaunchRequest launch01 = LaunchMother.getLaunchRequest(
+                BigDecimal.valueOf(1000.0),
+                "2021-09-01",
+                PaymentTypeEnum.PIX.name(),
+                PaymentStatusEnum.PAID.name(),
+                "2021-08-01");
+        LaunchRequest launch02 = LaunchMother.getLaunchRequest(
+                BigDecimal.valueOf(1000.0),
+                "2021-09-01",
+                PaymentTypeEnum.PIX.name(),
+                PaymentStatusEnum.PAID.name(),
+                "2021-09-01");
+
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest(1L,checkIn.toString(), checkOut.toString(), totalAmount, Arrays.asList(launch01, launch02));
+
+
+        ResponseEntity<DetailBookingResponse> result = restTemplate
+                .postForEntity(
+                        BOOKING_MAPPING, request, DetailBookingResponse.class);
+
+        assertThat(result.getBody().getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
+        assertThat(result.getBody().getPaymentStatus()).isEqualTo(PaymentStatusEnum.PAID);
+
+    }
+
+    @Test
+    void shouldCreatePreReservedBooking(){
+        Long travelerId = 1L;
+        String checkIn = "2021-09-01 10:00";
+        String checkOut = "2021-09-30 18:00";;
+        BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
+        LaunchRequest launch01 = LaunchMother.getLaunchRequest(
+                BigDecimal.valueOf(1000.0),
+                "2021-09-01",
+                PaymentTypeEnum.PIX.name(),
+                PaymentStatusEnum.PENDING.name(),
+                null);
+        LaunchRequest launch02 = LaunchMother.getLaunchRequest(
+                BigDecimal.valueOf(1000.0),
+                "2021-09-01",
+                PaymentTypeEnum.PIX.name(),
+                PaymentStatusEnum.PENDING.name(),
+                null);
+
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest(1L,checkIn.toString(), checkOut.toString(), totalAmount, Arrays.asList(launch01, launch02));
+
+
+        ResponseEntity<DetailBookingResponse> result = restTemplate
+                .postForEntity(
+                        BOOKING_MAPPING, request, DetailBookingResponse.class);
+
+        assertThat(result.getBody().getBookingStatus()).isEqualTo(BookingStatusEnum.PRE_RESERVED);
+        assertThat(result.getBody().getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
+
+    }
+
+    @Test
+    void givenDateInsideOtherBookingWhenCreateBookingThenReturnExceptionMessage(){
+
+    }
+
+//    @Test
+    void givenDateOutsideOtherBookingWhenCreateBookingThenReturnExceptionMessage(){
+
+//        Traveler traveler = TravelerMother.getTravelerSaved01();
+//        LocalDateTime checkIn = LocalDateTime.of(2021, Month.NOVEMBER, 1, 10,0);
+//        LocalDateTime checkOut = LocalDateTime.of(2021, Month.NOVEMBER, 30, 18,0);
+//        BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
+//        LaunchRequest launch01 = LaunchMother.getLaunchRequest(
+//                BigDecimal.valueOf(1000.0),
+//                "2021-11-15",
+//                PaymentTypeEnum.PIX.name(),
+//                PaymentStatusEnum.PAID.name(),
+//                "2021-11-16");
+//
+//        CreateBookingRequest request = BookingMother.getCreateBookingRequest(traveler,checkIn.toString(), checkOut.toString(), totalAmount, Arrays.asList(launch01));
+//
+//
+//        ResponseEntity<ExceptionResponse> result = restTemplate
+//                .postForEntity(
+//                        BOOKING_MAPPING, request, ExceptionResponse.class);
+//
+//        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+//        assertThat(result.getBody().getMessage()).isEqualTo("Já existe outra reserva para o mesmo periodo");
+
 
     }
 }

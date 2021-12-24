@@ -5,6 +5,8 @@ import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
+import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
+import com.fernando.oliveira.booking.domain.request.LaunchRequest;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -119,5 +121,18 @@ public class BookingMother {
         return Traveler.builder()
                 .id(TRAVELER_ID)
                 .build();
+    }
+
+    public static CreateBookingRequest getCreateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal totalAmount, List<LaunchRequest> launchs) {
+
+        CreateBookingRequest request = new CreateBookingRequest();
+        request.setCheckIn(checkIn);
+        request.setCheckOut(checkOut);
+        request.setTotalAmount(totalAmount);
+        request.setTravelerId(travelerId);
+        request.setLaunchs(launchs);
+
+
+        return request;
     }
 }
