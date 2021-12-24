@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking,Long> {
 
- @Query(value = "select b from booking b where :checkIn between b.checkIn and b.checkOut or (:checkOut between b.checkIn and b.checkOut)")
+ @Query(value = "select b from booking b where :checkIn between b.checkIn and b.checkOut or (:checkOut between b.checkIn and b.checkOut) or (b.checkIn >= :checkIn and b.checkOut <= :checkOut)")
  List<Booking> findBookingsByDate(
          @Param("checkIn") LocalDateTime checkIn,
          @Param("checkOut")LocalDateTime checkOut);

@@ -85,6 +85,9 @@ public class BookingServiceImpl implements BookingService{
 
         setBookingData(bookingBase, bookingToUpdate);
 
+        bookingToUpdate.setInsertDate(bookingBase.getInsertDate());
+        bookingToUpdate.setLastUpdate(LocalDateTime.now());
+
         Booking bookingUpdated = bookingRepository.save(bookingToUpdate);
 
         bookingUpdated.getLaunchs().stream()
@@ -118,7 +121,7 @@ public class BookingServiceImpl implements BookingService{
     }
 
     private void setBookingData(Booking booking, Booking bookingToUpdate) {
-       bookingToUpdate.setBookingStatus(booking.getBookingStatus());
+        bookingToUpdate.setBookingStatus(booking.getBookingStatus());
         bookingToUpdate.setPaymentStatus(booking.getPaymentStatus());
         bookingToUpdate.setAmountPending(booking.getAmountPending());
         bookingToUpdate.setLastUpdate(LocalDateTime.now());
@@ -129,6 +132,7 @@ public class BookingServiceImpl implements BookingService{
         bookingToUpdate.setLaunchs(booking.getLaunchs());
         bookingToUpdate.setTotalAmount(booking.getTotalAmount());
         bookingToUpdate.setTraveler(booking.getTraveler());
+
     }
 
     public void defineBookingStatus(Booking booking) {

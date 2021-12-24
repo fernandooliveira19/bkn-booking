@@ -6,6 +6,7 @@ import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
 import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
 import com.fernando.oliveira.booking.domain.request.LaunchRequest;
 import com.fernando.oliveira.booking.domain.response.DetailBookingResponse;
+import com.fernando.oliveira.booking.domain.response.ExceptionResponse;
 import com.fernando.oliveira.booking.mother.BookingMother;
 import com.fernando.oliveira.booking.mother.LaunchMother;
 import org.junit.jupiter.api.Test;
@@ -122,7 +123,7 @@ public class BookingIntegrationTest {
                 PaymentStatusEnum.PENDING.name(),
                 null);
 
-        CreateBookingRequest request = BookingMother.getCreateBookingRequest(1L,checkIn.toString(), checkOut.toString(), totalAmount, Arrays.asList(launch01, launch02));
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount, Arrays.asList(launch01, launch02));
 
 
         ResponseEntity<DetailBookingResponse> result = restTemplate
@@ -154,7 +155,7 @@ public class BookingIntegrationTest {
                 PaymentStatusEnum.PAID.name(),
                 "2021-09-01");
 
-        CreateBookingRequest request = BookingMother.getCreateBookingRequest(1L,checkIn.toString(), checkOut.toString(), totalAmount, Arrays.asList(launch01, launch02));
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount, Arrays.asList(launch01, launch02));
 
 
         ResponseEntity<DetailBookingResponse> result = restTemplate
@@ -185,7 +186,7 @@ public class BookingIntegrationTest {
                 PaymentStatusEnum.PENDING.name(),
                 null);
 
-        CreateBookingRequest request = BookingMother.getCreateBookingRequest(1L,checkIn.toString(), checkOut.toString(), totalAmount, Arrays.asList(launch01, launch02));
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount, Arrays.asList(launch01, launch02));
 
 
         ResponseEntity<DetailBookingResponse> result = restTemplate
@@ -200,32 +201,130 @@ public class BookingIntegrationTest {
     @Test
     void givenDateInsideOtherBookingWhenCreateBookingThenReturnExceptionMessage(){
 
+        Long travelerId = 2L;
+        String checkIn = "2021-10-05 10:00";
+        String checkOut = "2021-10-20 18:00";;
+        BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
+        LaunchRequest launch01 = LaunchMother.getLaunchRequest(
+                BigDecimal.valueOf(1000.0),
+                "2021-09-01",
+                PaymentTypeEnum.PIX.name(),
+                PaymentStatusEnum.PENDING.name(),
+                null);
+        LaunchRequest launch02 = LaunchMother.getLaunchRequest(
+                BigDecimal.valueOf(1000.0),
+                "2021-09-01",
+                PaymentTypeEnum.PIX.name(),
+                PaymentStatusEnum.PENDING.name(),
+                null);
+
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount, Arrays.asList(launch01, launch02));
+
+        ResponseEntity<ExceptionResponse> result = restTemplate
+                .postForEntity(
+                        BOOKING_MAPPING, request, ExceptionResponse.class);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+        assertThat(result.getBody().getMessage()).isEqualTo("Já existe outra reserva para o mesmo periodo");
+
+
     }
 
-//    @Test
-    void givenDateOutsideOtherBookingWhenCreateBookingThenReturnExceptionMessage(){
+    @Test
+    void givenDateWithConflictCheckInWhenCreateBookingThenReturnExceptionMessage(){
+        Long travelerId = 2L;
+        String checkIn = "2021-09-30 10:00";
+        String checkOut = "2021-10-05 18:00";;
+        BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
+        LaunchRequest launch01 = LaunchMother.getLaunchRequest(
+                BigDecimal.valueOf(1000.0),
+                "2021-10-10",
+                PaymentTypeEnum.PIX.name(),
+                PaymentStatusEnum.PENDING.name(),
+                null);
+        LaunchRequest launch02 = LaunchMother.getLaunchRequest(
+                BigDecimal.valueOf(1000.0),
+                "2021-10-20",
+                PaymentTypeEnum.PIX.name(),
+                PaymentStatusEnum.PENDING.name(),
+                null);
 
-//        Traveler traveler = TravelerMother.getTravelerSaved01();
-//        LocalDateTime checkIn = LocalDateTime.of(2021, Month.NOVEMBER, 1, 10,0);
-//        LocalDateTime checkOut = LocalDateTime.of(2021, Month.NOVEMBER, 30, 18,0);
-//        BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
-//        LaunchRequest launch01 = LaunchMother.getLaunchRequest(
-//                BigDecimal.valueOf(1000.0),
-//                "2021-11-15",
-//                PaymentTypeEnum.PIX.name(),
-//                PaymentStatusEnum.PAID.name(),
-//                "2021-11-16");
-//
-//        CreateBookingRequest request = BookingMother.getCreateBookingRequest(traveler,checkIn.toString(), checkOut.toString(), totalAmount, Arrays.asList(launch01));
-//
-//
-//        ResponseEntity<ExceptionResponse> result = restTemplate
-//                .postForEntity(
-//                        BOOKING_MAPPING, request, ExceptionResponse.class);
-//
-//        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
-//        assertThat(result.getBody().getMessage()).isEqualTo("Já existe outra reserva para o mesmo periodo");
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest(
+                travelerId,checkIn, checkOut, totalAmount, Arrays.asList(launch01, launch02));
 
+
+        ResponseEntity<ExceptionResponse> result = restTemplate
+                .postForEntity(
+                        BOOKING_MAPPING, request, ExceptionResponse.class);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+        assertThat(result.getBody().getMessage()).isEqualTo("Já existe outra reserva para o mesmo periodo");
+
+
+
+    }
+
+    @Test
+    void givenDateWithOutsideConflictCheckOutWhenCreateBookingThenReturnExceptionMessage(){
+        Long travelerId = 2L;
+        String checkIn = "2021-09-30 10:00";
+        String checkOut = "2021-11-05 18:00";;
+        BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
+        LaunchRequest launch01 = LaunchMother.getLaunchRequest(
+                BigDecimal.valueOf(1000.0),
+                "2021-10-10",
+                PaymentTypeEnum.PIX.name(),
+                PaymentStatusEnum.PENDING.name(),
+                null);
+        LaunchRequest launch02 = LaunchMother.getLaunchRequest(
+                BigDecimal.valueOf(1000.0),
+                "2021-10-20",
+                PaymentTypeEnum.PIX.name(),
+                PaymentStatusEnum.PENDING.name(),
+                null);
+
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest(
+                travelerId,checkIn, checkOut, totalAmount, Arrays.asList(launch01, launch02));
+
+
+        ResponseEntity<ExceptionResponse> result = restTemplate
+                .postForEntity(
+                        BOOKING_MAPPING, request, ExceptionResponse.class);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+        assertThat(result.getBody().getMessage()).isEqualTo("Já existe outra reserva para o mesmo periodo");
+
+    }
+
+    @Test
+    void givenDateWithConflictCheckOutWhenCreateBookingThenReturnExceptionMessage(){
+        Long travelerId = 2L;
+        String checkIn = "2021-10-30 10:00";
+        String checkOut = "2021-11-05 18:00";;
+        BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
+        LaunchRequest launch01 = LaunchMother.getLaunchRequest(
+                BigDecimal.valueOf(1000.0),
+                "2021-10-10",
+                PaymentTypeEnum.PIX.name(),
+                PaymentStatusEnum.PENDING.name(),
+                null);
+        LaunchRequest launch02 = LaunchMother.getLaunchRequest(
+                BigDecimal.valueOf(1000.0),
+                "2021-10-20",
+                PaymentTypeEnum.PIX.name(),
+                PaymentStatusEnum.PENDING.name(),
+                null);
+
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest(
+                travelerId,checkIn, checkOut, totalAmount, Arrays.asList(launch01, launch02));
+
+
+        ResponseEntity<ExceptionResponse> result = restTemplate
+                .postForEntity(
+                        BOOKING_MAPPING, request, ExceptionResponse.class);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+        assertThat(result.getBody().getMessage()).isEqualTo("Já existe outra reserva para o mesmo periodo");
 
     }
 }

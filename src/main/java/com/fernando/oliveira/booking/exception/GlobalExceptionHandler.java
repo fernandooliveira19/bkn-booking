@@ -16,8 +16,8 @@ public class GlobalExceptionHandler {
     private ExceptionResponseBuilder responseBuilder;
 
     @ExceptionHandler(TravelerException.class)
-    public ResponseEntity<ExceptionResponse> handleBusinessException(TravelerException exception){
-        ExceptionResponse exceptionResponse = responseBuilder.getBusinessException(exception);
+    public ResponseEntity<ExceptionResponse> handleTravelerException(TravelerException exception){
+        ExceptionResponse exceptionResponse = responseBuilder.getTravelerException(exception);
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exceptionResponse);
     }
 
@@ -25,5 +25,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception){
         ExceptionResponse exceptionResponse = responseBuilder.buildFieldErrors(exception);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(BookingException.class)
+    public ResponseEntity<ExceptionResponse> handleBookingException(BookingException exception){
+        ExceptionResponse exceptionResponse = responseBuilder.getBookingException(exception);
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exceptionResponse);
     }
 }

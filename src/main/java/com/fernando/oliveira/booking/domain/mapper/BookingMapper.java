@@ -20,5 +20,7 @@ public interface BookingMapper {
     DetailBookingResponse bookingToDetailBookingResponse(Booking booking);
 
     @Mapping(source = "travelerId", target = "traveler.id")
+    @Mapping(source = "checkIn", target = "checkIn", dateFormat = "yyyy-MM-dd HH:mm")
+    @Mapping(source = "checkOut", target = "checkOut", dateFormat = "yyyy-MM-dd HH:mm")
     Booking updateRequestToEntity(UpdateBookingRequest request);
 }

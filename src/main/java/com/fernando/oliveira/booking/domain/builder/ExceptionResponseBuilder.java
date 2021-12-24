@@ -1,6 +1,7 @@
 package com.fernando.oliveira.booking.domain.builder;
 
 import com.fernando.oliveira.booking.domain.response.ExceptionResponse;
+import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.exception.ObjectError;
 import com.fernando.oliveira.booking.exception.TravelerException;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 @Component
 public class ExceptionResponseBuilder {
 
-    public ExceptionResponse getBusinessException(TravelerException exception){
+    public ExceptionResponse getTravelerException(TravelerException exception){
         return ExceptionResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .message(exception.getMessage())
@@ -30,6 +31,13 @@ public class ExceptionResponseBuilder {
                 .timestamp(LocalDateTime.now())
                 .message("Erro nas validaçãoes dos campos")
                 .errorList(errorList)
+                .build();
+    }
+
+    public ExceptionResponse getBookingException(BookingException exception) {
+        return ExceptionResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .message(exception.getMessage())
                 .build();
     }
 }
