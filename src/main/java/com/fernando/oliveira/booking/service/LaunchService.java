@@ -8,4 +8,6 @@ public interface LaunchService {
     Launch createLaunch(Launch launch, Booking booking);
 
     Launch updateLaunch(Launch launch);
+
+    Launch findById(Long id);
 }

@@ -4,7 +4,9 @@ import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
+import com.fernando.oliveira.booking.domain.request.CreateLaunchRequest;
 import com.fernando.oliveira.booking.domain.request.LaunchRequest;
+import com.fernando.oliveira.booking.domain.request.UpdateLaunchRequest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -86,12 +88,29 @@ public class LaunchMother {
                 .build();
     }
 
-    public static LaunchRequest getLaunchRequest(BigDecimal amount,
-                                                 String scheduleDate,
-                                                 String paymentType,
-                                                 String paymentStatus,
-                                                 String paymentDate) {
-        LaunchRequest request = new LaunchRequest();
+    public static CreateLaunchRequest getCreateLaunchRequest(BigDecimal amount,
+                                                       String scheduleDate,
+                                                       String paymentType,
+                                                       String paymentStatus,
+                                                       String paymentDate) {
+        CreateLaunchRequest request = new CreateLaunchRequest();
+        request.setAmount(amount);
+        request.setPaymentType(paymentType);
+        request.setScheduleDate(scheduleDate);
+        request.setPaymentStatus(paymentStatus);
+        request.setPaymentDate(paymentDate);
+
+        return request;
+    }
+
+    public static UpdateLaunchRequest getUpdateLaunchRequest(Long id,
+                                                             BigDecimal amount,
+                                                             String scheduleDate,
+                                                             String paymentType,
+                                                             String paymentStatus,
+                                                             String paymentDate) {
+        UpdateLaunchRequest request = new UpdateLaunchRequest();
+        request.setId(id);
         request.setAmount(amount);
         request.setPaymentType(paymentType);
         request.setScheduleDate(scheduleDate);

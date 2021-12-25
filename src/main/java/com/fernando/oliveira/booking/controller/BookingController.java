@@ -73,7 +73,7 @@ public class BookingController {
         Booking bookingToUpdate = bookingMapper.updateRequestToEntity(request);
         Booking bookingUpdated = bookingService.updateBooking(bookingToUpdate, id);
         DetailBookingResponse response = bookingMapper.bookingToDetailBookingResponse(bookingUpdated);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }
 

@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,4 +19,6 @@ public class UpdateBookingRequest extends BookingRequest {
     @ApiModelProperty(name="paymentStatus", value="Situação do pagamento da reserva", example="PENDING", required = true)
     @NotBlank(message = "Situação do pagamento da reserva é obrigatória")
     private String paymentStatus;
+
+    private List<UpdateLaunchRequest> launchs;
 }

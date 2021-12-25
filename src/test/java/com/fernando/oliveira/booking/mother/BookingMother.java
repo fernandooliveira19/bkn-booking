@@ -5,8 +5,7 @@ import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
-import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
-import com.fernando.oliveira.booking.domain.request.LaunchRequest;
+import com.fernando.oliveira.booking.domain.request.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -123,9 +122,21 @@ public class BookingMother {
                 .build();
     }
 
-    public static CreateBookingRequest getCreateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal totalAmount, List<LaunchRequest> launchs) {
+    public static CreateBookingRequest getCreateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal totalAmount, List<CreateLaunchRequest> launchs) {
 
         CreateBookingRequest request = new CreateBookingRequest();
+        request.setCheckIn(checkIn);
+        request.setCheckOut(checkOut);
+        request.setTotalAmount(totalAmount);
+        request.setTravelerId(travelerId);
+        request.setLaunchs(launchs);
+
+
+        return request;
+    }
+
+    public static UpdateBookingRequest getUpdateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal totalAmount, List<UpdateLaunchRequest> launchs) {
+        UpdateBookingRequest request = new UpdateBookingRequest();
         request.setCheckIn(checkIn);
         request.setCheckOut(checkOut);
         request.setTotalAmount(totalAmount);

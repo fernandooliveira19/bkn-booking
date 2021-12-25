@@ -42,7 +42,5 @@ public class BookingRequest implements Serializable {
     @ApiModelProperty(name="observation", value="Observação", example="Teve um desconto relativo a quantidade de dias")
     private String observation;
 
-    private List<LaunchRequest> launchs;
-
 
 }

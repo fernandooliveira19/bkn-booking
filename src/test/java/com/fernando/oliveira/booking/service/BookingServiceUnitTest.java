@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -251,7 +250,6 @@ public class BookingServiceUnitTest {
         }catch (BookingException e){
             then(e.getMessage()).isEqualTo("Soma dos lançamentos estão diferentes do valor total da reserva");
         }
-
 
     }
 

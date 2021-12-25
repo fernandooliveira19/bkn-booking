@@ -8,6 +8,8 @@ import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -75,23 +77,32 @@ public class BookingServiceImpl implements BookingService{
 
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public Booking updateBooking(Booking booking, Long id) {
 
+        booking.setId(id);
         validateBooking(booking);
 
         Booking bookingToUpdate = defineBookingDetails(booking);
 
         Booking bookingBase = findById(id);
-
-        setBookingData(bookingBase, bookingToUpdate);
-
         bookingToUpdate.setInsertDate(bookingBase.getInsertDate());
         bookingToUpdate.setLastUpdate(LocalDateTime.now());
 
         Booking bookingUpdated = bookingRepository.save(bookingToUpdate);
 
-        bookingUpdated.getLaunchs().stream()
-                .forEach( e -> launchService.updateLaunch(e));
+        for(Launch launch : booking.getLaunchs()){
+
+            if(launch.getId() != null) {
+                launch.setBooking(bookingUpdated);
+                Launch l = launchService.findById(launch.getId());
+                launchService.updateLaunch(launch);
+            }else{
+                launchService.createLaunch(launch, bookingUpdated);
+            }
+
+
+        }
 
         return bookingUpdated;
 
@@ -118,21 +129,6 @@ public class BookingServiceImpl implements BookingService{
         definePaymentStatus(booking);
         defineAmountPending(booking);
         return booking;
-    }
-
-    private void setBookingData(Booking booking, Booking bookingToUpdate) {
-        bookingToUpdate.setBookingStatus(booking.getBookingStatus());
-        bookingToUpdate.setPaymentStatus(booking.getPaymentStatus());
-        bookingToUpdate.setAmountPending(booking.getAmountPending());
-        bookingToUpdate.setLastUpdate(LocalDateTime.now());
-        bookingToUpdate.setAdults(booking.getAdults());
-        bookingToUpdate.setChildren(booking.getChildren());
-        bookingToUpdate.setCheckIn(booking.getCheckIn());
-        bookingToUpdate.setCheckOut(booking.getCheckOut());
-        bookingToUpdate.setLaunchs(booking.getLaunchs());
-        bookingToUpdate.setTotalAmount(booking.getTotalAmount());
-        bookingToUpdate.setTraveler(booking.getTraveler());
-
     }
 
     public void defineBookingStatus(Booking booking) {
