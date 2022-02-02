@@ -27,9 +27,10 @@ public class ExceptionResponseBuilder {
                 .stream()
                 .map(error -> new ObjectError(error.getDefaultMessage(), error.getField()))
                 .collect(Collectors.toList());
+
         return ExceptionResponse.builder()
                 .timestamp(LocalDateTime.now())
-                .message("Erro nas validaçãoes dos campos")
+                .message(errorList.get(0).getMessage())
                 .errorList(errorList)
                 .build();
     }
