@@ -13,9 +13,9 @@ import java.math.BigDecimal;
 @Setter
 public class LaunchRequest implements Serializable {
 
-    @ApiModelProperty(name="amount", value="Valor do lançamento", example="500.0", required = true)
+    @ApiModelProperty(name="amount", value="Valor do lançamento", example="500,00", required = true)
     @NotNull(message = "Valor do lançamento é obrigatório")
-    private BigDecimal amount;
+    private String amount;
 
     @ApiModelProperty(name="paymentDate", value="Data de pagamento do lançamento", example="2021-10-14", required = true)
     private String paymentDate;

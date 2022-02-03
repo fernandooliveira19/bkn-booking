@@ -112,15 +112,15 @@ public class BookingIntegrationTest {
        String checkIn = "2021-09-01T10:00";
        String checkOut = "2021-09-30T18:00";
        String contractType = "DIRECT";
-       BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
+       String totalAmount = "2.000,00";
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
-                BigDecimal.valueOf(1000.0),
+                "1.000,00",
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PAID.name(),
                 "2021-08-01");
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
-                BigDecimal.valueOf(1000.0),
+                "1.000,00",
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
@@ -144,16 +144,16 @@ public class BookingIntegrationTest {
         Long travelerId = 1L;
         String checkIn = "2021-09-01T10:00";
         String checkOut = "2021-09-30T18:00";
-        BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
+        String totalAmount = "2.000,00";
         String contractType = "DIRECT";
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
-                BigDecimal.valueOf(1000.0),
+                "1.000,00",
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PAID.name(),
                 "2021-08-01");
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
-                BigDecimal.valueOf(1000.0),
+                "1.000,00",
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PAID.name(),
@@ -177,15 +177,15 @@ public class BookingIntegrationTest {
         String checkIn = "2021-09-01T10:00";
         String checkOut = "2021-09-30T18:00";
         String contractType = "DIRECT";
-        BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
+        String totalAmount = "2.000,00";
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
-                BigDecimal.valueOf(1000.0),
+                "1.000,00",
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 null);
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
-                BigDecimal.valueOf(1000.0),
+                "1.000,00",
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
@@ -210,15 +210,15 @@ public class BookingIntegrationTest {
         String checkIn = "2021-10-05T10:00";
         String checkOut = "2021-10-20T18:00";
         String contractType = "DIRECT";
-        BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
+        String totalAmount = "2.000,00";
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
-                BigDecimal.valueOf(1000.0),
+                "1.000,00",
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 null);
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
-                BigDecimal.valueOf(1000.0),
+                "1.000,00",
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
@@ -242,15 +242,15 @@ public class BookingIntegrationTest {
         String checkIn = "2021-09-30T10:00";
         String checkOut = "2021-10-05T18:00";
         String contractType = "DIRECT";
-        BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
+        String totalAmount = "2.000,00";
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
-                BigDecimal.valueOf(1000.0),
+                "1.000,00",
                 "2021-10-10",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 null);
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
-                BigDecimal.valueOf(1000.0),
+                "1.000,00",
                 "2021-10-20",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
@@ -277,15 +277,15 @@ public class BookingIntegrationTest {
         String checkIn = "2021-09-30T10:00";
         String checkOut = "2021-11-05T18:00";
         String contractType = "DIRECT";
-        BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
+        String totalAmount = "2.000,00";
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
-                BigDecimal.valueOf(1000.0),
+                "1.000,00",
                 "2021-10-10",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 null);
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
-                BigDecimal.valueOf(1000.0),
+                "1.000,00",
                 "2021-10-20",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
@@ -310,15 +310,15 @@ public class BookingIntegrationTest {
         String checkIn = "2021-10-30T10:00";
         String checkOut = "2021-11-05T18:00";
         String contractType = "DIRECT";
-        BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
+        String totalAmount = "2.000,00";
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
-                BigDecimal.valueOf(1000.0),
+                "1.000,00",
                 "2021-10-10",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 null);
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
-                BigDecimal.valueOf(1000.0),
+                "1.000,00",
                 "2021-10-20",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
@@ -342,24 +342,24 @@ public class BookingIntegrationTest {
         Long travelerId = 1L;
         String checkIn = "2021-10-01 10:00";
         String checkOut = "2021-10-30 18:00";;
-        BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
+        String totalAmount = "2.000,00";
         UpdateLaunchRequest launch01 = LaunchMother.getUpdateLaunchRequest(
                 100L,
-                BigDecimal.valueOf(1000.0),
+                "1.000,00",
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PAID.name(),
                 "2021-09-01");
         UpdateLaunchRequest launch02 = LaunchMother.getUpdateLaunchRequest(
                 101L,
-                BigDecimal.valueOf(1000.0),
+                "1.000,00",
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 null);
         UpdateLaunchRequest launch03 = LaunchMother.getUpdateLaunchRequest(
                 102L,
-                BigDecimal.valueOf(1000.0),
+                "1.000,00",
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),

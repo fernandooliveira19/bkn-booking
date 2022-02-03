@@ -25,7 +25,7 @@ public class BookingMother {
 
     private static final String REQUEST_CHECK_IN_01 = "2021-10-15T12:30";
     private static final String REQUEST_CHECK_OUT_01 = "2021-10-20T18:30";
-    private static final BigDecimal REQUEST_TOTAL_AMOUNT_01 = BigDecimal.valueOf(1500.0);
+    private static final String REQUEST_TOTAL_AMOUNT_01 = "1.500,00";
     private static final Long REQUEST_TRAVELER_ID_01 = 1L;
     private static final String REQUEST_CONTRACT_TYPE = "DIRECT";
     private static final Integer REQUEST_ADULTS_ID_01 = 2;
@@ -146,7 +146,7 @@ public class BookingMother {
         return request;
     }
 
-    public static CreateBookingRequest getCreateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal totalAmount, String contractType, List<CreateLaunchRequest> launchs) {
+    public static CreateBookingRequest getCreateBookingRequest(Long travelerId, String checkIn, String checkOut, String totalAmount, String contractType, List<CreateLaunchRequest> launchs) {
 
         CreateBookingRequest request = new CreateBookingRequest();
         request.setCheckIn(checkIn);
@@ -160,7 +160,7 @@ public class BookingMother {
         return request;
     }
 
-    public static UpdateBookingRequest getUpdateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal totalAmount, List<UpdateLaunchRequest> launchs) {
+    public static UpdateBookingRequest getUpdateBookingRequest(Long travelerId, String checkIn, String checkOut, String totalAmount, List<UpdateLaunchRequest> launchs) {
         UpdateBookingRequest request = new UpdateBookingRequest();
         request.setCheckIn(checkIn);
         request.setCheckOut(checkOut);
