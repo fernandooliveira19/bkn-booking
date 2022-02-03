@@ -18,17 +18,21 @@ public class BookingRequest implements Serializable {
     @NotNull(message = "Viajante é obrigatório")
     private Long travelerId;
 
-    @ApiModelProperty(name="checkIn", value="Data de check-in", example="2021-10-15 10:00", required = true)
+    @ApiModelProperty(name="checkIn", value="Data de check-in", example="2021-10-15T10:00", required = true)
     @NotBlank(message = "Data de check-in é obrigatória")
     private String checkIn;
 
-    @ApiModelProperty(name="checkOut", value="Data de check-out", example="2021-10-20 10:00", required = true)
+    @ApiModelProperty(name="checkOut", value="Data de check-out", example="2021-10-20T10:00", required = true)
     @NotBlank(message = "Data de check-out é obrigatória")
     private String checkOut;
 
     @ApiModelProperty(name="totalAmount", value="Valor total da reserva", example="1200.0", required = true)
-    @NotNull(message = "Nome é obrigatório")
+    @NotNull(message = "Valor total é obrigatório")
     private BigDecimal totalAmount;
+
+    @ApiModelProperty(name="contractType", value="Data de check-out", example="DIRECT", required = true)
+    @NotBlank(message = "Tipo de contrato é obrigatório")
+    private String contractType;
 
     @ApiModelProperty(name="adults", value="Quantidade de adultos", example="3")
     @Min(value = 1, message = "Quantidade de adultos deve ser maior que 1")

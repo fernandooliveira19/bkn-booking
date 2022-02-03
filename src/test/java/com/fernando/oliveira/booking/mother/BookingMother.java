@@ -23,6 +23,15 @@ public class BookingMother {
     private static final Long TRAVELER_ID_01 = 1L;
     private static final Long BOOKING_ID_01 = 10L;
 
+    private static final String REQUEST_CHECK_IN_01 = "2021-10-15T12:30";
+    private static final String REQUEST_CHECK_OUT_01 = "2021-10-20T18:30";
+    private static final BigDecimal REQUEST_TOTAL_AMOUNT_01 = BigDecimal.valueOf(1500.0);
+    private static final Long REQUEST_TRAVELER_ID_01 = 1L;
+    private static final String REQUEST_CONTRACT_TYPE = "DIRECT";
+    private static final Integer REQUEST_ADULTS_ID_01 = 2;
+    private static final Integer REQUEST_CHILDREN_ID_01 = 1;
+    private static final String REQUEST_OBSERVATION = "Observation";
+
     private static final LocalDateTime CHECK_IN_02 = LocalDateTime.of(2021, Month.OCTOBER, 21,12,30,0);
     private static final LocalDateTime CHECK_OUT_02 = LocalDateTime.of(2021, Month.OCTOBER, 25,18,30,0);
     private static final BigDecimal TOTAL_AMOUNT_02 = BigDecimal.valueOf(1500.0);
@@ -122,7 +131,22 @@ public class BookingMother {
                 .build();
     }
 
-    public static CreateBookingRequest getCreateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal totalAmount, List<CreateLaunchRequest> launchs) {
+    public static CreateBookingRequest getCreateBookingRequest() {
+
+        CreateBookingRequest request = new CreateBookingRequest();
+        request.setCheckIn(REQUEST_CHECK_IN_01);
+        request.setCheckOut(REQUEST_CHECK_OUT_01);
+        request.setTotalAmount(REQUEST_TOTAL_AMOUNT_01);
+        request.setTravelerId(REQUEST_TRAVELER_ID_01);
+        request.setAdults(REQUEST_ADULTS_ID_01);
+        request.setChildren(REQUEST_CHILDREN_ID_01);
+        request.setObservation(REQUEST_OBSERVATION);
+        request.setContractType(REQUEST_CONTRACT_TYPE);
+
+        return request;
+    }
+
+    public static CreateBookingRequest getCreateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal totalAmount, String contractType, List<CreateLaunchRequest> launchs) {
 
         CreateBookingRequest request = new CreateBookingRequest();
         request.setCheckIn(checkIn);
@@ -130,6 +154,7 @@ public class BookingMother {
         request.setTotalAmount(totalAmount);
         request.setTravelerId(travelerId);
         request.setLaunchs(launchs);
+        request.setContractType(contractType);
 
 
         return request;

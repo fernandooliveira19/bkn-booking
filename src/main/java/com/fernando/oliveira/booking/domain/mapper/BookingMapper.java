@@ -6,13 +6,19 @@ import com.fernando.oliveira.booking.domain.request.UpdateBookingRequest;
 import com.fernando.oliveira.booking.domain.response.DetailBookingResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BookingMapper {
 
-    @Mapping(source = "checkIn", target = "checkIn", dateFormat = "yyyy-MM-dd HH:mm")
-    @Mapping(source = "checkOut", target = "checkOut", dateFormat = "yyyy-MM-dd HH:mm")
+    String LOCAL_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm";
+
+    @Mapping(source = "checkIn", target = "checkIn", qualifiedByName = "formatLocalDateTime")
+    @Mapping(source = "checkOut", target = "checkOut", qualifiedByName = "formatLocalDateTime")
     @Mapping(source = "travelerId", target = "traveler.id")
     Booking createRequestToEntity(CreateBookingRequest request);
 
@@ -20,7 +26,13 @@ public interface BookingMapper {
     DetailBookingResponse bookingToDetailBookingResponse(Booking booking);
 
     @Mapping(source = "travelerId", target = "traveler.id")
-    @Mapping(source = "checkIn", target = "checkIn", dateFormat = "yyyy-MM-dd HH:mm")
-    @Mapping(source = "checkOut", target = "checkOut", dateFormat = "yyyy-MM-dd HH:mm")
+    @Mapping(source = "checkIn", target = "checkIn", qualifiedByName = "formatLocalDateTime")
+    @Mapping(source = "checkOut", target = "checkOut", qualifiedByName = "formatLocalDateTime")
     Booking updateRequestToEntity(UpdateBookingRequest request);
+
+    @Named("formatLocalDateTime")
+    static LocalDateTime formatLocalDateTime(String date){
+
+        return LocalDateTime.parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    }
 }

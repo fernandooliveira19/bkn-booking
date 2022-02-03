@@ -109,8 +109,9 @@ public class BookingIntegrationTest {
     void shouldCreateReservedBookingWithPaymentPending(){
 
        Long travelerId = 1L;
-       String checkIn = "2021-09-01 10:00";
-       String checkOut = "2021-09-30 18:00";;
+       String checkIn = "2021-09-01T10:00";
+       String checkOut = "2021-09-30T18:00";
+       String contractType = "DIRECT";
        BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
                 BigDecimal.valueOf(1000.0),
@@ -125,7 +126,7 @@ public class BookingIntegrationTest {
                 PaymentStatusEnum.PENDING.name(),
                 null);
 
-        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount, Arrays.asList(launch01, launch02));
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount,contractType, Arrays.asList(launch01, launch02));
 
 
         ResponseEntity<DetailBookingResponse> result = restTemplate
@@ -141,9 +142,10 @@ public class BookingIntegrationTest {
     @Test
     void shouldCreateReservedBookingWithPaymentDone(){
         Long travelerId = 1L;
-        String checkIn = "2021-09-01 10:00";
-        String checkOut = "2021-09-30 18:00";;
+        String checkIn = "2021-09-01T10:00";
+        String checkOut = "2021-09-30T18:00";
         BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
+        String contractType = "DIRECT";
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
                 BigDecimal.valueOf(1000.0),
                 "2021-09-01",
@@ -157,7 +159,7 @@ public class BookingIntegrationTest {
                 PaymentStatusEnum.PAID.name(),
                 "2021-09-01");
 
-        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount, Arrays.asList(launch01, launch02));
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount, contractType, Arrays.asList(launch01, launch02));
 
 
         ResponseEntity<DetailBookingResponse> result = restTemplate
@@ -172,8 +174,9 @@ public class BookingIntegrationTest {
     @Test
     void shouldCreatePreReservedBooking(){
         Long travelerId = 1L;
-        String checkIn = "2021-09-01 10:00";
-        String checkOut = "2021-09-30 18:00";;
+        String checkIn = "2021-09-01T10:00";
+        String checkOut = "2021-09-30T18:00";
+        String contractType = "DIRECT";
         BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
                 BigDecimal.valueOf(1000.0),
@@ -188,7 +191,7 @@ public class BookingIntegrationTest {
                 PaymentStatusEnum.PENDING.name(),
                 null);
 
-        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount, Arrays.asList(launch01, launch02));
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount, contractType, Arrays.asList(launch01, launch02));
 
 
         ResponseEntity<DetailBookingResponse> result = restTemplate
@@ -204,8 +207,9 @@ public class BookingIntegrationTest {
     void givenDateInsideOtherBookingWhenCreateBookingThenReturnExceptionMessage(){
 
         Long travelerId = 2L;
-        String checkIn = "2021-10-05 10:00";
-        String checkOut = "2021-10-20 18:00";;
+        String checkIn = "2021-10-05T10:00";
+        String checkOut = "2021-10-20T18:00";
+        String contractType = "DIRECT";
         BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
                 BigDecimal.valueOf(1000.0),
@@ -220,7 +224,7 @@ public class BookingIntegrationTest {
                 PaymentStatusEnum.PENDING.name(),
                 null);
 
-        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount, Arrays.asList(launch01, launch02));
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount, contractType, Arrays.asList(launch01, launch02));
 
         ResponseEntity<ExceptionResponse> result = restTemplate
                 .postForEntity(
@@ -235,8 +239,9 @@ public class BookingIntegrationTest {
     @Test
     void givenDateWithConflictCheckInWhenCreateBookingThenReturnExceptionMessage(){
         Long travelerId = 2L;
-        String checkIn = "2021-09-30 10:00";
-        String checkOut = "2021-10-05 18:00";;
+        String checkIn = "2021-09-30T10:00";
+        String checkOut = "2021-10-05T18:00";
+        String contractType = "DIRECT";
         BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
                 BigDecimal.valueOf(1000.0),
@@ -252,7 +257,7 @@ public class BookingIntegrationTest {
                 null);
 
         CreateBookingRequest request = BookingMother.getCreateBookingRequest(
-                travelerId,checkIn, checkOut, totalAmount, Arrays.asList(launch01, launch02));
+                travelerId,checkIn, checkOut, totalAmount, contractType,Arrays.asList(launch01, launch02));
 
 
         ResponseEntity<ExceptionResponse> result = restTemplate
@@ -269,8 +274,9 @@ public class BookingIntegrationTest {
     @Test
     void givenDateWithOutsideConflictCheckOutWhenCreateBookingThenReturnExceptionMessage(){
         Long travelerId = 2L;
-        String checkIn = "2021-09-30 10:00";
-        String checkOut = "2021-11-05 18:00";;
+        String checkIn = "2021-09-30T10:00";
+        String checkOut = "2021-11-05T18:00";
+        String contractType = "DIRECT";
         BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
                 BigDecimal.valueOf(1000.0),
@@ -286,7 +292,7 @@ public class BookingIntegrationTest {
                 null);
 
         CreateBookingRequest request = BookingMother.getCreateBookingRequest(
-                travelerId,checkIn, checkOut, totalAmount, Arrays.asList(launch01, launch02));
+                travelerId,checkIn, checkOut, totalAmount, contractType,Arrays.asList(launch01, launch02));
 
 
         ResponseEntity<ExceptionResponse> result = restTemplate
@@ -301,8 +307,9 @@ public class BookingIntegrationTest {
     @Test
     void givenDateWithConflictCheckOutWhenCreateBookingThenReturnExceptionMessage(){
         Long travelerId = 2L;
-        String checkIn = "2021-10-30 10:00";
-        String checkOut = "2021-11-05 18:00";;
+        String checkIn = "2021-10-30T10:00";
+        String checkOut = "2021-11-05T18:00";
+        String contractType = "DIRECT";
         BigDecimal totalAmount = BigDecimal.valueOf(2000.0);
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
                 BigDecimal.valueOf(1000.0),
@@ -318,7 +325,7 @@ public class BookingIntegrationTest {
                 null);
 
         CreateBookingRequest request = BookingMother.getCreateBookingRequest(
-                travelerId,checkIn, checkOut, totalAmount, Arrays.asList(launch01, launch02));
+                travelerId,checkIn, checkOut, totalAmount, contractType,Arrays.asList(launch01, launch02));
 
 
         ResponseEntity<ExceptionResponse> result = restTemplate
