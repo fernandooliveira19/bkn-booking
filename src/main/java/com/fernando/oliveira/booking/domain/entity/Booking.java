@@ -2,6 +2,7 @@ package com.fernando.oliveira.booking.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
+import com.fernando.oliveira.booking.domain.enums.ContractTypeEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -58,6 +59,10 @@ public class Booking {
     @Column(name="PAYMENT_STATUS", nullable=false)
     @Enumerated(EnumType.STRING)
     private PaymentStatusEnum paymentStatus;
+
+    @Column(name="CONTRACT_TYPE", nullable=false)
+    @Enumerated(EnumType.STRING)
+    private ContractTypeEnum contractType;
 
     @Column(name="INSERT_DATE", nullable=false, updatable = false)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
