@@ -50,4 +50,19 @@ public class BookingMapperUnitTest {
 
 
     }
+    @Test
+    public void shouldConvertCreateBookingRequestPendingToEntity(){
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest();
+        request.setTotalAmount("1.500,39");
+
+        Booking result = bookingMapper.createRequestToEntity(request);
+
+        assertEquals(LocalDateTime.of(2021, 10,15,12,30),result.getCheckIn());
+        assertEquals(LocalDateTime.of(2021, 10,20,18,30),result.getCheckOut());
+        assertEquals(BigDecimal.valueOf(1500.39), result.getTotalAmount());
+        assertEquals(1L, result.getTraveler().getId());
+        assertEquals(ContractTypeEnum.DIRECT, result.getContractType());
+
+
+    }
 }

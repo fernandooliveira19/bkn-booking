@@ -4,6 +4,7 @@ import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateBookingRequest;
 import com.fernando.oliveira.booking.domain.response.DetailBookingResponse;
+import org.apache.commons.lang.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -38,6 +39,9 @@ public interface BookingMapper {
     @Named("formatLocalDateTime")
     static LocalDateTime formatLocalDateTime(String date){
 
+        if(StringUtils.isBlank(date)) {
+            return null;
+        }
         return LocalDateTime.parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 

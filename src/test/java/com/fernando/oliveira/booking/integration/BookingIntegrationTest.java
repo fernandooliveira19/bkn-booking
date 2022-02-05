@@ -124,7 +124,7 @@ public class BookingIntegrationTest {
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
-                null);
+                "");
 
         CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount,contractType, Arrays.asList(launch01, launch02));
 
@@ -183,13 +183,13 @@ public class BookingIntegrationTest {
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
-                null);
+                "");
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
                 "1.000,00",
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
-                null);
+                "");
 
         CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount, contractType, Arrays.asList(launch01, launch02));
 
@@ -216,13 +216,13 @@ public class BookingIntegrationTest {
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
-                null);
+                "");
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
                 "1.000,00",
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
-                null);
+                "");
 
         CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount, contractType, Arrays.asList(launch01, launch02));
 
@@ -248,13 +248,13 @@ public class BookingIntegrationTest {
                 "2021-10-10",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
-                null);
+                "");
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
                 "1.000,00",
                 "2021-10-20",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
-                null);
+                "");
 
         CreateBookingRequest request = BookingMother.getCreateBookingRequest(
                 travelerId,checkIn, checkOut, totalAmount, contractType,Arrays.asList(launch01, launch02));
@@ -283,13 +283,13 @@ public class BookingIntegrationTest {
                 "2021-10-10",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
-                null);
+                "");
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
                 "1.000,00",
                 "2021-10-20",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
-                null);
+                "");
 
         CreateBookingRequest request = BookingMother.getCreateBookingRequest(
                 travelerId,checkIn, checkOut, totalAmount, contractType,Arrays.asList(launch01, launch02));
@@ -316,13 +316,13 @@ public class BookingIntegrationTest {
                 "2021-10-10",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
-                null);
+                "");
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
                 "1.000,00",
                 "2021-10-20",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
-                null);
+                "");
 
         CreateBookingRequest request = BookingMother.getCreateBookingRequest(
                 travelerId,checkIn, checkOut, totalAmount, contractType,Arrays.asList(launch01, launch02));
@@ -356,14 +356,14 @@ public class BookingIntegrationTest {
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
-                null);
+                "");
         UpdateLaunchRequest launch03 = LaunchMother.getUpdateLaunchRequest(
                 102L,
                 "1.000,00",
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
-                null);
+                "");
 
         UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(travelerId,checkIn, checkOut, totalAmount, Arrays.asList(launch01, launch02));
 
