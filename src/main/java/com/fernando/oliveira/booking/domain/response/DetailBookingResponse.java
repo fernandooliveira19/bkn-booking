@@ -34,13 +34,21 @@ public class DetailBookingResponse {
 
     private Integer rating;
 
-    private BigDecimal totalAmount;
+    private BigDecimal amountTotal;
 
     private BigDecimal amountPending;
+
+    private BigDecimal amountPaid;
 
     private Integer adults;
 
     private Integer children;
+
+    private String observation;
+
+    private String travelerName;
+
+    private String contractType;
 
     private List<DetailLaunchResponse> launchs;
 

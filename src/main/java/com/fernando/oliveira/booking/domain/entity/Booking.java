@@ -44,7 +44,7 @@ public class Booking {
     private LocalDateTime checkOut;
 
     @Column(name="AMOUNT", nullable=false)
-    private BigDecimal totalAmount;
+    private BigDecimal amountTotal;
 
     @Column(name="ADULTS")
     private Integer adults;
@@ -78,6 +78,12 @@ public class Booking {
     @Column(name="AMOUNT_PENDING")
     private BigDecimal amountPending;
 
+    @Column(name="AMOUNT_PAID")
+    private BigDecimal amountPaid;
+
     @Column(name="OBSERVATION")
     private String observation;
+    
+    @Transient
+    private String travelerName;
 }

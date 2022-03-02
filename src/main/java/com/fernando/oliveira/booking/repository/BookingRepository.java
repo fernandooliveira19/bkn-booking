@@ -17,4 +17,7 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
          @Param("checkIn") LocalDateTime checkIn,
          @Param("checkOut")LocalDateTime checkOut);
 
+ @Query(value = "select b from booking b where b.bookingStatus in ('RESERVED', 'PRE_RESERVED', 'CURRENT_BOOKING') order by b.checkIn")
+ List<Booking> findNextBookings();
+
  }

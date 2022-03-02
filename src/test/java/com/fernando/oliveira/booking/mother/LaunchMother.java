@@ -88,7 +88,7 @@ public class LaunchMother {
                 .build();
     }
 
-    public static CreateLaunchRequest getCreateLaunchRequest(String amount,
+    public static CreateLaunchRequest getCreateLaunchRequest(BigDecimal amount,
                                                        String scheduleDate,
                                                        String paymentType,
                                                        String paymentStatus,
@@ -104,7 +104,7 @@ public class LaunchMother {
     }
 
     public static UpdateLaunchRequest getUpdateLaunchRequest(Long id,
-                                                             String amount,
+                                                             BigDecimal amount,
                                                              String scheduleDate,
                                                              String paymentType,
                                                              String paymentStatus,

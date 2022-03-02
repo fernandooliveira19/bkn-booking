@@ -15,7 +15,7 @@ public class LaunchRequest implements Serializable {
 
     @ApiModelProperty(name="amount", value="Valor do lançamento", example="500,00", required = true)
     @NotNull(message = "Valor do lançamento é obrigatório")
-    private String amount;
+    private BigDecimal amount;
 
     @ApiModelProperty(name="paymentDate", value="Data de pagamento do lançamento", example="2021-10-14", required = true)
     private String paymentDate;

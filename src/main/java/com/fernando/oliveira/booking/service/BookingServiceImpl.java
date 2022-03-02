@@ -2,6 +2,7 @@ package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
+import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.exception.BookingException;
@@ -66,7 +67,11 @@ public class BookingServiceImpl implements BookingService{
 
     @Override
     public List<Booking> findNextBookings() {
-        return null;
+        return bookingRepository.findNextBookings()
+                .stream()
+                .map((e) -> defineBookingDetails(e))
+                .collect(Collectors.toList());
+
     }
 
     @Override
@@ -123,11 +128,12 @@ public class BookingServiceImpl implements BookingService{
         return  defineBookingDetails(booking);
     }
 
-    public Booking defineBookingDetails(Booking booking){
+   public Booking defineBookingDetails(Booking booking){
         defineTraveler(booking);
         defineBookingStatus(booking);
         definePaymentStatus(booking);
         defineAmountPending(booking);
+        defineAmountPaid(booking);
         return booking;
     }
 
@@ -175,7 +181,7 @@ public class BookingServiceImpl implements BookingService{
             throw new BookingException("Reserva deve possuir lançamentos");
         }
 
-        if(!booking.getTotalAmount().equals(getTotalAmountByLaunchs(booking.getLaunchs()))){
+        if(!booking.getAmountTotal().equals(getTotalAmountByLaunchs(booking.getLaunchs()))){
             throw new BookingException("Soma dos lançamentos estão diferentes do valor total da reserva");
         }
 
@@ -189,7 +195,13 @@ public class BookingServiceImpl implements BookingService{
     }
 
     private void defineTraveler(Booking booking){
-        booking.setTraveler(travelerService.findById(booking.getTraveler().getId()));
+        Traveler traveler = travelerService.findById(booking.getTraveler().getId());
+        booking.setTraveler(traveler);
+        booking.setTravelerName(traveler.getName());
+    }
+
+    private void defineAmountPaid(Booking booking){
+        booking.setAmountPaid(booking.getAmountTotal().subtract(booking.getAmountPending()));
     }
 
 

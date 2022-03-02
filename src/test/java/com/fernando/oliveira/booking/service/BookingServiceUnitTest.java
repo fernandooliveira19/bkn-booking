@@ -2,6 +2,7 @@ package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
+import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
@@ -114,6 +115,7 @@ public class BookingServiceUnitTest {
         LocalDateTime checkIn = LocalDateTime.of(2021, Month.OCTOBER,8,10,0);
         LocalDateTime checkOut = LocalDateTime.of(2021, Month.DECEMBER,16,18,0);
         Long travelerId = 1L;
+        Traveler traveler = TravelerMother.getTravelerSaved01();
         BigDecimal totalAmount = BigDecimal.valueOf(1500.0);
         Integer adults = 2;
         Integer children = 3;
@@ -127,6 +129,7 @@ public class BookingServiceUnitTest {
 
         when(bookingRepository.save(any(Booking.class))).thenReturn(bookingSaved);
         when(launchService.createLaunch(any(Launch.class), any(Booking.class))).thenReturn(firstLaunch);
+        when(travelerService.findById(anyLong())).thenReturn(traveler);
 
         Booking result = bookingService.createBooking(bookingToSave);
 
@@ -184,14 +187,17 @@ public class BookingServiceUnitTest {
         firstLaunch.setId(10L);
         secondLaunch.setId(20L);
         thirdLaunch.setId(30L);
+        bookingUpdated.setTraveler(booking.getTraveler());
         bookingUpdated.setLaunchs(Arrays.asList(firstLaunch, secondLaunch,thirdLaunch));
         bookingUpdated.setBookingStatus(BookingStatusEnum.RESERVED);
         bookingUpdated.setPaymentStatus(PaymentStatusEnum.PENDING);
         bookingUpdated.setAmountPending(BigDecimal.valueOf(500.0));
+        bookingUpdated.setAmountPaid(BigDecimal.valueOf(1000.0));
 
         when(bookingRepository.findBookingsByDate(any(LocalDateTime.class),any(LocalDateTime.class))).thenReturn(Arrays.asList());
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(bookingToUpdate));
         when(bookingRepository.save(any(Booking.class))).thenReturn(bookingUpdated);
+        when(travelerService.findById(anyLong())).thenReturn(booking.getTraveler());
 
         Booking result = bookingService.updateBooking(booking, bookingId);
 
@@ -199,7 +205,9 @@ public class BookingServiceUnitTest {
         then(result.getCheckOut()).isEqualTo(checkOut);
         then(result.getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
         then(result.getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
+        then(result.getAmountTotal()).isEqualTo(BigDecimal.valueOf(1500.0));
         then(result.getAmountPending()).isEqualTo(BigDecimal.valueOf(500.0));
+        then(result.getAmountPaid()).isEqualTo(BigDecimal.valueOf(1000.0));
 
     }
 

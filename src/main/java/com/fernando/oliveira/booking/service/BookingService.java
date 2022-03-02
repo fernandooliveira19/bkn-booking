@@ -20,4 +20,5 @@ public interface BookingService {
     Booking updateBooking(Booking bookingToUpdate, Long id);
 
     Booking detailBooking(Long id);
+
 }

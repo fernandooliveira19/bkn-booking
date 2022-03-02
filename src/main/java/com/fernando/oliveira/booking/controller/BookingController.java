@@ -91,4 +91,19 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }
+
+    @ApiOperation(value = "Retorna lista de próximas reservas ativas ordenadas por data")
+    @ApiResponses(value = {
+            @ApiResponse(code = 403, message = "Você não possui permissão para acessar esse recurso"),
+            @ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
+    @GetMapping("/next")
+    public ResponseEntity<List<DetailBookingResponse>> findNext(){
+
+        List<Booking> bookings = bookingService.findNextBookings();
+        List<DetailBookingResponse> response = bookings.stream()
+                .map(e -> bookingMapper.bookingToDetailBookingResponse(e))
+                .collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }

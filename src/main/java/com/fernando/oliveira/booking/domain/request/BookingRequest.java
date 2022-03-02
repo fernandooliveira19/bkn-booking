@@ -28,7 +28,7 @@ public class BookingRequest implements Serializable {
 
     @ApiModelProperty(name="totalAmount", value="Valor total da reserva", example="1.200,00", required = true)
     @NotNull(message = "Valor total é obrigatório")
-    private String totalAmount;
+    private BigDecimal amountTotal;
 
     @ApiModelProperty(name="contractType", value="Data de check-out", example="DIRECT", required = true)
     @NotBlank(message = "Tipo de contrato é obrigatório")

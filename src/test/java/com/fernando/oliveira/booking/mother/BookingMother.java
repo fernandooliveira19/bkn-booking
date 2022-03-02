@@ -25,7 +25,7 @@ public class BookingMother {
 
     private static final String REQUEST_CHECK_IN_01 = "2021-10-15T12:30";
     private static final String REQUEST_CHECK_OUT_01 = "2021-10-20T18:30";
-    private static final String REQUEST_TOTAL_AMOUNT_01 = "1.500,00";
+    private static final BigDecimal REQUEST_TOTAL_AMOUNT_01 = BigDecimal.valueOf(1500.00);
     private static final Long REQUEST_TRAVELER_ID_01 = 1L;
     private static final String REQUEST_CONTRACT_TYPE = "DIRECT";
     private static final Integer REQUEST_ADULTS_ID_01 = 2;
@@ -53,7 +53,7 @@ public class BookingMother {
         return Booking.builder()
                 .checkIn(CHECK_IN_01)
                 .checkOut(CHECK_OUT_01)
-                .totalAmount(TOTAL_AMOUNT_01)
+                .amountTotal(TOTAL_AMOUNT_01)
                 .adults(ADULTS)
                 .children(CHILDREN)
                 .traveler(getTraveler())
@@ -65,7 +65,7 @@ public class BookingMother {
                 .insertDate(LocalDateTime.now())
                 .checkIn(CHECK_IN_01)
                 .checkOut(CHECK_OUT_01)
-                .totalAmount(TOTAL_AMOUNT_01)
+                .amountTotal(TOTAL_AMOUNT_01)
                 .adults(ADULTS)
                 .children(CHILDREN)
                 .build();
@@ -75,7 +75,7 @@ public class BookingMother {
         return Booking.builder()
                 .checkIn(CHECK_IN_02)
                 .checkOut(CHECK_OUT_02)
-                .totalAmount(TOTAL_AMOUNT_02)
+                .amountTotal(TOTAL_AMOUNT_02)
                 .adults(ADULTS)
                 .children(CHILDREN)
                 .build();
@@ -85,14 +85,14 @@ public class BookingMother {
         return Booking.builder()
                 .checkIn(CHECK_IN_03)
                 .checkOut(CHECK_OUT_03)
-                .totalAmount(TOTAL_AMOUNT_03)
+                .amountTotal(TOTAL_AMOUNT_03)
                 .adults(ADULTS)
                 .children(CHILDREN)
                 .build();
     }
 
     public static Booking getBookingToSave(LocalDateTime checkIn, LocalDateTime checkOut,
-                                           BigDecimal totalAmount,
+                                           BigDecimal amountTotal,
                                            Long travelerId,
                                            Integer adults,
                                            Integer children,
@@ -101,7 +101,7 @@ public class BookingMother {
         return Booking.builder()
                 .checkIn(checkIn)
                 .checkOut(checkOut)
-                .totalAmount(totalAmount)
+                .amountTotal(amountTotal)
                 .adults(adults)
                 .children(children)
                 .launchs(launchs)
@@ -109,12 +109,12 @@ public class BookingMother {
                 .build();
     }
 
-    public static Booking getBookingSaved(LocalDateTime checkIn, LocalDateTime checkOut, BigDecimal totalAmount, Long travelerId, Integer adults, Integer children, List<Launch> launchs, BookingStatusEnum bookingStatus, PaymentStatusEnum paymentStatus) {
+    public static Booking getBookingSaved(LocalDateTime checkIn, LocalDateTime checkOut, BigDecimal amountTotal, Long travelerId, Integer adults, Integer children, List<Launch> launchs, BookingStatusEnum bookingStatus, PaymentStatusEnum paymentStatus) {
         return Booking.builder()
                 .id(1L)
                 .checkIn(checkIn)
                 .checkOut(checkOut)
-                .totalAmount(totalAmount)
+                .amountTotal(amountTotal)
                 .adults(adults)
                 .children(children)
                 .launchs(launchs)
@@ -136,7 +136,7 @@ public class BookingMother {
         CreateBookingRequest request = new CreateBookingRequest();
         request.setCheckIn(REQUEST_CHECK_IN_01);
         request.setCheckOut(REQUEST_CHECK_OUT_01);
-        request.setTotalAmount(REQUEST_TOTAL_AMOUNT_01);
+        request.setAmountTotal(REQUEST_TOTAL_AMOUNT_01);
         request.setTravelerId(REQUEST_TRAVELER_ID_01);
         request.setAdults(REQUEST_ADULTS_ID_01);
         request.setChildren(REQUEST_CHILDREN_ID_01);
@@ -146,12 +146,12 @@ public class BookingMother {
         return request;
     }
 
-    public static CreateBookingRequest getCreateBookingRequest(Long travelerId, String checkIn, String checkOut, String totalAmount, String contractType, List<CreateLaunchRequest> launchs) {
+    public static CreateBookingRequest getCreateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal amountTotal, String contractType, List<CreateLaunchRequest> launchs) {
 
         CreateBookingRequest request = new CreateBookingRequest();
         request.setCheckIn(checkIn);
         request.setCheckOut(checkOut);
-        request.setTotalAmount(totalAmount);
+        request.setAmountTotal(amountTotal);
         request.setTravelerId(travelerId);
         request.setLaunchs(launchs);
         request.setContractType(contractType);
@@ -160,11 +160,11 @@ public class BookingMother {
         return request;
     }
 
-    public static UpdateBookingRequest getUpdateBookingRequest(Long travelerId, String checkIn, String checkOut, String totalAmount, List<UpdateLaunchRequest> launchs) {
+    public static UpdateBookingRequest getUpdateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal amountTotal, List<UpdateLaunchRequest> launchs) {
         UpdateBookingRequest request = new UpdateBookingRequest();
         request.setCheckIn(checkIn);
         request.setCheckOut(checkOut);
-        request.setTotalAmount(totalAmount);
+        request.setAmountTotal(amountTotal);
         request.setTravelerId(travelerId);
         request.setLaunchs(launchs);
 

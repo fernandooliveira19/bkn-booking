@@ -24,7 +24,6 @@ public interface BookingMapper {
     @Mapping(source = "checkIn", target = "checkIn", qualifiedByName = "formatLocalDateTime")
     @Mapping(source = "checkOut", target = "checkOut", qualifiedByName = "formatLocalDateTime")
     @Mapping(source = "travelerId", target = "traveler.id")
-    @Mapping(source = "totalAmount", target = "totalAmount", qualifiedByName = "convertStringToBigDecimal")
     Booking createRequestToEntity(CreateBookingRequest request);
 
     @Mapping(source = "traveler.id", target = "travelerId")
@@ -33,7 +32,6 @@ public interface BookingMapper {
     @Mapping(source = "travelerId", target = "traveler.id")
     @Mapping(source = "checkIn", target = "checkIn", qualifiedByName = "formatLocalDateTime")
     @Mapping(source = "checkOut", target = "checkOut", qualifiedByName = "formatLocalDateTime")
-    @Mapping(source = "totalAmount", target = "totalAmount", qualifiedByName = "convertStringToBigDecimal")
     Booking updateRequestToEntity(UpdateBookingRequest request);
 
     @Named("formatLocalDateTime")

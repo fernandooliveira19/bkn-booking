@@ -80,8 +80,9 @@ public class BookingIntegrationTest {
         assertThat(response.getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
         assertThat(response.getCheckIn()).isEqualTo(LocalDateTime.of(2021, 10,01,10,0 ));
         assertThat(response.getCheckOut()).isEqualTo(LocalDateTime.of(2021, 10,30,18,30 ));
-        assertThat(response.getTotalAmount()).isEqualByComparingTo(BigDecimal.valueOf(1500.00));
+        assertThat(response.getAmountTotal()).isEqualByComparingTo(BigDecimal.valueOf(1500.00));
         assertThat(response.getAmountPending()).isEqualByComparingTo(BigDecimal.valueOf(200.00));
+        assertThat(response.getAmountPaid()).isEqualByComparingTo(BigDecimal.valueOf(1300.00));
 
         assertThat(response.getLaunchs().get(0).getId()).isEqualTo(100);
         assertThat(response.getLaunchs().get(0).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(1000.00));
@@ -112,21 +113,21 @@ public class BookingIntegrationTest {
        String checkIn = "2021-09-01T10:00";
        String checkOut = "2021-09-30T18:00";
        String contractType = "DIRECT";
-       String totalAmount = "2.000,00";
+       BigDecimal amountTotal = BigDecimal.valueOf(2000.00);
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
-                "1.000,00",
+                BigDecimal.valueOf(1000.0),
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PAID.name(),
                 "2021-08-01");
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
-                "1.000,00",
+                BigDecimal.valueOf(1000.0),
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 "");
 
-        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount,contractType, Arrays.asList(launch01, launch02));
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, amountTotal,contractType, Arrays.asList(launch01, launch02));
 
 
         ResponseEntity<DetailBookingResponse> result = restTemplate
@@ -144,22 +145,22 @@ public class BookingIntegrationTest {
         Long travelerId = 1L;
         String checkIn = "2021-09-01T10:00";
         String checkOut = "2021-09-30T18:00";
-        String totalAmount = "2.000,00";
+        BigDecimal amountTotal = BigDecimal.valueOf(2000.0);
         String contractType = "DIRECT";
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
-                "1.000,00",
+                BigDecimal.valueOf(1000.0),
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PAID.name(),
                 "2021-08-01");
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
-                "1.000,00",
+                BigDecimal.valueOf(1000.0),
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PAID.name(),
                 "2021-09-01");
 
-        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount, contractType, Arrays.asList(launch01, launch02));
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, amountTotal, contractType, Arrays.asList(launch01, launch02));
 
 
         ResponseEntity<DetailBookingResponse> result = restTemplate
@@ -177,21 +178,21 @@ public class BookingIntegrationTest {
         String checkIn = "2021-09-01T10:00";
         String checkOut = "2021-09-30T18:00";
         String contractType = "DIRECT";
-        String totalAmount = "2.000,00";
+        BigDecimal amountTotal = BigDecimal.valueOf(2000.00);
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
-                "1.000,00",
+                BigDecimal.valueOf(1000.00),
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 "");
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
-                "1.000,00",
+                BigDecimal.valueOf(1000.0),
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 "");
 
-        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount, contractType, Arrays.asList(launch01, launch02));
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, amountTotal, contractType, Arrays.asList(launch01, launch02));
 
 
         ResponseEntity<DetailBookingResponse> result = restTemplate
@@ -210,21 +211,21 @@ public class BookingIntegrationTest {
         String checkIn = "2021-10-05T10:00";
         String checkOut = "2021-10-20T18:00";
         String contractType = "DIRECT";
-        String totalAmount = "2.000,00";
+        BigDecimal amountTotal = BigDecimal.valueOf(2000.0);
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
-                "1.000,00",
+                BigDecimal.valueOf(1000.0),
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 "");
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
-                "1.000,00",
+                BigDecimal.valueOf(1000.0),
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 "");
 
-        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, totalAmount, contractType, Arrays.asList(launch01, launch02));
+        CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, amountTotal, contractType, Arrays.asList(launch01, launch02));
 
         ResponseEntity<ExceptionResponse> result = restTemplate
                 .postForEntity(
@@ -242,22 +243,22 @@ public class BookingIntegrationTest {
         String checkIn = "2021-09-30T10:00";
         String checkOut = "2021-10-05T18:00";
         String contractType = "DIRECT";
-        String totalAmount = "2.000,00";
+        BigDecimal amountTotal = BigDecimal.valueOf(2000.0);
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
-                "1.000,00",
+                BigDecimal.valueOf(1000.0),
                 "2021-10-10",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 "");
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
-                "1.000,00",
+                BigDecimal.valueOf(1000.0),
                 "2021-10-20",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 "");
 
         CreateBookingRequest request = BookingMother.getCreateBookingRequest(
-                travelerId,checkIn, checkOut, totalAmount, contractType,Arrays.asList(launch01, launch02));
+                travelerId,checkIn, checkOut, amountTotal, contractType,Arrays.asList(launch01, launch02));
 
 
         ResponseEntity<ExceptionResponse> result = restTemplate
@@ -277,22 +278,22 @@ public class BookingIntegrationTest {
         String checkIn = "2021-09-30T10:00";
         String checkOut = "2021-11-05T18:00";
         String contractType = "DIRECT";
-        String totalAmount = "2.000,00";
+        BigDecimal amountTotal = BigDecimal.valueOf(2000.0);
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
-                "1.000,00",
+                BigDecimal.valueOf(1000.0),
                 "2021-10-10",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 "");
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
-                "1.000,00",
+                BigDecimal.valueOf(1000.0),
                 "2021-10-20",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 "");
 
         CreateBookingRequest request = BookingMother.getCreateBookingRequest(
-                travelerId,checkIn, checkOut, totalAmount, contractType,Arrays.asList(launch01, launch02));
+                travelerId,checkIn, checkOut, amountTotal, contractType,Arrays.asList(launch01, launch02));
 
 
         ResponseEntity<ExceptionResponse> result = restTemplate
@@ -310,22 +311,22 @@ public class BookingIntegrationTest {
         String checkIn = "2021-10-30T10:00";
         String checkOut = "2021-11-05T18:00";
         String contractType = "DIRECT";
-        String totalAmount = "2.000,00";
+        BigDecimal amountTotal = BigDecimal.valueOf(2000.0);
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
-                "1.000,00",
+                BigDecimal.valueOf(1000.0),
                 "2021-10-10",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 "");
         CreateLaunchRequest launch02 = LaunchMother.getCreateLaunchRequest(
-                "1.000,00",
+                BigDecimal.valueOf(1000.0),
                 "2021-10-20",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 "");
 
         CreateBookingRequest request = BookingMother.getCreateBookingRequest(
-                travelerId,checkIn, checkOut, totalAmount, contractType,Arrays.asList(launch01, launch02));
+                travelerId,checkIn, checkOut, amountTotal, contractType,Arrays.asList(launch01, launch02));
 
 
         ResponseEntity<ExceptionResponse> result = restTemplate
@@ -342,30 +343,30 @@ public class BookingIntegrationTest {
         Long travelerId = 1L;
         String checkIn = "2021-10-01 10:00";
         String checkOut = "2021-10-30 18:00";;
-        String totalAmount = "2.000,00";
+        BigDecimal amountTotal = BigDecimal.valueOf(2000.0);
         UpdateLaunchRequest launch01 = LaunchMother.getUpdateLaunchRequest(
                 100L,
-                "1.000,00",
+                BigDecimal.valueOf(1000.0),
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PAID.name(),
                 "2021-09-01");
         UpdateLaunchRequest launch02 = LaunchMother.getUpdateLaunchRequest(
                 101L,
-                "1.000,00",
+                BigDecimal.valueOf(1000.0),
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 "");
         UpdateLaunchRequest launch03 = LaunchMother.getUpdateLaunchRequest(
                 102L,
-                "1.000,00",
+                BigDecimal.valueOf(1000.0),
                 "2021-09-01",
                 PaymentTypeEnum.PIX.name(),
                 PaymentStatusEnum.PENDING.name(),
                 "");
 
-        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(travelerId,checkIn, checkOut, totalAmount, Arrays.asList(launch01, launch02));
+        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(travelerId,checkIn, checkOut, amountTotal, Arrays.asList(launch01, launch02));
 
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<UpdateBookingRequest> httpEntity = new HttpEntity<UpdateBookingRequest>(request, headers);
