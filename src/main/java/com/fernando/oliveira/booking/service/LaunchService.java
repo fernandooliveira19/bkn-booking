@@ -10,4 +10,6 @@ public interface LaunchService {
     Launch updateLaunch(Launch launch);
 
     Launch findById(Long id);
+
+    void deleteLaunch(Long id);
 }
