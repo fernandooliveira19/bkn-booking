@@ -2,6 +2,7 @@ package com.fernando.oliveira.booking.domain.mapper;
 
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.request.CreateLaunchRequest;
+import com.fernando.oliveira.booking.domain.request.UpdateLaunchRequest;
 import org.apache.commons.lang.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,9 +16,13 @@ import java.time.format.DateTimeFormatter;
         uses = {BookingMapper.class})
 public interface LaunchMapper {
 
-    @Mapping(source = "amount", target = "amount", qualifiedByName = "convertStringToBigDecimal")
+    @Mapping(source = "amount", target = "amount")
     @Mapping(source = "paymentDate", target = "paymentDate", qualifiedByName = "formatLocalDate")
     Launch createRequestToEntity(CreateLaunchRequest request);
+
+    @Mapping(source = "amount", target = "amount")
+    @Mapping(source = "paymentDate", target = "paymentDate", qualifiedByName = "formatLocalDate")
+    Launch updateRequestToEntity(UpdateLaunchRequest request);
 
     @Named("formatLocalDate")
     static LocalDate formatLocalDate(String date){
