@@ -23,6 +23,8 @@ public class BookingMother {
     private static final Long TRAVELER_ID_01 = 1L;
     private static final Long BOOKING_ID_01 = 10L;
 
+    private static final String TRAVELER_NAME = "First Traveler";
+
     private static final String REQUEST_CHECK_IN_01 = "2021-10-15T12:30";
     private static final String REQUEST_CHECK_OUT_01 = "2021-10-20T18:30";
     private static final BigDecimal REQUEST_TOTAL_AMOUNT_01 = BigDecimal.valueOf(1500.00);
@@ -68,6 +70,7 @@ public class BookingMother {
                 .amountTotal(TOTAL_AMOUNT_01)
                 .adults(ADULTS)
                 .children(CHILDREN)
+                .travelerName(TRAVELER_NAME)
                 .build();
     }
 

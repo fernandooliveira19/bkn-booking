@@ -10,8 +10,8 @@ import java.util.List;
 @Setter
 public class HomeResponse implements Serializable {
 
-    private List<BookingHomeResponse> bookingHomeResponse;
+    private List<BookingHomeResponse> bookingHomeResponses;
 
-    private List<LaunchHomeResponse> launchHomeResponse;
+    private List<LaunchHomeResponse> launchHomeResponses;
 
 }

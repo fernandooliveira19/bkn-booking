@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class LaunchServiceImpl implements LaunchService{
 
@@ -37,6 +39,11 @@ public class LaunchServiceImpl implements LaunchService{
     public void deleteLaunch(Long id) {
         launchRepository.delete(findById(id));
 
+    }
+
+    @Override
+    public List<Launch> findNextLaunchs(){
+        return launchRepository.findNextLaunchs();
     }
 
 }

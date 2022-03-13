@@ -36,7 +36,9 @@ public class LaunchMother {
     }
 
     public static Launch getFirstLaunchFromFirstBooking(){
+        Booking booking = BookingMother.getFirstBookingSaved();
         return Launch.builder()
+                .booking(booking)
                 .amount(BigDecimal.valueOf(1000.0))
                 .scheduleDate(LocalDate.of(2021, Month.OCTOBER, 10))
                 .paymentStatus(PaymentStatusEnum.PAID)
@@ -47,7 +49,9 @@ public class LaunchMother {
     }
 
     public static Launch getSecondLaunchFromFirstBooking(){
+        Booking booking = BookingMother.getFirstBookingSaved();
         return Launch.builder()
+                .booking(booking)
                 .amount(BigDecimal.valueOf(300.0))
                 .scheduleDate(LocalDate.of(2021, Month.OCTOBER, 10))
                 .paymentStatus(PaymentStatusEnum.PENDING)
@@ -58,7 +62,9 @@ public class LaunchMother {
     }
 
     public static Launch getThirdLaunchFromFirstBooking(){
+        Booking booking = BookingMother.getFirstBookingSaved();
         return Launch.builder()
+                .booking(booking)
                 .amount(BigDecimal.valueOf(200.0))
                 .scheduleDate(LocalDate.of(2021, Month.OCTOBER, 15))
                 .paymentStatus(PaymentStatusEnum.PENDING)

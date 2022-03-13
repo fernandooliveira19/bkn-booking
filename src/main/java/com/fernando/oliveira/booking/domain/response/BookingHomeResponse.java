@@ -11,7 +11,7 @@ public class BookingHomeResponse {
 
     private Long bookingId;
     private String checkIn;
-    private String checkout;
+    private String checkOut;
     private String travelerName;
     private BigDecimal amountTotal;
     private BigDecimal amountPending;

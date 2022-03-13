@@ -3,6 +3,7 @@ package com.fernando.oliveira.booking.domain.mapper;
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateBookingRequest;
+import com.fernando.oliveira.booking.domain.response.BookingHomeResponse;
 import com.fernando.oliveira.booking.domain.response.DetailBookingResponse;
 import org.apache.commons.lang.StringUtils;
 import org.mapstruct.Mapper;
@@ -34,6 +35,11 @@ public interface BookingMapper {
     @Mapping(source = "checkOut", target = "checkOut", qualifiedByName = "formatLocalDateTime")
     Booking updateRequestToEntity(UpdateBookingRequest request);
 
+    @Mapping(source = "id", target = "bookingId")
+    BookingHomeResponse bookingToBookingHomeResponse(Booking booking);
+
+
+
     @Named("formatLocalDateTime")
     static LocalDateTime formatLocalDateTime(String date){
 
@@ -50,4 +56,6 @@ public interface BookingMapper {
         value = value.trim();
         return BigDecimal.valueOf(Double.parseDouble(value));
     }
+
+
 }
