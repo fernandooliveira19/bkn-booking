@@ -2,20 +2,26 @@ package com.fernando.oliveira.booking.controller;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
+import com.fernando.oliveira.booking.domain.request.ContractRequest;
 import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateBookingRequest;
 import com.fernando.oliveira.booking.domain.response.DetailBookingResponse;
 import com.fernando.oliveira.booking.service.BookingService;
+import com.fernando.oliveira.booking.service.ContractService;
+import com.fernando.oliveira.booking.utils.ContractUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +35,9 @@ public class BookingController {
 
     @Autowired
     private BookingMapper bookingMapper;
+
+    @Autowired
+    private ContractService contractService;
 
 
     @ApiOperation(value = "Realiza cadastro de reserva")
@@ -104,6 +113,25 @@ public class BookingController {
                 .map(e -> bookingMapper.bookingToDetailBookingResponse(e))
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @ApiOperation(value = "Gera contrato de reserva no formato pdf")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Contrato gerado com sucesso"),
+            @ApiResponse(code = 400, message = "Dados de cadastro inválidos"),
+            @ApiResponse(code = 403, message = "Você não possui permissão para acessar esse recurso"),
+            @ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
+    @GetMapping("/{id}/contract")
+    public ResponseEntity<InputStreamResource> createContract(@PathVariable("id") Long bookingId){
+        Booking booking = bookingService.detailBooking(bookingId);
+        ByteArrayInputStream bis = contractService.createContract(booking);
+
+        return ResponseEntity
+                .ok()
+                .headers(ContractUtils.getHttpHeaders(ContractUtils.getContractName(booking)))
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(bis));
+
     }
 
 }

@@ -48,6 +48,7 @@ public class BookingMother {
     private static final Integer CHILDREN = 2;
 
     private static final Long TRAVELER_ID = 1L;
+    private static final String TRAVELER_NAME = "João da Silva";
 
     public static Booking getFirstBooking(){
         return Booking.builder()
@@ -68,6 +69,8 @@ public class BookingMother {
                 .amountTotal(TOTAL_AMOUNT_01)
                 .adults(ADULTS)
                 .children(CHILDREN)
+                .travelerName(TRAVELER_NAME)
+                .traveler(TravelerMother.getTravelerToSaved01())
                 .build();
     }
 
