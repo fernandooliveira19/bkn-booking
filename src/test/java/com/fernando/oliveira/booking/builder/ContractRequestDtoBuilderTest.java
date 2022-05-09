@@ -2,14 +2,21 @@ package com.fernando.oliveira.booking.builder;
 
 import com.fernando.oliveira.booking.domain.dto.ContractRequestDto;
 import com.fernando.oliveira.booking.domain.entity.Booking;
+import com.fernando.oliveira.booking.domain.entity.Launch;
+import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
+import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
 import com.fernando.oliveira.booking.mother.BookingMother;
+import com.fernando.oliveira.booking.mother.LaunchMother;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -20,8 +27,12 @@ public class ContractRequestDtoBuilderTest {
     private ContractRequestDtoBuilder requestContractDtoBuilder;
 
     @Test
-    void givenBookingWhenBuilderRequestThenReturnContractName(){
+    void givenBookingPendingWhenBuilderRequestThenReturnContractName(){
         Booking booking = BookingMother.getFirstBookingSaved();
+        booking.setLaunchs(Arrays.asList(
+                LaunchMother.getFirstLaunchFromFirstBooking(),
+                LaunchMother.getSecondLaunchFromFirstBooking(),
+                LaunchMother.getThirdLaunchFromFirstBooking()));
 
         ContractRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
@@ -30,8 +41,12 @@ public class ContractRequestDtoBuilderTest {
     }
 
     @Test
-    void givenBookingWhenBuilderRequestThenReturnTravelerDetails(){
+    void givenBookingPendingWhenBuilderRequestThenReturnTravelerDetails(){
         Booking booking = BookingMother.getFirstBookingSaved();
+        booking.setLaunchs(Arrays.asList(
+                LaunchMother.getFirstLaunchFromFirstBooking(),
+                LaunchMother.getSecondLaunchFromFirstBooking(),
+                LaunchMother.getThirdLaunchFromFirstBooking()));
 
         ContractRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
@@ -43,13 +58,78 @@ public class ContractRequestDtoBuilderTest {
     }
 
     @Test
-    void givenBookingWhenBuilderRequestThenReturnRentDetails(){
+    void givenBookingPendingWhenBuilderRequestThenReturnRentDetails(){
         Booking booking = BookingMother.getFirstBookingSaved();
+        booking.setLaunchs(Arrays.asList(
+                LaunchMother.getFirstLaunchFromFirstBooking(),
+                LaunchMother.getSecondLaunchFromFirstBooking(),
+                LaunchMother.getThirdLaunchFromFirstBooking()));
 
         ContractRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
         LocalDateTime.of(2021, Month.OCTOBER, 15,12,30,0);
         assertEquals("início: 15/10/2021 após 12:30", result.getDescriptionCheckIn());
         assertEquals("término: 20/10/2021 até 18:30", result.getDescriptionCheckOut());
+    }
+
+    @Test
+    void givenBookingPaidWhenBuilderRequestThenReturnPaymentDetails(){
+        Booking booking = BookingMother.getFirstBookingSaved();
+        booking.setPaymentStatus(PaymentStatusEnum.PAID);
+        booking.setAmountPaid(BigDecimal.valueOf(1500.0));
+        booking.setAmountPending(BigDecimal.valueOf(0.0));
+
+        Launch launch01 = LaunchMother.getLaunchSaved(booking,
+                BigDecimal.valueOf(1000.0),
+                PaymentTypeEnum.PIX,
+                PaymentStatusEnum.PAID,
+                LocalDate.of(2021,10,01),
+                LocalDate.of(2021, 10, 01)
+        );
+        Launch launch02 = LaunchMother.getLaunchSaved(booking,
+                BigDecimal.valueOf(500.0),
+                PaymentTypeEnum.PIX,
+                PaymentStatusEnum.PAID,
+                LocalDate.of(2021,10,15),
+                LocalDate.of(2021, 10, 15)
+        );
+        booking.setLaunchs(Arrays.asList(launch01,launch02));
+
+        ContractRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
+
+        assertEquals("O locatário efetuou o pagamento no valor de: R$ 1.500,00", result.getDescriptionPayment());
+        assertEquals("Com isso totalizando, o locatário pagou pela importância de: R$ 1.500,00, o qual já está incluso a\n" +
+                "taxa de limpeza.", result.getSummaryBooking());
+
+    }
+
+    @Test
+    void givenBookingPendingWhenBuilderRequestThenReturnPaymentDetails(){
+        Booking booking = BookingMother.getFirstBookingSaved();
+        booking.setPaymentStatus(PaymentStatusEnum.PENDING);
+        booking.setAmountPaid(BigDecimal.valueOf(1000.0));
+        booking.setAmountPending(BigDecimal.valueOf(500.0));
+
+        Launch launch01 = LaunchMother.getLaunchSaved(booking,
+                BigDecimal.valueOf(1000.0),
+                PaymentTypeEnum.PIX,
+                PaymentStatusEnum.PAID,
+                LocalDate.of(2021,10,01),
+                LocalDate.of(2021, 10, 01)
+        );
+        Launch launch02 = LaunchMother.getLaunchSaved(booking,
+                BigDecimal.valueOf(500.0),
+                PaymentTypeEnum.PIX,
+                PaymentStatusEnum.PENDING,
+                LocalDate.of(2021,10,15),
+                null
+        );
+        booking.setLaunchs(Arrays.asList(launch01,launch02));
+
+        ContractRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
+
+        assertEquals("O locatário efetuou o pagamento no valor de: R$ 1.000,00 a título de sinal. O restante de R$ 500,00 será pago até o dia 15/10/2021", result.getDescriptionPayment());
+        assertEquals("Com isso totalizando, o locatário pagará pela importância de: R$ 1.500,00, o qual já está incluso a taxa de limpeza.", result.getSummaryBooking());
+
     }
 
 }

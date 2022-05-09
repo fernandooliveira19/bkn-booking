@@ -21,6 +21,8 @@ public class ContractRequestDtoBuilder {
                         booking.getTraveler().getNumberPhone()))
                 .descriptionCheckIn(ContractUtils.getDescriptionCheckIn(booking.getCheckIn()))
                 .descriptionCheckOut(ContractUtils.getDescriptionCheckOut(booking.getCheckOut()))
+                .descriptionPayment(ContractUtils.getDescriptionPayment(booking))
+                .summaryBooking(ContractUtils.getSummary(booking))
                 .build();
 
     }

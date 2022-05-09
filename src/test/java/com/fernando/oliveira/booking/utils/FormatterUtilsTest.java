@@ -2,6 +2,10 @@ package com.fernando.oliveira.booking.utils;
 
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FormatterUtilsTest {
@@ -47,6 +51,28 @@ public class FormatterUtilsTest {
         String result = FormatterUtils.formatCpf("");
 
         assertEquals("", result);
+    }
+
+    @Test
+    void givenBigDecimalValueWhenFormatThenReturnCurrencyValue(){
+        BigDecimal value = BigDecimal.valueOf(1500.00);
+        String result = FormatterUtils.formatCurrencyValue(value);
+
+        assertEquals("R$ 1.500,00", result);
+    }
+
+    @Test
+    void givenLocalDateWhenFormatThenReturnLocalDateFormatted(){
+        LocalDate localDate = LocalDate.of(2021,10,05);
+        String result = FormatterUtils.getLocalDateFormat(localDate);
+        assertEquals("05/10/2021", result);
+    }
+
+    @Test
+    void givenLocalDateTimeWhenFormatThenReturnLocalDateTimeFormatted(){
+        LocalDateTime localDateTime = LocalDateTime.of(2021,10,05, 10,30 );
+        String result = FormatterUtils.getLocalDateTimeFormat(localDateTime);
+        assertEquals("05/10/2021 10:30:00", result);
     }
 
 }

@@ -20,6 +20,8 @@ public class BookingMother {
     private static final LocalDateTime CHECK_IN_01 = LocalDateTime.of(2021, Month.OCTOBER, 15,12,30,0);
     private static final LocalDateTime CHECK_OUT_01 = LocalDateTime.of(2021, Month.OCTOBER, 20,18,30,0);
     private static final BigDecimal TOTAL_AMOUNT_01 = BigDecimal.valueOf(1500.0);
+    private static final BigDecimal AMOUNT_PAID_01 = BigDecimal.valueOf(1000.0);
+    private static final BigDecimal AMOUNT_PENDING_01 = BigDecimal.valueOf(500.0);
     private static final Long TRAVELER_ID_01 = 1L;
     private static final Long BOOKING_ID_01 = 10L;
 
@@ -71,6 +73,9 @@ public class BookingMother {
                 .children(CHILDREN)
                 .travelerName(TRAVELER_NAME)
                 .traveler(TravelerMother.getTravelerToSaved01())
+                .paymentStatus(PaymentStatusEnum.PENDING)
+                .amountPaid(AMOUNT_PAID_01)
+                .amountPending(AMOUNT_PENDING_01)
                 .build();
     }
 

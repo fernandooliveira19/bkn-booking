@@ -1,6 +1,8 @@
 package com.fernando.oliveira.booking.utils;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
+import com.fernando.oliveira.booking.domain.entity.Launch;
+import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.http.HttpHeaders;
@@ -10,8 +12,10 @@ import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -40,7 +44,7 @@ public class ContractUtils {
     }
 
     public static String getDescriptionCheckIn(LocalDateTime checkIn) {
-        String localDate = FormatterUtils.getLocalDateFormat(checkIn);
+        String localDate = FormatterUtils.getLocalDateTimeFormat(checkIn);
         String date = StringUtils.substring(localDate, 0,10);
         String hour = StringUtils.substring(localDate, 11,16);
 
@@ -52,11 +56,6 @@ public class ContractUtils {
     private static final String PREFIX_CONTRACT = "contrato";
     private static final String SEPARATOR = "_";
 
-
-//    public static String getContractName(RequestContract requestContract) {
-//
-//        return PREFIX_CONTRACT + SEPARATOR + getSimpleCheckinFormat(requestContract.getCheckIn()) + SEPARATOR + getFirstTravelerName(requestContract.getTravelerName());
-//    }
 
     public static String getSimpleCheckinFormat(String checkIn) {
         String hours = checkIn.substring(checkIn.indexOf("T"));
@@ -88,10 +87,55 @@ public class ContractUtils {
 
     public static String getDescriptionCheckOut(LocalDateTime checkOut) {
 
-        String localDate = FormatterUtils.getLocalDateFormat(checkOut);
+        String localDate = FormatterUtils.getLocalDateTimeFormat(checkOut);
         String date = StringUtils.substring(localDate, 0,10);
         String hour = StringUtils.substring(localDate, 11,16);
 
         return "término: " + date + " até " + hour;
+    }
+
+    public static String getDescriptionPayment(Booking booking) {
+
+        if(booking.getPaymentStatus().equals(PaymentStatusEnum.PAID)){
+            return  "O locatário efetuou o pagamento no valor de: " + FormatterUtils.formatCurrencyValue(booking.getAmountTotal());
+        }
+        if(booking.getPaymentStatus().equals(PaymentStatusEnum.PENDING)){
+            Launch lastLaunch = getLastPendingLaunch(booking);
+            StringBuilder pendingText = new StringBuilder();
+            pendingText.append("O locatário efetuou o pagamento no valor de: ")
+                    .append(FormatterUtils.formatCurrencyValue(booking.getAmountPaid()))
+                    .append(" a título de sinal. O restante de ")
+                    .append(FormatterUtils.formatCurrencyValue(booking.getAmountPending()))
+                    .append(" será pago até o dia ")
+                    .append(FormatterUtils.getLocalDateFormat(lastLaunch.getScheduleDate()));
+            return pendingText.toString();
+
+        }
+        return "";
+    }
+
+    public static String getSummary(Booking booking) {
+
+        if(booking.getPaymentStatus().equals(PaymentStatusEnum.PAID)){
+            return "Com isso totalizando, o locatário pagou pela importância de: "+
+                    FormatterUtils.formatCurrencyValue(booking.getAmountTotal())+ ", o qual já está incluso a\n" +
+                    "taxa de limpeza.";
+        }
+        if(booking.getPaymentStatus().equals(PaymentStatusEnum.PENDING)){
+            StringBuilder summaryPending = new StringBuilder();
+            summaryPending.append("Com isso totalizando, o locatário pagará pela importância de: ")
+                    .append(FormatterUtils.formatCurrencyValue(booking.getAmountTotal()))
+                    .append(", o qual já está incluso a taxa de limpeza.");
+            return summaryPending.toString();
+        }
+        return "";
+    }
+
+    public static Launch getLastPendingLaunch(Booking booking){
+        return booking.getLaunchs().stream()
+                .filter(e -> e.getPaymentStatus().equals(PaymentStatusEnum.PENDING))
+                .max(Comparator.comparing(Launch::getScheduleDate))
+                .get();
+
     }
 }
