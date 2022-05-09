@@ -114,8 +114,8 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
     private void getRent(ContractRequestDto requestContract, Document document) throws DocumentException {
         document.add(getSubtitle("IV. DO PRAZO DE LOCAÇÃO"));
         document.add(getDefaultParagraph("A locação tem:"));
-        document.add(getDefaultParagraph("início: " + requestContract.getDescriptionCheckIn()));
-        document.add(getDefaultParagraph("término: " + requestContract.getDescriptionCheckOut()));
+        document.add(getDefaultParagraph(requestContract.getDescriptionCheckIn()));
+        document.add(getDefaultParagraph(requestContract.getDescriptionCheckOut()));
         document.add(getDefaultParagraph("A permanência do locatário no imóvel pode ensejar multas e indenização, nos termos da lei."));
         document.add(getEmptyLine());
     }

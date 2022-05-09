@@ -3,6 +3,7 @@ package com.fernando.oliveira.booking.builder;
 import com.fernando.oliveira.booking.domain.dto.ContractRequestDto;
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
+import com.fernando.oliveira.booking.domain.enums.ContractTypeEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
 import com.fernando.oliveira.booking.mother.BookingMother;
@@ -77,6 +78,7 @@ public class ContractRequestDtoBuilderTest {
         booking.setPaymentStatus(PaymentStatusEnum.PAID);
         booking.setAmountPaid(BigDecimal.valueOf(1500.0));
         booking.setAmountPending(BigDecimal.valueOf(0.0));
+        booking.setContractType(ContractTypeEnum.DIRECT);
 
         Launch launch01 = LaunchMother.getLaunchSaved(booking,
                 BigDecimal.valueOf(1000.0),
@@ -129,6 +131,32 @@ public class ContractRequestDtoBuilderTest {
 
         assertEquals("O locatário efetuou o pagamento no valor de: R$ 1.000,00 a título de sinal. O restante de R$ 500,00 será pago até o dia 15/10/2021", result.getDescriptionPayment());
         assertEquals("Com isso totalizando, o locatário pagará pela importância de: R$ 1.500,00, o qual já está incluso a taxa de limpeza.", result.getSummaryBooking());
+
+    }
+
+    @Test
+    void givenBookingPaidFromSiteWhenBuilderRequestThenReturnPaymentDetails(){
+        Booking booking = BookingMother.getFirstBookingSaved();
+        booking.setPaymentStatus(PaymentStatusEnum.PAID);
+        booking.setAmountPaid(BigDecimal.valueOf(1500.0));
+        booking.setAmountPending(BigDecimal.valueOf(0.0));
+        booking.setContractType(ContractTypeEnum.SITE);
+
+        Launch launch01 = LaunchMother.getLaunchSaved(booking,
+                BigDecimal.valueOf(1500.0),
+                PaymentTypeEnum.SITE,
+                PaymentStatusEnum.PAID,
+                LocalDate.of(2021,10,01),
+                LocalDate.of(2021, 10, 01)
+        );
+
+        booking.setLaunchs(Arrays.asList(launch01));
+
+        ContractRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
+
+        assertEquals("O locatário efetuou o pagamento no valor de: R$ 1.500,00 através do site vrbo.com (antigo aluguetemporada.com.br)", result.getDescriptionPayment());
+        assertEquals("Com isso totalizando, o locatário pagou pela importância de: R$ 1.500,00, o qual já está incluso a\n" +
+                "taxa de limpeza.", result.getSummaryBooking());
 
     }
 

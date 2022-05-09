@@ -2,6 +2,7 @@ package com.fernando.oliveira.booking.utils;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
+import com.fernando.oliveira.booking.domain.enums.ContractTypeEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -95,23 +96,35 @@ public class ContractUtils {
     }
 
     public static String getDescriptionPayment(Booking booking) {
+        StringBuilder descriptionPayment = new StringBuilder();
+        if(booking.getPaymentStatus().equals(PaymentStatusEnum.PAID)) {
+            if (booking.getContractType().equals(ContractTypeEnum.SITE)) {
 
-        if(booking.getPaymentStatus().equals(PaymentStatusEnum.PAID)){
-            return  "O locatário efetuou o pagamento no valor de: " + FormatterUtils.formatCurrencyValue(booking.getAmountTotal());
-        }
-        if(booking.getPaymentStatus().equals(PaymentStatusEnum.PENDING)){
+                descriptionPayment
+                        .append("O locatário efetuou o pagamento no valor de: ")
+                        .append(FormatterUtils.formatCurrencyValue(booking.getAmountTotal()))
+                        .append(" através do site vrbo.com (antigo aluguetemporada.com.br)");
+
+            } else {
+                descriptionPayment
+                        .append("O locatário efetuou o pagamento no valor de: ")
+                        .append(FormatterUtils.formatCurrencyValue(booking.getAmountTotal()));
+
+            }
+        }else if(booking.getPaymentStatus().equals(PaymentStatusEnum.PENDING)){
             Launch lastLaunch = getLastPendingLaunch(booking);
-            StringBuilder pendingText = new StringBuilder();
-            pendingText.append("O locatário efetuou o pagamento no valor de: ")
+
+            descriptionPayment
+                    .append("O locatário efetuou o pagamento no valor de: ")
                     .append(FormatterUtils.formatCurrencyValue(booking.getAmountPaid()))
                     .append(" a título de sinal. O restante de ")
                     .append(FormatterUtils.formatCurrencyValue(booking.getAmountPending()))
                     .append(" será pago até o dia ")
                     .append(FormatterUtils.getLocalDateFormat(lastLaunch.getScheduleDate()));
-            return pendingText.toString();
+
 
         }
-        return "";
+        return descriptionPayment.toString();
     }
 
     public static String getSummary(Booking booking) {
