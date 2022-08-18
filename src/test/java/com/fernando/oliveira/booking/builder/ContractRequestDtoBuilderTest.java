@@ -37,7 +37,7 @@ public class ContractRequestDtoBuilderTest {
 
         ContractRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
-        assertEquals("contrato_joao_2021-10-15.pdf", result.getContractName());
+        assertEquals("contrato_joao_2021-10-15", result.getContractName());
 
     }
 

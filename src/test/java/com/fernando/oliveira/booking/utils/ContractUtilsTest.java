@@ -14,7 +14,7 @@ public class ContractUtilsTest {
         Booking booking = BookingMother.getFirstBookingSaved();
 
         String result = ContractUtils.getContractName(booking);
-        assertEquals("contrato_joao_2021-10-15.pdf", result);
+        assertEquals("contrato_joao_2021-10-15", result);
     }
 
     @Test

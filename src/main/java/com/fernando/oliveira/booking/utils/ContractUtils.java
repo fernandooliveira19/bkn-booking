@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -33,7 +32,7 @@ public class ContractUtils {
 
         String localDateFormat = getContractDateFormat(booking.getCheckIn());
 
-        return PREFIX_CONTRACT_NAME + firstName +"_"+localDateFormat+".pdf";
+        return PREFIX_CONTRACT_NAME + firstName +"_"+localDateFormat;
     }
 
     public static String getContractDateFormat(LocalDateTime date) {
@@ -73,6 +72,7 @@ public class ContractUtils {
     public static HttpHeaders getHttpHeaders(String fileName) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "inline; filename="+ fileName +".pdf");
+
         return headers;
     }
     public static String removeAccent(String str) {
