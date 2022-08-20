@@ -1,6 +1,8 @@
 package com.fernando.oliveira.booking.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -43,8 +45,12 @@ public class Traveler {
     private String numberPhone;
 
     @Column(name = "INSERT_DATE", nullable = false, updatable = false)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime insertDate;
 
-    @Column(name = "LAST_UPDATE_DATE", nullable = false)
+    @Column(name = "LAST_UPDATE_DATE")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime lastUpdateDate;
 }
