@@ -3,6 +3,7 @@ package com.fernando.oliveira.booking.domain.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -26,7 +27,7 @@ public class Traveler {
     @Column(name="NAME", nullable=false)
     private String name;
 
-    @Column(name="EMAIL", nullable=false)
+    @Column(name="EMAIL")
     private String email;
 
     @Column(name="DOCUMENT")
@@ -40,4 +41,10 @@ public class Traveler {
 
     @Column(name="NUMBER_PHONE", nullable = false)
     private String numberPhone;
+
+    @Column(name = "INSERT_DATE", nullable = false, updatable = false)
+    private LocalDateTime insertDate;
+
+    @Column(name = "LAST_UPDATE_DATE", nullable = false)
+    private LocalDateTime lastUpdateDate;
 }

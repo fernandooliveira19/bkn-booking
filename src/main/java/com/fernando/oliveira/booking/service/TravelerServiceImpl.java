@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.fernando.oliveira.booking.utils.FormatterUtils.*;
@@ -25,6 +26,7 @@ public class TravelerServiceImpl implements TravelerService {
         formatFields(traveler);
         validate(traveler);
         traveler.setStatus(StatusEnum.ACTIVE.getCode());
+        traveler.setInsertDate(LocalDateTime.now());
 
         return repository.save(traveler);
 
@@ -86,6 +88,7 @@ public class TravelerServiceImpl implements TravelerService {
         travelerToUpdate.setNumberPhone(traveler.getNumberPhone());
         formatFields(travelerToUpdate);
         validate(travelerToUpdate);
+        travelerToUpdate.setLastUpdateDate(LocalDateTime.now());
         return repository.save(travelerToUpdate);
     }
 

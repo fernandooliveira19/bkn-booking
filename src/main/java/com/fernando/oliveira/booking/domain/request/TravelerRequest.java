@@ -19,9 +19,8 @@ public class TravelerRequest {
     @Pattern(regexp = "^[A-ú]+\\s[A-ú]+(\\s[A-ú]+)*", message = "Sobrenome é obrigatório")
     private String name;
 
-    @ApiModelProperty(name="email", value="Email do viajante", example="jose.silva@gmail.com", required = true)
+    @ApiModelProperty(name="email", value="Email do viajante", example="jose.silva@gmail.com")
     @Email
-    @NotBlank(message = "Email é obrigatório")
     private String email;
 
     @ApiModelProperty(name="document", value="Documento do viajante", example="12345678910")
