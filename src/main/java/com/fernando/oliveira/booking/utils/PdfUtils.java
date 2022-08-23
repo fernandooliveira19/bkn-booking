@@ -19,9 +19,10 @@ import java.util.regex.Pattern;
 
 @Slf4j
 @Component
-public class ContractUtils {
+public class PdfUtils {
 
     private static final String PREFIX_CONTRACT_NAME= "contrato_";
+    private static final String PREFIX_AUTHORIZATION_ACCESS_NAME= "autorizacao_";
 
     public static String getContractName(Booking booking) {
         String firstName = Arrays.stream(booking.getTravelerName().split(" "))
@@ -150,5 +151,17 @@ public class ContractUtils {
                 .max(Comparator.comparing(Launch::getScheduleDate))
                 .get();
 
+    }
+
+    public static String getAuthorizationAccessName(Booking booking) {
+        String firstName = Arrays.stream(booking.getTravelerName().split(" "))
+                .findFirst()
+                .map(e -> FormatterUtils.removeAccent(e))
+                .map(e -> e.toLowerCase())
+                .get();
+
+        String localDateFormat = getContractDateFormat(booking.getCheckIn());
+
+        return PREFIX_AUTHORIZATION_ACCESS_NAME + firstName +"_"+localDateFormat;
     }
 }

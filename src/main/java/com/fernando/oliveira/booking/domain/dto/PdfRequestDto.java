@@ -7,7 +7,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class ContractRequestDto {
+public class PdfRequestDto {
 
     private String contractName;
     private String travelerName;

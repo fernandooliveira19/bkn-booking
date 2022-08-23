@@ -1,6 +1,6 @@
 package com.fernando.oliveira.booking.builder;
 
-import com.fernando.oliveira.booking.domain.dto.ContractRequestDto;
+import com.fernando.oliveira.booking.domain.dto.PdfRequestDto;
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.enums.ContractTypeEnum;
@@ -22,10 +22,10 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
-public class ContractRequestDtoBuilderTest {
+public class PdfRequestDtoBuilderTest {
 
     @InjectMocks
-    private ContractRequestDtoBuilder requestContractDtoBuilder;
+    private PdfRequestDtoBuilder requestContractDtoBuilder;
 
     @Test
     void givenBookingPendingWhenBuilderRequestThenReturnContractName(){
@@ -35,7 +35,7 @@ public class ContractRequestDtoBuilderTest {
                 LaunchMother.getSecondLaunchFromFirstBooking(),
                 LaunchMother.getThirdLaunchFromFirstBooking()));
 
-        ContractRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
+        PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
         assertEquals("contrato_joao_2021-10-15", result.getContractName());
 
@@ -49,7 +49,7 @@ public class ContractRequestDtoBuilderTest {
                 LaunchMother.getSecondLaunchFromFirstBooking(),
                 LaunchMother.getThirdLaunchFromFirstBooking()));
 
-        ContractRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
+        PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
         assertEquals("João da Silva", result.getTravelerName());
         assertEquals("500.428.067-39", result.getTravelerDocument());
@@ -66,7 +66,7 @@ public class ContractRequestDtoBuilderTest {
                 LaunchMother.getSecondLaunchFromFirstBooking(),
                 LaunchMother.getThirdLaunchFromFirstBooking()));
 
-        ContractRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
+        PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
         LocalDateTime.of(2021, Month.OCTOBER, 15,12,30,0);
         assertEquals("início: 15/10/2021 após 12:30", result.getDescriptionCheckIn());
         assertEquals("término: 20/10/2021 até 18:30", result.getDescriptionCheckOut());
@@ -96,7 +96,7 @@ public class ContractRequestDtoBuilderTest {
         );
         booking.setLaunchs(Arrays.asList(launch01,launch02));
 
-        ContractRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
+        PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
         assertEquals("O locatário efetuou o pagamento no valor de: R$ 1.500,00", result.getDescriptionPayment());
         assertEquals("Com isso totalizando, o locatário pagou pela importância de: R$ 1.500,00, o qual já está incluso a\n" +
@@ -127,7 +127,7 @@ public class ContractRequestDtoBuilderTest {
         );
         booking.setLaunchs(Arrays.asList(launch01,launch02));
 
-        ContractRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
+        PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
         assertEquals("O locatário efetuou o pagamento no valor de: R$ 1.000,00 a título de sinal. O restante de R$ 500,00 será pago até o dia 15/10/2021", result.getDescriptionPayment());
         assertEquals("Com isso totalizando, o locatário pagará pela importância de: R$ 1.500,00, o qual já está incluso a taxa de limpeza.", result.getSummaryBooking());
@@ -152,7 +152,7 @@ public class ContractRequestDtoBuilderTest {
 
         booking.setLaunchs(Arrays.asList(launch01));
 
-        ContractRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
+        PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
         assertEquals("O locatário efetuou o pagamento no valor de: R$ 1.500,00 através do site vrbo.com (antigo aluguetemporada.com.br)", result.getDescriptionPayment());
         assertEquals("Com isso totalizando, o locatário pagou pela importância de: R$ 1.500,00, o qual já está incluso a\n" +

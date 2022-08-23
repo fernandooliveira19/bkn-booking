@@ -2,13 +2,13 @@ package com.fernando.oliveira.booking.controller;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
-import com.fernando.oliveira.booking.domain.request.ContractRequest;
 import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateBookingRequest;
 import com.fernando.oliveira.booking.domain.response.DetailBookingResponse;
+import com.fernando.oliveira.booking.service.AuthorizationAccessService;
 import com.fernando.oliveira.booking.service.BookingService;
 import com.fernando.oliveira.booking.service.ContractService;
-import com.fernando.oliveira.booking.utils.ContractUtils;
+import com.fernando.oliveira.booking.utils.PdfUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -38,6 +38,9 @@ public class BookingController {
 
     @Autowired
     private ContractService contractService;
+
+    @Autowired
+    private AuthorizationAccessService authorizationAccessService;
 
 
     @ApiOperation(value = "Realiza cadastro de reserva")
@@ -128,10 +131,30 @@ public class BookingController {
 
         return ResponseEntity
                 .ok()
-                .headers(ContractUtils.getHttpHeaders(ContractUtils.getContractName(booking)))
+                .headers(PdfUtils.getHttpHeaders(PdfUtils.getContractName(booking)))
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(new InputStreamResource(bis));
 
     }
+
+    @ApiOperation(value = "Gera autoraização de acesso no formato pdf")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Autorizacao gerada com sucesso"),
+            @ApiResponse(code = 400, message = "Dados de cadastro inválidos"),
+            @ApiResponse(code = 403, message = "Você não possui permissão para acessar esse recurso"),
+            @ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
+    @GetMapping("/{id}/authorization")
+    public ResponseEntity<InputStreamResource> authorizationAccess(@PathVariable("id") Long bookingId){
+        Booking booking = bookingService.detailBooking(bookingId);
+        ByteArrayInputStream bis = authorizationAccessService.createAuthorizationAccess(booking);
+
+        return ResponseEntity
+                .ok()
+                .headers(PdfUtils.getHttpHeaders(PdfUtils.getAuthorizationAccessName(booking)))
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(bis));
+
+    }
+
 
 }
