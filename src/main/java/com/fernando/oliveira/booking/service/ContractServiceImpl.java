@@ -1,24 +1,18 @@
 package com.fernando.oliveira.booking.service;
 
-import com.fernando.oliveira.booking.builder.ContractRequestDtoBuilder;
-import com.fernando.oliveira.booking.domain.dto.ContractRequestDto;
+import com.fernando.oliveira.booking.builder.PdfRequestDtoBuilder;
+import com.fernando.oliveira.booking.domain.dto.PdfRequestDto;
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 @Service
 public class ContractServiceImpl extends PdfServiceImpl implements ContractService {
@@ -27,7 +21,7 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
     private BookingService bookingService;
 
     @Autowired
-    private ContractRequestDtoBuilder contractRequestDtoBuilder;
+    private PdfRequestDtoBuilder pdfRequestDtoBuilder;
 
 
     private static final String EMPTY_LINE = "\n";
@@ -35,7 +29,7 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
     @Override
     public ByteArrayInputStream createContract(Booking booking) {
 
-        ContractRequestDto requestDto = contractRequestDtoBuilder.getRequestContractDto(booking);
+        PdfRequestDto requestDto = pdfRequestDtoBuilder.getRequestContractDto(booking);
 
         Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -70,12 +64,12 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
     }
 
 
-    private void getIdentificationParts(ContractRequestDto requestContract, Document document) throws DocumentException {
-        document.add(getSubtitle("I. IDENTIFICAÇÃO DAS PARTES"));
+    private void getIdentificationParts(PdfRequestDto requestContract, Document document) throws DocumentException {
+        document.add(getSubtitle("I. IDENTIFICAÇÃO DAS PARTES", Element.ALIGN_LEFT));
         document.add(getDefaultParagraph("As pessoas abaixo identificadas firmam o presente contrato de locação por temporada, nos termos da legislação brasileira, em especial, de acordo com a Lei de Locação (Lei nº 8.245/91): "));
         document.add(getDefaultParagraph("Locador: Fernando Augusto Machado de Oliveira, CPF: 296.830.188-82"));
         document.add(getDefaultParagraph("Endereço eletrônico: f19@uol.com.br"));
-        document.add(getSubtitle("Responsável locação: "));
+        document.add(getSubtitle("Responsável locação: ", Element.ALIGN_LEFT));
         document.add(getDefaultParagraph("Nome: " + requestContract.getTravelerName()));
         document.add(getDefaultParagraph("Email: " + requestContract.getTravelerEmail()));
         document.add(getDefaultParagraph("Telefone: " + requestContract.getTravelerPhone()));
@@ -86,13 +80,13 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
     }
 
     private void getApartmentDetails(Document document) throws DocumentException {
-        document.add(getSubtitle("II. DO IMÓVEL LOCADO"));
+        document.add(getSubtitle("II. DO IMÓVEL LOCADO", Element.ALIGN_LEFT));
         document.add(getDefaultParagraph("O imóvel locado está situado na rua Rio de Janeiro, 50 – apto 617/618 – Centro – Guarujá – SP. Trata-se de imóvel com as seguintes características:"));
         document.add(getDefaultParagraph("Possui ambiente com 2 quartos, sendo 1 com suíte, sala, cozinha, banheiro. O apartamento possui 1 cama de casal, 2 bicamas, 2 colchões de solteiro extras, mesa com 6 cadeiras, banheiro social com box."));
         document.add(getDefaultParagraph("Ainda possui TV 49' na sala e duas 32' nos quartos, modem Wi-fi, secadora de roupas, 3 ventiladores, armário para acomodação de bagagens, cômoda, panela de arroz, micro-ondas, fogão de quatro bocas, geladeira, liquidificador, sanduicheira grill, filtro de água e utensílios de cozinha."));
         document.add(getDefaultParagraph("O edifício possui portaria 24 horas, monitoramento por câmeras, WI-FI no hall de entrada, 3 elevadores, serviço de praia com cadeiras e 2 guarda-sóis (a solicitar na recepção)"));
 
-        document.add(getSubtitle("Observações:"));
+        document.add(getSubtitle("Observações:", Element.ALIGN_LEFT));
         document.add(getItemList("É necessário levar roupa de cama, mesa e banho"));
         document.add(getItemList("É recomendável levar travesseiros"));
         document.add(getItemList("NÃO possui garagem, porém há vagas nas ruas próximas e estacionamentos"));
@@ -101,7 +95,7 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
     }
 
     private void getBuildingDetails(Document document) throws DocumentException {
-        document.add(getSubtitle("III. DO REGULAMENTO INTERNO DO EDIFICIO"));
+        document.add(getSubtitle("III. DO REGULAMENTO INTERNO DO EDIFICIO", Element.ALIGN_LEFT));
         document.add(getItemList("O imóvel pode acomodar no máximo 8 pessoas. Sendo que crianças até 5 anos não contam."));
         document.add(getItemList("Banhistas devem entrar e sair pela porta lateral e usar o elevador reservado para banhistas, sem areia no corpo"));
         document.add(getItemList("Estacionamento é reservado para embarque e desembarque de bagagem e é limitado a 15 minutos"));
@@ -111,8 +105,8 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
         document.add(getEmptyLine());
     }
 
-    private void getRent(ContractRequestDto requestContract, Document document) throws DocumentException {
-        document.add(getSubtitle("IV. DO PRAZO DE LOCAÇÃO"));
+    private void getRent(PdfRequestDto requestContract, Document document) throws DocumentException {
+        document.add(getSubtitle("IV. DO PRAZO DE LOCAÇÃO", Element.ALIGN_LEFT));
         document.add(getDefaultParagraph("A locação tem:"));
         document.add(getDefaultParagraph(requestContract.getDescriptionCheckIn()));
         document.add(getDefaultParagraph(requestContract.getDescriptionCheckOut()));
@@ -120,24 +114,15 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
         document.add(getEmptyLine());
     }
 
-    private void getPaymentDetails(ContractRequestDto requestContract, Document document) throws DocumentException {
-        document.add(getSubtitle("V. DO PREÇO E DO PAGAMENTO"));
+    private void getPaymentDetails(PdfRequestDto requestContract, Document document) throws DocumentException {
+        document.add(getSubtitle("V. DO PREÇO E DO PAGAMENTO", Element.ALIGN_LEFT));
         document.add(getRentDetails(requestContract));
         document.add(getEmptyLine());
     }
 
-    private void getFooter(Document document) throws DocumentException, IOException {
-        document.add(getDefaultParagraph("Guarujá, " + getFormatCurrentDate()));
-        document.add(getEmptyLine());
-        document.add(getSign());
-        document.add(getDefaultParagraph("____________________________________________"));
-        document.add(getDefaultParagraph("Locador: Fernando Augusto Machado de Oliveira"));
-
-    }
-
     private void getCancelDetails(Document document) throws DocumentException {
 
-        document.add(getSubtitle("VI. DO CANCELAMENTO DA LOCAÇÃO"));
+        document.add(getSubtitle("VI. DO CANCELAMENTO DA LOCAÇÃO", Element.ALIGN_LEFT));
         document.add(getDefaultParagraph("O locatário pode cancelar a locação mediante comunicado por escrito através do e-mail do locador ao endereço contido na descrição das partes. O cancelamento implica nas seguintes penalidades que variam de acordo com a antecedência do aviso de cancelamento:"));
         document.add(getDefaultParagraph("Abaixo segue a tabela referente a devolução do valor depositado em caso de desistência por parte do locatário"));
         document.add(getCancelTable());
@@ -148,12 +133,7 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
     }
 
 
-    private Element getDefaultParagraph(String text) {
-        Paragraph paragraph = new Paragraph();
-        paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
-        paragraph.add(text);
-        return paragraph;
-    }
+
 
     private Element getItemList(String text) {
         Font zapfdingbats = new Font();
@@ -202,14 +182,7 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
         return cell;
     }
 
-    private Image getSign() throws BadElementException, IOException {
-
-        File resource = new ClassPathResource("sign_small.jpg").getFile();
-        return Image.getInstance(resource.getAbsolutePath());
-    }
-
-
-    private Element getRentDetails(ContractRequestDto requestContract) {
+    private Element getRentDetails(PdfRequestDto requestContract) {
         Paragraph paragraph = new Paragraph();
         paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
         paragraph.add(requestContract.getDescriptionPayment());
@@ -220,17 +193,5 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
         paragraph.add(EMPTY_LINE);
         return paragraph;
     }
-
-
-    private String getFormatCurrentDate() {
-
-        Date data = new Date();
-        Locale local = new Locale("pt", "BR");
-        DateFormat dateFormat = new SimpleDateFormat("dd '  de  ' MMMM '  de  ' yyyy", local);
-        return dateFormat.format(data);
-    }
-
-
-
 
 }
