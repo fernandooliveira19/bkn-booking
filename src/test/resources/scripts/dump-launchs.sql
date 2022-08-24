@@ -1,6 +1,7 @@
 INSERT INTO launch (id, schedule_date,payment_date, payment_type, payment_status, amount,booking_id)	values (	1, '2017-12-20', '2017-12-20','TRANSFER', 'PAID', 1830.0, 1);
 INSERT INTO launch (id, schedule_date,payment_date, payment_type, payment_status, amount,booking_id)	values (	2, '2017-12-27','2017-12-27','TRANSFER',  'PAID', 1830.0, 1);
-INSERT INTO launch (id, schedule_date,payment_date, payment_type, payment_status, amount,booking_id)	values (	3, '2019-02-02','2019-02-02','SITE", 'PAID', 1148.0, 2);
+INSERT INTO launch (id, schedule_date,payment_date, payment_type, payment_status, amount,booking_id)	values (	3, '2019-02-02','2019-02-02','SITE', 'PAID', 1148.0, 2);
+
 INSERT INTO launch (id, schedule_date,payment_date, payment_type, payment_status, amount,booking_id)	values (	4, '2019-02-05','2019-02-05','TRANSFER', 'PAID', 300.0, 3);
 INSERT INTO launch (id, schedule_date,payment_date, payment_type, payment_status, amount,booking_id)	values (	5, '2019-02-21','2019-02-21','TRANSFER',  'PAID', 320.0, 3);
 INSERT INTO launch (id, schedule_date,payment_date, payment_type, payment_status, amount,booking_id)	values (	6, '2019-01-15','2019-01-17','DEPOSIT', 'PAID', 900.0, 4);
@@ -248,6 +249,6 @@ INSERT INTO launch (id, schedule_date,payment_date, payment_type, payment_status
 INSERT INTO launch (id, schedule_date,payment_date, payment_type, payment_status, amount,booking_id)	values (	2276, '2022-07-05','','TRANSFER', 'PENDING', 0.0, 1316);
 INSERT INTO launch (id, schedule_date,payment_date, payment_type, payment_status, amount,booking_id)	values (	2286, '2023-01-10','','TRANSFER',  'PENDING', 0.0, 1316);
 INSERT INTO launch (id, schedule_date,payment_date, payment_type, payment_status, amount,booking_id)	values (	2296, '2022-08-05','','TRANSFER', 'PENDING', 450.0, 1326);
-INSERT INTO launch (id, schedule_date,payment_date, payment_type, payment_status, amount,booking_id)	values (	2306, '2023-01-10','','TRANSFER',  'PENDING', 1350.0, 1326);
+--INSERT INTO launch (id, schedule_date,payment_date, payment_type, payment_status, amount,booking_id)	values (	2306, '2023-01-10','','TRANSFER',  'PENDING', 1350.0, 1326);
 INSERT INTO launch (id, schedule_date,payment_date, payment_type, payment_status, amount,booking_id)	values (	2316, '2022-08-20','','TRANSFER', 'PENDING', 400.0, 1336);
 INSERT INTO launch (id, schedule_date,payment_date, payment_type, payment_status, amount,booking_id)	values (	2326, '2022-09-07','','TRANSFER',  'PENDING', 1100.0, 1336);
