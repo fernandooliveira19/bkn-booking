@@ -10,6 +10,7 @@ import com.fernando.oliveira.booking.domain.request.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.Arrays;
 import java.util.List;
 
 public class BookingMother {
@@ -22,7 +23,6 @@ public class BookingMother {
     private static final BigDecimal TOTAL_AMOUNT_01 = BigDecimal.valueOf(1500.0);
     private static final BigDecimal AMOUNT_PAID_01 = BigDecimal.valueOf(1000.0);
     private static final BigDecimal AMOUNT_PENDING_01 = BigDecimal.valueOf(500.0);
-    private static final Long TRAVELER_ID_01 = 1L;
     private static final Long BOOKING_ID_01 = 10L;
 
     private static final String REQUEST_CHECK_IN_01 = "2021-10-15T12:30";
@@ -37,20 +37,20 @@ public class BookingMother {
     private static final LocalDateTime CHECK_IN_02 = LocalDateTime.of(2021, Month.OCTOBER, 21,12,30,0);
     private static final LocalDateTime CHECK_OUT_02 = LocalDateTime.of(2021, Month.OCTOBER, 25,18,30,0);
     private static final BigDecimal TOTAL_AMOUNT_02 = BigDecimal.valueOf(1500.0);
-    private static final Long TRAVELER_ID_02 = 2L;
+
+
     private static final Long BOOKING_ID_02 = 20L;
+    private static final BigDecimal AMOUNT_PAID_02 = BigDecimal.valueOf(800.0);
+    private static final BigDecimal AMOUNT_PENDING_02 = BigDecimal.valueOf(200.0);
 
     private static final LocalDateTime CHECK_IN_03 = LocalDateTime.of(2021, Month.OCTOBER, 26,12,30,0);
     private static final LocalDateTime CHECK_OUT_03 = LocalDateTime.of(2021, Month.OCTOBER, 30,18,30,0);
     private static final BigDecimal TOTAL_AMOUNT_03 = BigDecimal.valueOf(1500.0);
-    private static final Long TRAVELER_ID_03 = 3L;
     private static final Long BOOKING_ID_03 = 30L;
 
     private static final Integer ADULTS = 4;
     private static final Integer CHILDREN = 2;
 
-    private static final Long TRAVELER_ID = 1L;
-    private static final String TRAVELER_NAME = "João da Silva";
 
     public static Booking getFirstBooking(){
         return Booking.builder()
@@ -63,6 +63,10 @@ public class BookingMother {
                 .build();
     }
     public static Booking getFirstBookingSaved(){
+        Launch launch01 = LaunchMother.getFirstLaunchFromFirstBooking();
+        Launch launch02 = LaunchMother.getSecondLaunchFromFirstBooking();
+        Launch launch03 = LaunchMother.getThirdLaunchFromFirstBooking();
+
         return Booking.builder()
                 .id(BOOKING_ID_01)
                 .insertDate(LocalDateTime.now())
@@ -71,11 +75,12 @@ public class BookingMother {
                 .amountTotal(TOTAL_AMOUNT_01)
                 .adults(ADULTS)
                 .children(CHILDREN)
-                .travelerName(TRAVELER_NAME)
-                .traveler(TravelerMother.getTravelerToSaved01())
+                .travelerName(TravelerMother.TRAVELER_01_NAME)
+                .traveler(TravelerMother.getTravelerSaved01())
                 .paymentStatus(PaymentStatusEnum.PENDING)
                 .amountPaid(AMOUNT_PAID_01)
                 .amountPending(AMOUNT_PENDING_01)
+                .launchs(Arrays.asList(launch01, launch02, launch03))
                 .build();
     }
 
@@ -86,6 +91,28 @@ public class BookingMother {
                 .amountTotal(TOTAL_AMOUNT_02)
                 .adults(ADULTS)
                 .children(CHILDREN)
+                .build();
+    }
+
+    public static Booking getSecondBookingSaved(){
+
+        Launch launch01 = LaunchMother.getFirstLaunchFromSecondBooking();
+        Launch launch02 = LaunchMother.getSecondLaunchFromSecondBooking();
+
+        return Booking.builder()
+                .id(BOOKING_ID_02)
+                .insertDate(LocalDateTime.now())
+                .checkIn(CHECK_IN_02)
+                .checkOut(CHECK_OUT_02)
+                .amountTotal(TOTAL_AMOUNT_02)
+                .adults(ADULTS)
+                .children(CHILDREN)
+                .travelerName(TravelerMother.TRAVELER_02_NAME)
+                .traveler(TravelerMother.getTravelerSaved02())
+                .paymentStatus(PaymentStatusEnum.PENDING)
+                .amountPaid(AMOUNT_PAID_02)
+                .amountPending(AMOUNT_PENDING_02)
+                .launchs(Arrays.asList(launch01, launch02))
                 .build();
     }
 
@@ -135,7 +162,7 @@ public class BookingMother {
 
     public static Traveler getTraveler(){
         return Traveler.builder()
-                .id(TRAVELER_ID)
+                .id(TravelerMother.TRAVELER_01_ID)
                 .build();
     }
 

@@ -24,12 +24,12 @@ public class LaunchMother {
     public static Launch getLaunchToSave(BigDecimal amount,
                                               PaymentTypeEnum paymentType,
                                               PaymentStatusEnum paymentStatus,
-                                              LocalDate scheculeDate,
+                                              LocalDate scheduleDate,
                                               LocalDate paymentDate){
         return Launch.builder()
                 .amount(amount)
                 .paymentType(paymentType)
-                .scheduleDate(scheculeDate)
+                .scheduleDate(scheduleDate)
                 .paymentStatus(paymentStatus)
                 .paymentDate(paymentDate)
                 .build();
@@ -119,6 +119,29 @@ public class LaunchMother {
 
         return request;
     }
+
+    public static Launch getFirstLaunchFromSecondBooking(){
+        return Launch.builder()
+                .amount(BigDecimal.valueOf(2000.0))
+                .scheduleDate(LocalDate.of(2021, Month.FEBRUARY, 20))
+                .paymentStatus(PaymentStatusEnum.PAID)
+                .paymentDate(LocalDate.of(2021, Month.FEBRUARY, 20))
+                .paymentType(PaymentTypeEnum.PIX)
+                .build();
+
+    }
+
+    public static Launch getSecondLaunchFromSecondBooking(){
+        return Launch.builder()
+                .amount(BigDecimal.valueOf(200.0))
+                .scheduleDate(LocalDate.of(2021, Month.FEBRUARY, 27))
+                .paymentStatus(PaymentStatusEnum.PENDING)
+                .paymentDate(null)
+                .paymentType(PaymentTypeEnum.PIX)
+                .build();
+
+    }
+
 
 
 }

@@ -19,14 +19,14 @@ public class TravelerMother {
 		
 	}
 
-	private static final Long TRAVELER_01_ID = 1L;
-	private static final String TRAVELER_01_NAME = "João da Silva";
+	public static final Long TRAVELER_01_ID = 1L;
+	public static final String TRAVELER_01_NAME = "João da Silva";
 	private static final String TRAVELER_01_EMAIL = "joao.silva@gmail.com";
 	private static final String TRAVELER_01_DOCUMENT = "50042806739";
 	private static final Integer TRAVELER_01_PREFIX_PHONE= 11;
 	private static final String TRAVELER_01_NUMBER_PHONE = "98888-7777";
 
-	private static final String TRAVELER_02_NAME = "Joao Carlos";
+	public static final String TRAVELER_02_NAME = "Joao Carlos";
 	private static final String TRAVELER_02_EMAIL = "joao_carlos@gmail.com";
 	private static final String TRAVELER_02_DOCUMENT = "18421484869";
 	private static final Integer TRAVELER_02_PREFIX_PHONE= 22;

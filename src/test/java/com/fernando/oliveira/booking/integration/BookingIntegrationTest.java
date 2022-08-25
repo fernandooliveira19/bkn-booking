@@ -47,6 +47,8 @@ public class BookingIntegrationTest {
 
     private static final String BOOKING_MAPPING = "/v1/bookings";
 
+    private static final String NEXT_BOOKINGS = BOOKING_MAPPING + "/next";
+
 
     @Test
     void shouldReturnAllBookings(){
@@ -376,6 +378,19 @@ public class BookingIntegrationTest {
 
         assertThat(result.getBody().getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
         assertThat(result.getBody().getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
+
+    }
+
+    @Test
+    void shouldReturnNextBookings(){
+        ResponseEntity<DetailBookingResponse[]> result = restTemplate
+                .getForEntity(
+                        NEXT_BOOKINGS, DetailBookingResponse[].class);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        DetailBookingResponse [] response = result.getBody();
+
+        assertThat(response.length).isEqualTo(1);
 
     }
 }
