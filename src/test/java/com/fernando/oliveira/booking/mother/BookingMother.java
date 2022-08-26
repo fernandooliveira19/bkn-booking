@@ -144,6 +144,26 @@ public class BookingMother {
                 .build();
     }
 
+    public static Booking getBookingToUpdate(LocalDateTime checkIn, LocalDateTime checkOut,
+                                           BigDecimal amountTotal,
+                                           Long travelerId,
+                                           Integer adults,
+                                           Integer children,
+                                           String observation,
+                                           List<Launch> launchs,
+                                           Traveler traveler) {
+        return Booking.builder()
+                .checkIn(checkIn)
+                .checkOut(checkOut)
+                .amountTotal(amountTotal)
+                .adults(adults)
+                .children(children)
+                .observation(observation)
+                .launchs(launchs)
+                .traveler(traveler)
+                .build();
+    }
+
     public static Booking getBookingSaved(LocalDateTime checkIn, LocalDateTime checkOut, BigDecimal amountTotal, Long travelerId, Integer adults, Integer children, List<Launch> launchs, BookingStatusEnum bookingStatus, PaymentStatusEnum paymentStatus) {
         return Booking.builder()
                 .id(1L)

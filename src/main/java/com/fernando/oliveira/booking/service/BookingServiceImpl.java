@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class BookingServiceImpl implements BookingService{
+public class BookingServiceImpl implements BookingService {
 
     @Autowired
     private BookingRepository bookingRepository;
@@ -41,7 +41,7 @@ public class BookingServiceImpl implements BookingService{
         Booking bookingSaved = bookingRepository.save(bookingToSave);
 
         bookingSaved.getLaunchs().stream()
-             .forEach( e -> launchService.createLaunch(e, bookingSaved));
+                .forEach(e -> launchService.createLaunch(e, bookingSaved));
 
         return bookingSaved;
     }
@@ -80,7 +80,6 @@ public class BookingServiceImpl implements BookingService{
     }
 
 
-
     @Override
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public Booking updateBooking(Booking booking, Long id) {
@@ -96,13 +95,13 @@ public class BookingServiceImpl implements BookingService{
 
         Booking bookingUpdated = bookingRepository.save(bookingToUpdate);
 
-        for(Launch launch : booking.getLaunchs()){
+        for (Launch launch : booking.getLaunchs()) {
 
-            if(launch.getId() != null) {
+            if (launch.getId() != null) {
                 launch.setBooking(bookingUpdated);
                 Launch l = launchService.findById(launch.getId());
                 launchService.updateLaunch(launch);
-            }else{
+            } else {
                 launchService.createLaunch(launch, bookingUpdated);
             }
 
@@ -118,17 +117,17 @@ public class BookingServiceImpl implements BookingService{
         Optional<Booking> result = bookingRepository.findById(id);
 
         return result
-                .orElseThrow(() -> new BookingException("Não foi encontrado reserva pelo id: "  + id));
+                .orElseThrow(() -> new BookingException("Não foi encontrado reserva pelo id: " + id));
 
     }
 
-    public Booking detailBooking(Long id){
+    public Booking detailBooking(Long id) {
         Booking booking = findById(id);
 
-        return  defineBookingDetails(booking);
+        return defineBookingDetails(booking);
     }
 
-   public Booking defineBookingDetails(Booking booking){
+    public Booking defineBookingDetails(Booking booking) {
         defineTraveler(booking);
         defineBookingStatus(booking);
         definePaymentStatus(booking);
@@ -139,70 +138,85 @@ public class BookingServiceImpl implements BookingService{
 
     public void defineBookingStatus(Booking booking) {
 
+        if (BookingStatusEnum.FINISHED.equals(booking.getBookingStatus())) {
+            return;
+        }
+
         booking.setBookingStatus(BookingStatusEnum.PRE_RESERVED);
 
-        booking.getLaunchs().stream().forEach(e ->{
-            if(e.getPaymentStatus().equals(PaymentStatusEnum.PAID)){
+        booking.getLaunchs().stream().forEach(e -> {
+            if (e.getPaymentStatus().equals(PaymentStatusEnum.PAID)) {
                 booking.setBookingStatus(BookingStatusEnum.RESERVED);
             }
         });
 
     }
 
-    public void definePaymentStatus(Booking booking){
+    public void definePaymentStatus(Booking booking) {
         booking.setPaymentStatus(PaymentStatusEnum.PAID);
 
-        booking.getLaunchs().stream().forEach(e ->{
-            if(e.getPaymentStatus().equals(PaymentStatusEnum.PENDING)){
+        booking.getLaunchs().stream().forEach(e -> {
+            if (e.getPaymentStatus().equals(PaymentStatusEnum.PENDING)) {
                 booking.setPaymentStatus(PaymentStatusEnum.PENDING);
             }
         });
     }
 
 
-    public void validateBooking(Booking booking){
+    public void validateBooking(Booking booking) {
 
         List<Booking> otherBookings = bookingRepository.findBookingsByDate(booking.getCheckIn(), booking.getCheckOut());
 
-        if(!otherBookings.isEmpty()){
+        if (!otherBookings.isEmpty()) {
 
-            if(booking.getId() == null){
+            if (booking.getId() == null) {
                 throw new BookingException("Já existe outra reserva para o mesmo periodo");
             }
-            for(Booking bkn: otherBookings){
-                if(!bkn.getId().equals(booking.getId())){
+            for (Booking bkn : otherBookings) {
+                if (!bkn.getId().equals(booking.getId())) {
                     throw new BookingException("Já existe outra reserva para o mesmo periodo");
                 }
             }
 
         }
 
-        if(booking.getLaunchs() == null || booking.getLaunchs().isEmpty()){
+        if (booking.getLaunchs() == null || booking.getLaunchs().isEmpty()) {
             throw new BookingException("Reserva deve possuir lançamentos");
         }
 
-        if(!booking.getAmountTotal().equals(getTotalAmountByLaunchs(booking.getLaunchs()))){
+        if (!booking.getAmountTotal().equals(getTotalAmountByLaunchs(booking.getLaunchs()))) {
             throw new BookingException("Soma dos lançamentos estão diferentes do valor total da reserva");
         }
 
     }
-    public BigDecimal getTotalAmountByLaunchs(List<Launch> launchs){
+
+    public BigDecimal getTotalAmountByLaunchs(List<Launch> launchs) {
 
         return launchs.stream()
                 .map(Launch::getAmount)
-        .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
     }
 
-    private void defineTraveler(Booking booking){
+    private void defineTraveler(Booking booking) {
         Traveler traveler = travelerService.findById(booking.getTraveler().getId());
         booking.setTraveler(traveler);
         booking.setTravelerName(traveler.getName());
     }
 
-    private void defineAmountPaid(Booking booking){
+    private void defineAmountPaid(Booking booking) {
         booking.setAmountPaid(booking.getAmountTotal().subtract(booking.getAmountPending()));
     }
 
+    @Override
+    public Booking finishBooking(Booking booking, Long id) {
+
+        Booking bookingToFinish = findById(id);
+        bookingToFinish.setObservation(booking.getObservation());
+        bookingToFinish.setBookingStatus(BookingStatusEnum.FINISHED);
+        bookingToFinish.setLastUpdate(LocalDateTime.now());
+
+        return bookingRepository.save(bookingToFinish);
+    }
 
 }

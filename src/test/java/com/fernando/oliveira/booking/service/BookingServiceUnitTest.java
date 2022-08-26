@@ -293,6 +293,35 @@ public class BookingServiceUnitTest {
         then(result.get(1).getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
         then(result.get(1).getTravelerName()).isEqualTo("Joao Carlos");
 
+    }
+
+    @Test
+    void givenBookingWhenUpdateToFinishThenReturnBookingFinished(){
+        LocalDateTime checkIn = LocalDateTime.of(2021, Month.OCTOBER,8,10,0);
+        LocalDateTime checkOut = LocalDateTime.of(2021, Month.DECEMBER,16,18,0);
+        Long travelerId = 1L;
+        Traveler traveler = TravelerMother.getTravelerSaved01();
+        BigDecimal totalAmount = BigDecimal.valueOf(1500.0);
+        Integer adults = 2;
+        Integer children = 3;
+        String observation = "finished successfully";
+
+        Launch firstLaunch = getLaunchToSave(BigDecimal.valueOf(1000.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PENDING, LocalDate.of(2021, 10,10), null );
+        Launch secondLaunch = getLaunchToSave(BigDecimal.valueOf(300.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PENDING, LocalDate.of(2021, 11,10), null );
+        Launch thirdLaunch = getLaunchToSave(BigDecimal.valueOf(200.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PENDING, LocalDate.of(2021, 12,10), null );
+
+        Booking bookingToFinish = BookingMother.getBookingToUpdate(checkIn, checkOut,totalAmount, travelerId, adults, children, observation, Arrays.asList(firstLaunch, secondLaunch, thirdLaunch), traveler);
+        Booking bookingSaved = BookingMother.getFirstBookingSaved();
+        Long bookingId = 10L;
+
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(bookingSaved));
+        when(bookingRepository.save(any(Booking.class))).thenReturn(bookingSaved);
+
+        Booking result = bookingService.finishBooking(bookingToFinish, bookingId);
+
+        then(result.getBookingStatus()).isEqualTo(BookingStatusEnum.FINISHED);
+        then(result.getLastUpdate()).isNotNull();
+        then(result.getObservation()).isEqualTo(observation);
 
     }
 

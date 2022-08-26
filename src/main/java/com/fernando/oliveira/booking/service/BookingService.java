@@ -21,4 +21,8 @@ public interface BookingService {
 
     Booking detailBooking(Long id);
 
+    Booking finishBooking(Booking booking, Long id);
+
+
+
 }

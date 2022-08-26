@@ -49,6 +49,8 @@ public class BookingIntegrationTest {
 
     private static final String NEXT_BOOKINGS = BOOKING_MAPPING + "/next";
 
+    private static final String FINISH_BOOKINGS = BOOKING_MAPPING + "/finish";
+
 
     @Test
     void shouldReturnAllBookings(){
@@ -393,4 +395,5 @@ public class BookingIntegrationTest {
         assertThat(response.length).isEqualTo(1);
 
     }
+
 }
