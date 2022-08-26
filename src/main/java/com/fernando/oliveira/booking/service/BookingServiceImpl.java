@@ -138,7 +138,8 @@ public class BookingServiceImpl implements BookingService {
 
     public void defineBookingStatus(Booking booking) {
 
-        if (BookingStatusEnum.FINISHED.equals(booking.getBookingStatus())) {
+        if (BookingStatusEnum.FINISHED.equals(booking.getBookingStatus())
+            || BookingStatusEnum.CANCELED.equals(booking.getBookingStatus())) {
             return;
         }
 
@@ -209,14 +210,29 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Booking finishBooking(Booking booking, Long id) {
+    public Booking finishBooking(String observation, Long id) {
 
         Booking bookingToFinish = findById(id);
-        bookingToFinish.setObservation(booking.getObservation());
-        bookingToFinish.setBookingStatus(BookingStatusEnum.FINISHED);
-        bookingToFinish.setLastUpdate(LocalDateTime.now());
 
-        return bookingRepository.save(bookingToFinish);
+        return cancelOrFinishBooking(bookingToFinish, observation, BookingStatusEnum.FINISHED);
+    }
+
+    @Override
+    public Booking cancelBooking(String observation, Long id) {
+
+        Booking bookingToCancel = findById(id);
+
+        return cancelOrFinishBooking(bookingToCancel, observation, BookingStatusEnum.CANCELED);
+
+    }
+
+    private Booking cancelOrFinishBooking(Booking booking, String observation, BookingStatusEnum status){
+
+        booking.setObservation(observation);
+        booking.setBookingStatus(status);
+        booking.setLastUpdate(LocalDateTime.now());
+
+        return bookingRepository.save(booking);
     }
 
 }

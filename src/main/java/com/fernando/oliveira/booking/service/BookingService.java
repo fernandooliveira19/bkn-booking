@@ -21,8 +21,7 @@ public interface BookingService {
 
     Booking detailBooking(Long id);
 
-    Booking finishBooking(Booking booking, Long id);
+    Booking finishBooking(String observation, Long id);
 
-
-
+    Booking cancelBooking(String observation, Long bookingId);
 }
