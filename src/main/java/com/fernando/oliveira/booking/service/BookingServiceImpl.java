@@ -7,6 +7,8 @@ import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.repository.BookingRepository;
+import com.netflix.discovery.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -196,11 +198,11 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private void validateFinishBooking(Booking booking) {
-        if(booking.getCheckOut().isBefore(LocalDateTime.now())){
-            throw new BookingException("Não é permitido finalizar reserva antes do check-out");
+        if(booking.getCheckOut().isAfter(LocalDateTime.now())){
+            throw new BookingException("Não é permitido finalizar a reserva antes do check-out");
         }
-        if(booking.getObservation().isEmpty()){
-            throw new BookingException("Observação sobre a finalização da reserva é obrigatório");
+        if(StringUtils.isBlank(booking.getObservation())){
+            throw new BookingException("É obrigatório preencher uma observação sobre a reserva");
         }
         booking.getLaunchs().stream().forEach(e -> {
             if (e.getPaymentStatus().equals(PaymentStatusEnum.PENDING)) {
