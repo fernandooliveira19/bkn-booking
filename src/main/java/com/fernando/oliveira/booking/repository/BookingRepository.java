@@ -20,4 +20,7 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
  @Query(value = "select b from booking b where b.bookingStatus in ('RESERVED', 'PRE_RESERVED') order by b.checkIn")
  List<Booking> findNextBookings();
 
+ @Query(value = "select b from booking b order by b.checkIn")
+ List<Booking> findAll();
+
  }
