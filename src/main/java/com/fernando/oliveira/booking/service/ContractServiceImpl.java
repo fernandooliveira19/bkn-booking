@@ -3,6 +3,7 @@ package com.fernando.oliveira.booking.service;
 import com.fernando.oliveira.booking.builder.PdfRequestDtoBuilder;
 import com.fernando.oliveira.booking.domain.dto.PdfRequestDto;
 import com.fernando.oliveira.booking.domain.entity.Booking;
+import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -36,9 +37,13 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
         try {
             PdfWriter.getInstance(document, out);
             document.open();
-            document.add(getTitle("CONTRATO DE LOCAÇÃO POR TEMPORADA"));
+            if(booking.getBookingStatus().equals(BookingStatusEnum.RESERVED)) {
+                document.add(getTitle("CONTRATO DE LOCAÇÃO POR TEMPORADA"));
+            }else{
+                document.add(getTitle("PRÉ-CONTRATO DE LOCAÇÃO POR TEMPORADA"));
+            }
 
-            getIdentificationParts(requestDto, document);
+            getIdentificationParts(booking,requestDto, document);
 
             getApartmentDetails(document);
 
@@ -46,7 +51,7 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
 
             getRent(requestDto, document);
 
-            getPaymentDetails(requestDto, document);
+            getPaymentDetails(requestDto, document, booking);
 
             getCancelDetails(document);
 
@@ -64,11 +69,14 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
     }
 
 
-    private void getIdentificationParts(PdfRequestDto requestContract, Document document) throws DocumentException {
+    private void getIdentificationParts(Booking booking, PdfRequestDto requestContract, Document document) throws DocumentException {
         document.add(getSubtitle("I. IDENTIFICAÇÃO DAS PARTES", Element.ALIGN_LEFT));
-        document.add(getDefaultParagraph("As pessoas abaixo identificadas firmam o presente contrato de locação por temporada, nos termos da legislação brasileira, em especial, de acordo com a Lei de Locação (Lei nº 8.245/91): "));
-        document.add(getDefaultParagraph("Locador: Fernando Augusto Machado de Oliveira, CPF: 296.830.188-82"));
-        document.add(getDefaultParagraph("Endereço eletrônico: f19@uol.com.br"));
+
+        if(BookingStatusEnum.RESERVED.equals(booking.getBookingStatus())) {
+            document.add(getDefaultParagraph("As pessoas abaixo identificadas firmam o presente contrato de locação por temporada, nos termos da legislação brasileira, em especial, de acordo com a Lei de Locação (Lei nº 8.245/91): "));
+            document.add(getDefaultParagraph("Locador: Fernando Augusto Machado de Oliveira, CPF: 296.830.188-82"));
+            document.add(getDefaultParagraph("Endereço eletrônico: f19@uol.com.br"));
+        }
         document.add(getSubtitle("Responsável locação: ", Element.ALIGN_LEFT));
         document.add(getDefaultParagraph("Nome: " + requestContract.getTravelerName()));
         document.add(getDefaultParagraph("Email: " + requestContract.getTravelerEmail()));
@@ -83,7 +91,7 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
         document.add(getSubtitle("II. DO IMÓVEL LOCADO", Element.ALIGN_LEFT));
         document.add(getDefaultParagraph("O imóvel locado está situado na rua Rio de Janeiro, 50 – apto 617/618 – Centro – Guarujá – SP. Trata-se de imóvel com as seguintes características:"));
         document.add(getDefaultParagraph("Possui ambiente com 2 quartos, sendo 1 com suíte, sala, cozinha, banheiro. O apartamento possui 1 cama de casal, 2 bicamas, 2 colchões de solteiro extras, mesa com 6 cadeiras, banheiro social com box."));
-        document.add(getDefaultParagraph("Ainda possui TV 49' na sala e duas 32' nos quartos, modem Wi-fi, secadora de roupas, 3 ventiladores, armário para acomodação de bagagens, cômoda, panela de arroz, micro-ondas, fogão de quatro bocas, geladeira, liquidificador, sanduicheira grill, filtro de água e utensílios de cozinha."));
+        document.add(getDefaultParagraph("Ainda possui Smart TV 49' na sala e duas 32' nos quartos, modem Wi-fi, lavadora de roupas, 3 ventiladores, armário para acomodação de bagagens, cômoda, panela de arroz, micro-ondas, cooktop de indução de quatro bocas. Jogo de completo com 6 panelas Tognana de fundo triplo, geladeira, liquidificador, sanduicheira grill, filtro de água e utensílios de cozinha."));
         document.add(getDefaultParagraph("O edifício possui portaria 24 horas, monitoramento por câmeras, WI-FI no hall de entrada, 3 elevadores, serviço de praia com cadeiras e 2 guarda-sóis (a solicitar na recepção)"));
 
         document.add(getSubtitle("Observações:", Element.ALIGN_LEFT));
@@ -114,9 +122,9 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
         document.add(getEmptyLine());
     }
 
-    private void getPaymentDetails(PdfRequestDto requestContract, Document document) throws DocumentException {
+    private void getPaymentDetails(PdfRequestDto requestContract, Document document, Booking booking) throws DocumentException {
         document.add(getSubtitle("V. DO PREÇO E DO PAGAMENTO", Element.ALIGN_LEFT));
-        document.add(getRentDetails(requestContract));
+        document.add(getRentDetails(requestContract, booking));
         document.add(getEmptyLine());
     }
 
@@ -182,7 +190,7 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
         return cell;
     }
 
-    private Element getRentDetails(PdfRequestDto requestContract) {
+    private Element getRentDetails(PdfRequestDto requestContract, Booking booking) {
         Paragraph paragraph = new Paragraph();
         paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
         paragraph.add(requestContract.getDescriptionPayment());
@@ -191,6 +199,12 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
         paragraph.add(EMPTY_LINE);
         paragraph.add(requestContract.getSummaryBooking());
         paragraph.add(EMPTY_LINE);
+
+        if(BookingStatusEnum.PRE_RESERVED.equals(booking.getBookingStatus())){
+            paragraph.add(EMPTY_LINE);
+            paragraph.add("Importante: A reserva somente será efetivada quando o pagamento do valor total ou do sinal for efetuado.");
+            paragraph.add(EMPTY_LINE);
+        }
         return paragraph;
     }
 

@@ -2,6 +2,7 @@ package com.fernando.oliveira.booking.utils;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
+import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.ContractTypeEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -102,24 +104,35 @@ public class PdfUtils {
             if (booking.getContractType().equals(ContractTypeEnum.SITE)) {
 
                 descriptionPayment
-                        .append("O locatário efetuou o pagamento no valor de: ")
+                        .append("O locatário efetuou o pagamento no valor de ")
                         .append(FormatterUtils.formatCurrencyValue(booking.getAmountTotal()))
                         .append(" através do site vrbo.com (antigo aluguetemporada.com.br)");
 
             } else {
                 descriptionPayment
-                        .append("O locatário efetuou o pagamento no valor de: ")
+                        .append("O locatário efetuou o pagamento no valor de ")
                         .append(FormatterUtils.formatCurrencyValue(booking.getAmountTotal()));
 
             }
         }else if(booking.getPaymentStatus().equals(PaymentStatusEnum.PENDING)){
             Launch lastLaunch = getLastPendingLaunch(booking);
 
+            if(BookingStatusEnum.PRE_RESERVED.equals(booking.getBookingStatus())){
+                BigDecimal amountPending = booking.getAmountTotal().subtract(lastLaunch.getAmount());
+                descriptionPayment
+                        .append("O locatário efetuará o pagamento no valor de ")
+                        .append(FormatterUtils.formatCurrencyValue(amountPending))
+                        .append(" a título de sinal. O restante de ")
+                        .append(FormatterUtils.formatCurrencyValue(booking.getAmountTotal().subtract(amountPending)));
+            }else {
+                descriptionPayment
+                        .append("O locatário efetuou o pagamento no valor de ")
+                        .append(FormatterUtils.formatCurrencyValue(booking.getAmountPaid()))
+                        .append(" a título de sinal. O restante de ")
+                        .append(FormatterUtils.formatCurrencyValue(booking.getAmountPending()));
+            }
+
             descriptionPayment
-                    .append("O locatário efetuou o pagamento no valor de: ")
-                    .append(FormatterUtils.formatCurrencyValue(booking.getAmountPaid()))
-                    .append(" a título de sinal. O restante de ")
-                    .append(FormatterUtils.formatCurrencyValue(booking.getAmountPending()))
                     .append(" será pago até o dia ")
                     .append(FormatterUtils.getLocalDateFormat(lastLaunch.getScheduleDate()));
 
@@ -131,13 +144,13 @@ public class PdfUtils {
     public static String getSummary(Booking booking) {
 
         if(booking.getPaymentStatus().equals(PaymentStatusEnum.PAID)){
-            return "Com isso totalizando, o locatário pagou pela importância de: "+
+            return "Com isso totalizando, o locatário pagou pela importância de "+
                     FormatterUtils.formatCurrencyValue(booking.getAmountTotal())+ ", o qual já está incluso a\n" +
                     "taxa de limpeza.";
         }
         if(booking.getPaymentStatus().equals(PaymentStatusEnum.PENDING)){
             StringBuilder summaryPending = new StringBuilder();
-            summaryPending.append("Com isso totalizando, o locatário pagará pela importância de: ")
+            summaryPending.append("Com isso totalizando, o locatário pagará pela importância de ")
                     .append(FormatterUtils.formatCurrencyValue(booking.getAmountTotal()))
                     .append(", o qual já está incluso a taxa de limpeza.");
             return summaryPending.toString();
