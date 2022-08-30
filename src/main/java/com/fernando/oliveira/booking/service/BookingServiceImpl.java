@@ -166,6 +166,10 @@ public class BookingServiceImpl implements BookingService {
 
     public void validateBooking(Booking booking) {
 
+        if(BookingStatusEnum.FINISHED.equals(booking.getBookingStatus())){
+            validateFinishBooking(booking);
+        }
+
         List<Booking> otherBookings = bookingRepository.findBookingsByDate(booking.getCheckIn(), booking.getCheckOut());
 
         if (!otherBookings.isEmpty()) {
@@ -189,6 +193,20 @@ public class BookingServiceImpl implements BookingService {
             throw new BookingException("Soma dos lançamentos estão diferentes do valor total da reserva");
         }
 
+    }
+
+    private void validateFinishBooking(Booking booking) {
+        if(booking.getCheckOut().isBefore(LocalDateTime.now())){
+            throw new BookingException("Não é permitido finalizar reserva antes do check-out");
+        }
+        if(booking.getObservation().isEmpty()){
+            throw new BookingException("Observação sobre a finalização da reserva é obrigatório");
+        }
+        booking.getLaunchs().stream().forEach(e -> {
+            if (e.getPaymentStatus().equals(PaymentStatusEnum.PENDING)) {
+                throw new BookingException("Não é possível finalizar a reserva. Verificar pagamentos pendentes");
+            }
+        });
     }
 
     public BigDecimal getTotalAmountByLaunchs(List<Launch> launchs) {
