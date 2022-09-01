@@ -37,6 +37,7 @@ public class LaunchMother {
 
     public static Launch getFirstLaunchFromFirstBooking(){
         return Launch.builder()
+                .id(10L)
                 .amount(BigDecimal.valueOf(1000.0))
                 .scheduleDate(LocalDate.of(2021, Month.OCTOBER, 10))
                 .paymentStatus(PaymentStatusEnum.PAID)

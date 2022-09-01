@@ -1,7 +1,6 @@
 package com.fernando.oliveira.booking.domain.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import io.swagger.annotations.ApiModel;
@@ -50,6 +49,6 @@ public class DetailBookingResponse {
 
     private String contractType;
 
-    private List<DetailLaunchResponse> launchs;
+    private List<LaunchDetailResponse> launchs;
 
 }

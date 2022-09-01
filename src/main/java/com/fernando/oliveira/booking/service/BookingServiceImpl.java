@@ -171,6 +171,9 @@ public class BookingServiceImpl implements BookingService {
         if(BookingStatusEnum.FINISHED.equals(booking.getBookingStatus())){
             validateFinishBooking(booking);
         }
+        if(BookingStatusEnum.CANCELED.equals(booking.getBookingStatus())){
+            validateCancelBooking(booking);
+        }
 
         List<Booking> otherBookings = bookingRepository.findBookingsByDate(booking.getCheckIn(), booking.getCheckOut());
 
@@ -197,6 +200,17 @@ public class BookingServiceImpl implements BookingService {
 
     }
 
+    private void validateCancelBooking(Booking booking) {
+        if(StringUtils.isBlank(booking.getObservation())){
+            throw new BookingException("É obrigatório preencher uma observação sobre a reserva");
+        }
+        booking.getLaunchs().stream().forEach(e -> {
+            if (e.getPaymentStatus().equals(PaymentStatusEnum.PAID)) {
+                throw new BookingException("Não é possível cancelar a reserva. Verificar lançamentos pagos");
+            }
+        });
+    }
+
     private void validateFinishBooking(Booking booking) {
         if(booking.getCheckOut().isAfter(LocalDateTime.now())){
             throw new BookingException("Não é permitido finalizar a reserva antes do check-out");
@@ -206,7 +220,7 @@ public class BookingServiceImpl implements BookingService {
         }
         booking.getLaunchs().stream().forEach(e -> {
             if (e.getPaymentStatus().equals(PaymentStatusEnum.PENDING)) {
-                throw new BookingException("Não é possível finalizar a reserva. Verificar pagamentos pendentes");
+                throw new BookingException("Não é possível finalizar a reserva. Verificar lancçamentos pendentes");
             }
         });
     }

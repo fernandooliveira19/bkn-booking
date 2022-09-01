@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Entity
+@Entity(name="launch")
 @Table(name="launch" )
 @Getter
 @Setter

@@ -10,12 +10,13 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DetailLaunchResponse implements Serializable {
+public class LaunchDetailResponse implements Serializable {
 
     private Long id;
 
@@ -28,4 +29,8 @@ public class DetailLaunchResponse implements Serializable {
     private PaymentTypeEnum paymentType;
 
     private PaymentStatusEnum paymentStatus;
+
+    private String travelerName;
+
+    private LocalDateTime checkIn;
 }

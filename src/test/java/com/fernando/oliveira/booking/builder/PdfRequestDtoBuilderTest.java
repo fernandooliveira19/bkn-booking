@@ -98,8 +98,8 @@ public class PdfRequestDtoBuilderTest {
 
         PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
-        assertEquals("O locatário efetuou o pagamento no valor de: R$ 1.500,00", result.getDescriptionPayment());
-        assertEquals("Com isso totalizando, o locatário pagou pela importância de: R$ 1.500,00, o qual já está incluso a\n" +
+        assertEquals("O locatário efetuou o pagamento no valor de R$ 1.500,00", result.getDescriptionPayment());
+        assertEquals("Com isso totalizando, o locatário pagou pela importância de R$ 1.500,00, o qual já está incluso a\n" +
                 "taxa de limpeza.", result.getSummaryBooking());
 
     }
@@ -129,8 +129,8 @@ public class PdfRequestDtoBuilderTest {
 
         PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
-        assertEquals("O locatário efetuou o pagamento no valor de: R$ 1.000,00 a título de sinal. O restante de R$ 500,00 será pago até o dia 15/10/2021", result.getDescriptionPayment());
-        assertEquals("Com isso totalizando, o locatário pagará pela importância de: R$ 1.500,00, o qual já está incluso a taxa de limpeza.", result.getSummaryBooking());
+        assertEquals("O locatário efetuou o pagamento no valor de R$ 1.000,00 a título de sinal. O restante de R$ 500,00 será pago até o dia 15/10/2021", result.getDescriptionPayment());
+        assertEquals("Com isso totalizando, o locatário pagará pela importância de R$ 1.500,00, o qual já está incluso a taxa de limpeza.", result.getSummaryBooking());
 
     }
 
@@ -154,8 +154,8 @@ public class PdfRequestDtoBuilderTest {
 
         PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
-        assertEquals("O locatário efetuou o pagamento no valor de: R$ 1.500,00 através do site vrbo.com (antigo aluguetemporada.com.br)", result.getDescriptionPayment());
-        assertEquals("Com isso totalizando, o locatário pagou pela importância de: R$ 1.500,00, o qual já está incluso a\n" +
+        assertEquals("O locatário efetuou o pagamento no valor de R$ 1.500,00 através do site vrbo.com (antigo aluguetemporada.com.br)", result.getDescriptionPayment());
+        assertEquals("Com isso totalizando, o locatário pagou pela importância de R$ 1.500,00, o qual já está incluso a\n" +
                 "taxa de limpeza.", result.getSummaryBooking());
 
     }

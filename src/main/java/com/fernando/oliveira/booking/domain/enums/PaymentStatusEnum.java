@@ -2,6 +2,7 @@ package com.fernando.oliveira.booking.domain.enums;
 
 public enum PaymentStatusEnum {
 
+    CANCELED("Cancelado"),
     PAID("Pago"),
     PENDING("Pendente");
 
