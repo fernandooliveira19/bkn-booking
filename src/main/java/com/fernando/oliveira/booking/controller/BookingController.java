@@ -3,7 +3,6 @@ package com.fernando.oliveira.booking.controller;
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
 import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
-import com.fernando.oliveira.booking.domain.request.FinishBookingRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateBookingRequest;
 import com.fernando.oliveira.booking.domain.response.DetailBookingResponse;
 import com.fernando.oliveira.booking.service.AuthorizationAccessService;
@@ -156,38 +155,5 @@ public class BookingController {
                 .body(new InputStreamResource(bis));
 
     }
-
-    @ApiOperation(value = "Realiza finalização de reserva")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Reserva finalizada com sucesso"),
-            @ApiResponse(code = 400, message = "Dados de cadastro inválidos"),
-            @ApiResponse(code = 403, message = "Você não possui permissão para acessar esse recurso"),
-            @ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
-    @PutMapping(value = "/finish/{id}")
-    public ResponseEntity<DetailBookingResponse> finish(@RequestBody @Valid FinishBookingRequest request,
-                                                        @PathVariable("id") Long id){
-
-        Booking bookingUpdated = bookingService.finishBooking(request.getObservation(), id);
-        DetailBookingResponse response = bookingMapper.bookingToDetailBookingResponse(bookingUpdated);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-
-    }
-
-    @ApiOperation(value = "Realiza cancelamento de reserva")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Reserva cancelada com sucesso"),
-            @ApiResponse(code = 400, message = "Dados de cadastro inválidos"),
-            @ApiResponse(code = 403, message = "Você não possui permissão para acessar esse recurso"),
-            @ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
-    @PutMapping(value = "/cancel/{id}")
-    public ResponseEntity<DetailBookingResponse> cancel(@RequestBody @Valid FinishBookingRequest request,
-                                                        @PathVariable("id") Long id){
-
-        Booking bookingUpdated = bookingService.cancelBooking(request.getObservation(), id);
-        DetailBookingResponse response = bookingMapper.bookingToDetailBookingResponse(bookingUpdated);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-
-    }
-
 
 }

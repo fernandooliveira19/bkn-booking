@@ -7,7 +7,6 @@ import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.repository.BookingRepository;
-import com.netflix.discovery.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,14 +41,16 @@ public class BookingServiceImpl implements BookingService {
 
         Booking bookingSaved = bookingRepository.save(bookingToSave);
 
-        bookingSaved.getLaunchs().stream()
+        bookingSaved.getLaunchs()
+                .stream()
                 .forEach(e -> launchService.createLaunch(e, bookingSaved));
 
         return bookingSaved;
     }
 
     private void defineAmountPending(Booking booking) {
-        BigDecimal amountPending = booking.getLaunchs().stream()
+        BigDecimal amountPending = booking.getLaunchs()
+                .stream()
                 .filter(e -> e.getPaymentStatus().equals(PaymentStatusEnum.PENDING))
                 .map(Launch::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -101,7 +102,7 @@ public class BookingServiceImpl implements BookingService {
 
             if (launch.getId() != null) {
                 launch.setBooking(bookingUpdated);
-                Launch l = launchService.findById(launch.getId());
+//                Launch l = launchService.findById(launch.getId());
                 launchService.updateLaunch(launch);
             } else {
                 launchService.createLaunch(launch, bookingUpdated);
@@ -241,32 +242,6 @@ public class BookingServiceImpl implements BookingService {
 
     private void defineAmountPaid(Booking booking) {
         booking.setAmountPaid(booking.getAmountTotal().subtract(booking.getAmountPending()));
-    }
-
-    @Override
-    public Booking finishBooking(String observation, Long id) {
-
-        Booking bookingToFinish = findById(id);
-
-        return cancelOrFinishBooking(bookingToFinish, observation, BookingStatusEnum.FINISHED);
-    }
-
-    @Override
-    public Booking cancelBooking(String observation, Long id) {
-
-        Booking bookingToCancel = findById(id);
-
-        return cancelOrFinishBooking(bookingToCancel, observation, BookingStatusEnum.CANCELED);
-
-    }
-
-    private Booking cancelOrFinishBooking(Booking booking, String observation, BookingStatusEnum status){
-
-        booking.setObservation(observation);
-        booking.setBookingStatus(status);
-        booking.setLastUpdate(LocalDateTime.now());
-
-        return bookingRepository.save(booking);
     }
 
 }
