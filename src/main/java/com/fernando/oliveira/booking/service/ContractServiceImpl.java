@@ -91,8 +91,21 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
         document.add(getSubtitle("II. DO IMÓVEL LOCADO", Element.ALIGN_LEFT));
         document.add(getDefaultParagraph("O imóvel locado está situado na rua Rio de Janeiro, 50 – apto 617/618 – Centro – Guarujá – SP. Trata-se de imóvel com as seguintes características:"));
         document.add(getDefaultParagraph("Possui ambiente com 2 quartos, sendo 1 com suíte, sala, cozinha, banheiro. O apartamento possui 1 cama de casal, 2 bicamas, 2 colchões de solteiro extras, mesa com 6 cadeiras, banheiro social com box."));
-        document.add(getDefaultParagraph("Ainda possui Smart TV 49' na sala e duas 32' nos quartos, modem Wi-fi, lavadora de roupas, 3 ventiladores, armário para acomodação de bagagens, cômoda, panela de arroz, micro-ondas, cooktop de indução de quatro bocas. Jogo de completo com 6 panelas Tognana de fundo triplo, geladeira, liquidificador, sanduicheira grill, filtro de água e utensílios de cozinha."));
+        document.add(getDefaultParagraph("Ainda possui Smart TV 49' na sala e duas 32' nos quartos, modem Wi-fi, lavadora de roupas, 3 ventiladores, armário para acomodação de bagagens, cômoda, panela de arroz, micro-ondas, cooktop de indução de quatro bocas"));
+        document.add(getDefaultParagraph("Geladeira, liquidificador, sanduicheira grill, filtro de água e utensílios de cozinha, garrafa térmica"));
+        document.add(getDefaultParagraph("Jogo de completo com 5 panelas Tognana de fundo triplo com tampas de vidro (2 frigideiras, 2 caçarolas, 1 panela), 1 fervedor Tramontina e 1 panela de pressão Brinox" ));
         document.add(getDefaultParagraph("O edifício possui portaria 24 horas, monitoramento por câmeras, WI-FI no hall de entrada, 3 elevadores, serviço de praia com cadeiras e 2 guarda-sóis (a solicitar na recepção)"));
+        document.add(getEmptyLine());
+        document.add(getSubtitle("Orientações para utilização do cooktop:", Element.ALIGN_LEFT));
+        document.add(getItemList("Mantenha pressionado o botão de controle Lig./Desl. por 3 segundos até ouvir um \"bip\" para ligar o fogão."));
+        document.add(getItemList("Somente utilize as panelas adequadas que estão disponíveis na área de aquecimento desejada"));
+        document.add(getItemList("Verifique se o fundo da panela e a superfície da zona de cozinhar está limpa e seca"));
+        document.add(getItemList("Selecione a area de aquecimento e ajuste a potencia"));
+        document.add(getItemList("Deve-se utilizar os protetores de silicone abaixo das panelas"));
+        document.add(getItemList("Não utilizar utensílios que venham a riscar as panelas, somente utilizar os utensílios de silicone disponíveis"));
+        document.add(getItemList("Para desligar a area de aquecimento, selecione a área e dimiua a potencia"));
+        document.add(getItemList("Ao final da utilização pressione o botão Lig./Desl, ou retire as panelas da area de aquecimento"));
+        document.add(getEmptyLine());
 
         document.add(getSubtitle("Observações:", Element.ALIGN_LEFT));
         document.add(getItemList("É necessário levar roupa de cama, mesa e banho"));
@@ -136,7 +149,6 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
         document.add(getCancelTable());
         document.add(getEmptyLine());
         document.add(getDefaultParagraph("Em caso de imprevistos, existe a possibilidade de trocar a data de locação, mediante acordo com o locatário e agenda disponível."));
-        document.add(getEmptyLine());
         document.add(getEmptyLine());
     }
 
@@ -202,7 +214,8 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
 
         if(BookingStatusEnum.PRE_RESERVED.equals(booking.getBookingStatus())){
             paragraph.add(EMPTY_LINE);
-            paragraph.add("Importante: A reserva somente será efetivada quando o pagamento do valor total ou do sinal for efetuado.");
+            paragraph.add(getSubtitle("Importante: ", Element.ALIGN_LEFT));
+            paragraph.add("A reserva somente será efetivada quando o pagamento do valor total ou do sinal for efetuado.");
             paragraph.add(EMPTY_LINE);
         }
         return paragraph;
