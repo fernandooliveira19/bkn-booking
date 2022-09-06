@@ -1,10 +1,12 @@
 package com.fernando.oliveira.booking.service;
 
+import com.fernando.oliveira.booking.domain.dto.BookingSpec;
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
+import com.fernando.oliveira.booking.domain.request.SearchBookingRequest;
 import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.repository.BookingRepository;
 import org.apache.commons.lang.StringUtils;
@@ -78,8 +80,11 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Booking> search(LocalDateTime checkIn, LocalDateTime checkOut, String travelerName, BookingStatusEnum bookingStatusEnum, PaymentStatusEnum paymentStatusEnum) {
-        return null;
+    public List<Booking> search(SearchBookingRequest request) {
+
+        BookingSpec bookingSpec = new BookingSpec(request);
+
+        return bookingRepository.findAll(bookingSpec);
     }
 
 
@@ -102,7 +107,6 @@ public class BookingServiceImpl implements BookingService {
 
             if (launch.getId() != null) {
                 launch.setBooking(bookingUpdated);
-//                Launch l = launchService.findById(launch.getId());
                 launchService.updateLaunch(launch);
             } else {
                 launchService.createLaunch(launch, bookingUpdated);

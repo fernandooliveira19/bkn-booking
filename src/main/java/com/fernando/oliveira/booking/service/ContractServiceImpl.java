@@ -106,6 +106,7 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
         document.add(getItemList("Para desligar a area de aquecimento, selecione a área e dimiua a potencia"));
         document.add(getItemList("Ao final da utilização pressione o botão Lig./Desl, ou retire as panelas da area de aquecimento"));
         document.add(getEmptyLine());
+        document.add(getEmptyLine());
 
         document.add(getSubtitle("Observações:", Element.ALIGN_LEFT));
         document.add(getItemList("É necessário levar roupa de cama, mesa e banho"));
@@ -146,6 +147,8 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
         document.add(getSubtitle("VI. DO CANCELAMENTO DA LOCAÇÃO", Element.ALIGN_LEFT));
         document.add(getDefaultParagraph("O locatário pode cancelar a locação mediante comunicado por escrito através do e-mail do locador ao endereço contido na descrição das partes. O cancelamento implica nas seguintes penalidades que variam de acordo com a antecedência do aviso de cancelamento:"));
         document.add(getDefaultParagraph("Abaixo segue a tabela referente a devolução do valor depositado em caso de desistência por parte do locatário"));
+        document.add(getEmptyLine());
+        document.add(getEmptyLine());
         document.add(getCancelTable());
         document.add(getEmptyLine());
         document.add(getDefaultParagraph("Em caso de imprevistos, existe a possibilidade de trocar a data de locação, mediante acordo com o locatário e agenda disponível."));

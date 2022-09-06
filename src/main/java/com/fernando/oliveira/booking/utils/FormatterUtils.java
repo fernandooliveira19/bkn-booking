@@ -98,4 +98,16 @@ public class FormatterUtils {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return date.format(formatter);
     }
+
+    public static LocalDateTime getLocalDateFormat(String date) {
+        if(date == null){
+            return null;
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime localDate = LocalDate.parse(date).atStartOfDay();
+
+        return localDate;
+
+    }
 }
