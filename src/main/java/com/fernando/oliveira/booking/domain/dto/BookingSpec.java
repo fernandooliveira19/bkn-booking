@@ -5,13 +5,13 @@ import com.fernando.oliveira.booking.domain.request.SearchBookingRequest;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.criterion.Order;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -41,16 +41,7 @@ public class BookingSpec implements Specification<Booking> {
             predicates.add(criteriaBuilder.equal(root.get("contractType"), example.getContractType()));
         }
 
-//        if(example.getDate() != null){
-//            List<Predicate> conditionsList = new ArrayList<Predicate>();
-//
-//            Predicate onStart = criteriaBuilder.greaterThan(root.get("checkIn"), example.getDate());
-//            Predicate onEnd = criteriaBuilder.lessThan(root.get("checkOut"),example.getDate());
-//            predicates.add(onStart);
-//            predicates.add(onEnd);
-//
-//        }
-
+        query.orderBy(criteriaBuilder.asc(root.get("checkIn")));
 
         return andTogether(predicates, criteriaBuilder);
     }

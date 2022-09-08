@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -82,9 +83,23 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<Booking> search(SearchBookingRequest request) {
 
-        BookingSpec bookingSpec = new BookingSpec(request);
 
-        return bookingRepository.findAll(bookingSpec);
+        if(request.getBookingStatus() == null
+            && request.getPaymentStatus() == null
+            && request.getContractType() == null){
+
+            return findNextBookings();
+
+        }else{
+            BookingSpec bookingSpec = new BookingSpec(request);
+
+            List<Booking> result = bookingRepository.findAll(bookingSpec);
+
+            return result.stream()
+                    .map((e) -> defineBookingDetails((Booking) e))
+                    .collect(Collectors.toList());
+
+        }
     }
 
 
