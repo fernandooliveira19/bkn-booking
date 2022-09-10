@@ -2,6 +2,9 @@ package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.StatusEnum;
+import com.fernando.oliveira.booking.domain.mapper.TravelerMapper;
+import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
+import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
 import com.fernando.oliveira.booking.exception.TravelerException;
 import com.fernando.oliveira.booking.mother.TravelerMother;
 import com.fernando.oliveira.booking.repository.TravelerRepository;
@@ -29,17 +32,24 @@ public class TravelerServiceTest {
 
 	@Mock
 	TravelerRepository repository;
+
+	@Mock
+	TravelerMapper travelerMapper;
 	
 
 	@Test
 	public void shouldCreateTravelerAndReturnTravelerDetails() {
-		
+
+		CreateTravelerRequest request = TravelerMother.getCreateTraveler01Request();
+		TravelerDetailResponse response = TravelerMother.getDetailTraveler01Response();
 		Traveler travelerToSave = getTravelerToSaved01();
 		Traveler travelerSaved = getTravelerSaved01();
 
+		when(travelerMapper.requestToCreateTraveler(request)).thenReturn(travelerToSave);
 		when(repository.save(travelerToSave)).thenReturn(travelerSaved);
+		when(travelerMapper.travelerToTravelerDetailResponse(travelerSaved)).thenReturn(response);
 
-		Traveler result = travelerService.createTraveler(travelerToSave);
+		TravelerDetailResponse result = travelerService.createTraveler(request);
 
 		assertNotNull(result.getId());
 		assertEquals(travelerSaved.getId(),result.getId());
@@ -155,14 +165,20 @@ public class TravelerServiceTest {
 	@Test
 	public void shouldReturnExceptionWhenCreateTravelerAlreadyExistsWithSameName() {
 
+		CreateTravelerRequest request = TravelerMother.getCreateTraveler01Request();
+		request.setName("Joao Carlos");
+		TravelerDetailResponse response = TravelerMother.getDetailTraveler01Response();
+
 		Traveler travelerToSave = TravelerMother.getTravelerToSaved01();
 		travelerToSave.setName("Joao Carlos");
 		Traveler travelerSaved = TravelerMother.getTravelerSaved02();
 		when(repository.findByNameOrEmail(Mockito.anyString(), Mockito.anyString()))
 				.thenReturn(Arrays.asList(travelerSaved));
 
+		when(travelerMapper.requestToCreateTraveler(request)).thenReturn(travelerToSave);
+
 		Exception exception = assertThrows(TravelerException.class, () ->{
-			travelerService.createTraveler(travelerToSave);
+			travelerService.createTraveler(request);
 		});
 
 		assertEquals(exception.getMessage(), "Já existe outro viajante cadastrado com mesmo nome ou email" );

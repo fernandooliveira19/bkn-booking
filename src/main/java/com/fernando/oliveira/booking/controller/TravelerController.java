@@ -40,9 +40,9 @@ public class TravelerController {
 	@PostMapping
 	public ResponseEntity<TravelerDetailResponse> createTraveler(@RequestBody @Valid CreateTravelerRequest request) {
 
-		Traveler travelerCreated = travelerService.createTraveler(travelerMapper.requestToCreateTraveler(request));
-
-		return ResponseEntity.status(HttpStatus.CREATED).body(travelerMapper.travelerToTravelerDetailResponse(travelerCreated));
+		return ResponseEntity
+				.status(HttpStatus.CREATED)
+				.body(travelerService.createTraveler(request));
 
 	}
 

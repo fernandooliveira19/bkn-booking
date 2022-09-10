@@ -2,6 +2,9 @@ package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.StatusEnum;
+import com.fernando.oliveira.booking.domain.mapper.TravelerMapper;
+import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
+import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
 import com.fernando.oliveira.booking.exception.TravelerException;
 import com.fernando.oliveira.booking.repository.TravelerRepository;
 import org.apache.commons.lang.StringUtils;
@@ -20,15 +23,21 @@ public class TravelerServiceImpl implements TravelerService {
     @Autowired
     private TravelerRepository repository;
 
+    @Autowired
+    private TravelerMapper travelerMapper;
 
-    public Traveler createTraveler(Traveler traveler) {
+
+    public TravelerDetailResponse createTraveler(CreateTravelerRequest request) {
+
+        Traveler traveler = travelerMapper.requestToCreateTraveler(request);
 
         formatFields(traveler);
         validate(traveler);
         traveler.setStatus(StatusEnum.ACTIVE.getCode());
         traveler.setInsertDate(LocalDateTime.now());
 
-        return repository.save(traveler);
+        return travelerMapper.travelerToTravelerDetailResponse(repository.save(traveler))   ;
+
 
     }
 

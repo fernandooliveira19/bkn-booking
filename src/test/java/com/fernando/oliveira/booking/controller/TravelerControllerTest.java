@@ -57,9 +57,9 @@ public class TravelerControllerTest {
 
 		TravelerDetailResponse response = TravelerMother.getDetailTraveler01Response();
 
-		Mockito.when(mapper.requestToCreateTraveler(Mockito.any(CreateTravelerRequest.class))).thenReturn(travelerToSave);
-		Mockito.when(travelerService.createTraveler(Mockito.any(Traveler.class))).thenReturn(travelerSaved);
-		Mockito.when(mapper.travelerToTravelerDetailResponse(Mockito.any(Traveler.class))).thenReturn(response);
+//		Mockito.when(mapper.requestToCreateTraveler(Mockito.any(CreateTravelerRequest.class))).thenReturn(travelerToSave);
+		Mockito.when(travelerService.createTraveler(Mockito.any(CreateTravelerRequest.class))).thenReturn(response);
+//		Mockito.when(mapper.travelerToTravelerDetailResponse(Mockito.any(Traveler.class))).thenReturn(response);
 
 		String requestJson = TravelerMother.getCreateRequestJsonValue(request);
 		mockMvc.perform(post(BASE_MAPPING)

@@ -1,13 +1,15 @@
 package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Traveler;
+import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
+import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
 
 import java.util.List;
 
 
 public interface TravelerService {
 
-	Traveler createTraveler(Traveler traveler) ;
+	TravelerDetailResponse createTraveler(CreateTravelerRequest request) ;
 
 	List<Traveler> findTravelersByNameOrEmail(String name, String email);
 
