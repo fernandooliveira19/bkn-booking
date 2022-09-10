@@ -2,6 +2,7 @@ package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
+import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
 import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
 
 import java.util.List;
@@ -15,13 +16,15 @@ public interface TravelerService {
 
 	Traveler findById(Long id);
 
-	List<Traveler> findAll();
+	TravelerDetailResponse getTravelerDetail(Long id) ;
 
-    Traveler updateTraveler(Long id, Traveler traveler);
+	List<TravelerDetailResponse> findAll();
 
-	List<Traveler> findByNameContainingOrderByNameAsc(String name);
+	TravelerDetailResponse updateTraveler(Long id, UpdateTravelerRequest request);
+
+	List<TravelerDetailResponse> findByNameContainingOrderByNameAsc(String name);
 
 	void inactivateTraveler(Long id);
 
-	List<Traveler> findActiveTravelers();
+	List<TravelerDetailResponse> findActiveTravelers();
 }

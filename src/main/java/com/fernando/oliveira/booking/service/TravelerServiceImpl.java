@@ -4,6 +4,7 @@ import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.StatusEnum;
 import com.fernando.oliveira.booking.domain.mapper.TravelerMapper;
 import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
+import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
 import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
 import com.fernando.oliveira.booking.exception.TravelerException;
 import com.fernando.oliveira.booking.repository.TravelerRepository;
@@ -13,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static com.fernando.oliveira.booking.domain.enums.StatusEnum.ACTIVE;
 import static com.fernando.oliveira.booking.utils.FormatterUtils.*;
 
 @Service
@@ -33,15 +36,11 @@ public class TravelerServiceImpl implements TravelerService {
 
         formatFields(traveler);
         validate(traveler);
-        traveler.setStatus(StatusEnum.ACTIVE.getCode());
+        traveler.setStatus(ACTIVE.getCode());
         traveler.setInsertDate(LocalDateTime.now());
 
         return travelerMapper.travelerToTravelerDetailResponse(repository.save(traveler))   ;
-
-
     }
-
-
 
     private void validate(Traveler traveler) {
         List<Traveler> travelers = findTravelersByNameOrEmail(traveler.getName(), traveler.getEmail());
@@ -81,29 +80,45 @@ public class TravelerServiceImpl implements TravelerService {
     }
 
     @Override
-    public List<Traveler> findAll() {
-
-        return repository.findAll();
+    public TravelerDetailResponse getTravelerDetail(Long id) {
+        return travelerMapper.travelerToTravelerDetailResponse(this.findById(id));
     }
 
     @Override
-    public Traveler updateTraveler(Long id, Traveler traveler) {
+    public List<TravelerDetailResponse> findAll() {
+
+        return repository
+                .findAll()
+                .stream()
+                .map(e -> travelerMapper.travelerToTravelerDetailResponse(e))
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public TravelerDetailResponse updateTraveler(Long id, UpdateTravelerRequest request) {
         Traveler travelerToUpdate = findById(id);
-        travelerToUpdate.setName(traveler.getName());
-        travelerToUpdate.setEmail(traveler.getEmail());
-        travelerToUpdate.setDocument(traveler.getDocument());
-        travelerToUpdate.setStatus(traveler.getStatus());
-        travelerToUpdate.setPrefixPhone(traveler.getPrefixPhone());
-        travelerToUpdate.setNumberPhone(traveler.getNumberPhone());
+        travelerToUpdate.setName(request.getName());
+        travelerToUpdate.setEmail(request.getEmail());
+        travelerToUpdate.setDocument(request.getDocument());
+        travelerToUpdate.setStatus(request.getStatus());
+        travelerToUpdate.setPrefixPhone(request.getPrefixPhone());
+        travelerToUpdate.setNumberPhone(request.getNumberPhone());
         formatFields(travelerToUpdate);
         validate(travelerToUpdate);
         travelerToUpdate.setLastUpdateDate(LocalDateTime.now());
-        return repository.save(travelerToUpdate);
+        return travelerMapper
+                .travelerToTravelerDetailResponse(repository.save(travelerToUpdate));
     }
 
     @Override
-    public List<Traveler> findByNameContainingOrderByNameAsc(String name) {
-        return repository.findByNameContainingIgnoreCaseOrderByNameAsc(name);
+    public List<TravelerDetailResponse> findByNameContainingOrderByNameAsc(String name) {
+
+        return repository.findByNameContainingIgnoreCaseOrderByNameAsc(name)
+                .stream()
+                .map(traveler -> travelerMapper.travelerToTravelerDetailResponse(traveler))
+                .collect(Collectors.toList());
+
     }
 
     @Override
@@ -114,8 +129,12 @@ public class TravelerServiceImpl implements TravelerService {
     }
 
     @Override
-    public List<Traveler> findActiveTravelers() {
-        return repository.findActiveTravelers();
+    public List<TravelerDetailResponse> findActiveTravelers() {
+        return repository
+                .findActiveTravelers()
+                .stream()
+                .map(traveler -> travelerMapper.travelerToTravelerDetailResponse(traveler))
+                .collect(Collectors.toList());
     }
 
     private void formatFields(Traveler traveler) {

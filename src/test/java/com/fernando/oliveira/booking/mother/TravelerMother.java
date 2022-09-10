@@ -123,6 +123,14 @@ public class TravelerMother {
 
 	}
 
+	public static List<TravelerDetailResponse> getTravelerDetailList() {
+
+		return Arrays.asList(getDetailTraveler01Response(), getDetailTraveler02Response(), getDetailTraveler03Response());
+
+	}
+
+
+
 	public static Traveler getTravelerToSaved01(){
 		return Traveler.builder()
 				.name(TRAVELER_01_NAME)

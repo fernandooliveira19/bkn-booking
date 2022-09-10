@@ -1,7 +1,5 @@
 package com.fernando.oliveira.booking.controller;
 
-import com.fernando.oliveira.booking.domain.entity.Traveler;
-import com.fernando.oliveira.booking.domain.mapper.TravelerMapper;
 import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
 import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Api(tags="Travelers")
 @RestController
@@ -26,10 +23,6 @@ public class TravelerController {
 
 	@Autowired
 	private TravelerService travelerService;
-
-	@Autowired
-	private TravelerMapper travelerMapper;
-
 
 	@ApiOperation(value = "Realiza cadastro de viajante")
 	@ApiResponses(value = {
@@ -54,9 +47,9 @@ public class TravelerController {
 	@GetMapping("/{id}")
 	public ResponseEntity<TravelerDetailResponse> findById(@PathVariable("id") Long id) {
 
-		Traveler result = travelerService.findById(id);
-
-		return ResponseEntity.status(HttpStatus.OK).body(travelerMapper.travelerToTravelerDetailResponse(result));
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(travelerService.getTravelerDetail(id));
 
 	}
 
@@ -68,10 +61,9 @@ public class TravelerController {
 	@GetMapping
 	public ResponseEntity<List<TravelerDetailResponse>> findAll() {
 
-		List<Traveler> result = travelerService.findAll();
-		List<TravelerDetailResponse> response = result.stream().map(e -> travelerMapper.travelerToTravelerDetailResponse(e)).collect(Collectors.toList());
-
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(travelerService.findAll());
 
 	}
 
@@ -85,11 +77,9 @@ public class TravelerController {
 	@PutMapping
 	public ResponseEntity<TravelerDetailResponse> update(@Valid  @RequestBody UpdateTravelerRequest request) {
 
-		Traveler traveler = travelerMapper.requestToUpdateTraveler(request);
-		Traveler updatedTraveler = travelerService.updateTraveler(traveler.getId(), traveler);
-		TravelerDetailResponse response = travelerMapper.travelerToTravelerDetailResponse(updatedTraveler);
-
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(travelerService.updateTraveler(request.getId(), request));
 	}
 
 	@ApiOperation(value = "Realiza pesquisa de viajantes pelo nome")
@@ -101,14 +91,9 @@ public class TravelerController {
 	@GetMapping("/find")
 	public ResponseEntity<List<TravelerDetailResponse>> findByName(@RequestParam String name) {
 
-		List<Traveler> result = travelerService.findByNameContainingOrderByNameAsc(name);
-
-		List<TravelerDetailResponse> response = result
-				.stream()
-				.map(traveler -> travelerMapper.travelerToTravelerDetailResponse(traveler))
-				.collect(Collectors.toList());
-
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(travelerService.findByNameContainingOrderByNameAsc(name));
 	}
 
 	@ApiOperation(value = "Realiza inativação de viajante pelo identificador")
@@ -133,13 +118,9 @@ public class TravelerController {
 	@GetMapping("/actives/")
 	public ResponseEntity<List<TravelerDetailResponse>> findAllActive() {
 
-		List<Traveler> result = travelerService.findActiveTravelers();
-		List<TravelerDetailResponse> response = result
-				.stream()
-				.map(e -> travelerMapper.travelerToTravelerDetailResponse(e))
-				.collect(Collectors.toList());
-
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(travelerService.findActiveTravelers());
 
 	}
 }
