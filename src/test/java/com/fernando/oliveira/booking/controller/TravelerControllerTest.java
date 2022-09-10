@@ -20,6 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static com.fernando.oliveira.booking.mother.TravelerMother.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -51,7 +53,7 @@ public class TravelerControllerTest {
 
 		TravelerDetailResponse response = getDetailTraveler01Response();
 
-		Mockito.when(travelerService.createTraveler(Mockito.any(CreateTravelerRequest.class))).thenReturn(response);
+		when(travelerService.createTraveler(any(CreateTravelerRequest.class))).thenReturn(response);
 
 		String requestJson = getCreateRequestJsonValue(request);
 		mockMvc.perform(post(BASE_MAPPING)
@@ -73,7 +75,7 @@ public class TravelerControllerTest {
 
 		TravelerDetailResponse response = getDetailTraveler02Response();
 
-		Mockito.when(travelerService.getTravelerDetail(id)).thenReturn(response);
+		when(travelerService.getTravelerDetail(id)).thenReturn(response);
 
 		mockMvc.perform(get(BASE_MAPPING +"/2")
 				.header("Content-Type", ContentType.APPLICATION_JSON))
@@ -87,7 +89,7 @@ public class TravelerControllerTest {
 
 		List<TravelerDetailResponse> responseList = getTravelerDetailList();
 
-		Mockito.when(travelerService.findAll()).thenReturn(responseList);
+		when(travelerService.findAll()).thenReturn(responseList);
 
 		mockMvc.perform(get(BASE_MAPPING )
 				.header("Content-Type", ContentType.APPLICATION_JSON))
