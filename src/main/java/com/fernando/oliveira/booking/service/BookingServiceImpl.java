@@ -53,7 +53,8 @@ public class BookingServiceImpl implements BookingService {
     private void defineAmountPending(Booking booking) {
         BigDecimal amountPending = booking.getLaunchs()
                 .stream()
-                .filter(e -> e.getPaymentStatus().equals(PaymentStatusEnum.PENDING))
+                .filter(e -> e.getPaymentStatus().equals(PaymentStatusEnum.PENDING)
+                    || e.getPaymentStatus().equals(PaymentStatusEnum.CANCELED))
                 .map(Launch::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
@@ -83,13 +84,13 @@ public class BookingServiceImpl implements BookingService {
     public List<Booking> search(SearchBookingRequest request) {
 
 
-        if(request.getBookingStatus() == null
-            && request.getPaymentStatus() == null
-            && request.getContractType() == null){
+        if (request.getBookingStatus() == null
+                && request.getPaymentStatus() == null
+                && request.getContractType() == null) {
 
             return findNextBookings();
 
-        }else{
+        } else {
             BookingSpec bookingSpec = new BookingSpec(request);
 
             List<Booking> result = bookingRepository.findAll(bookingSpec);
@@ -160,7 +161,7 @@ public class BookingServiceImpl implements BookingService {
     public void defineBookingStatus(Booking booking) {
 
         if (BookingStatusEnum.FINISHED.equals(booking.getBookingStatus())
-            || BookingStatusEnum.CANCELED.equals(booking.getBookingStatus())) {
+                || BookingStatusEnum.CANCELED.equals(booking.getBookingStatus())) {
             return;
         }
 
@@ -175,6 +176,10 @@ public class BookingServiceImpl implements BookingService {
     }
 
     public void definePaymentStatus(Booking booking) {
+
+        if (BookingStatusEnum.CANCELED.equals(booking.getBookingStatus())) {
+            return;
+        }
         booking.setPaymentStatus(PaymentStatusEnum.PAID);
 
         booking.getLaunchs().stream().forEach(e -> {
@@ -187,10 +192,10 @@ public class BookingServiceImpl implements BookingService {
 
     public void validateBooking(Booking booking) {
 
-        if(BookingStatusEnum.FINISHED.equals(booking.getBookingStatus())){
+        if (BookingStatusEnum.FINISHED.equals(booking.getBookingStatus())) {
             validateFinishBooking(booking);
         }
-        if(BookingStatusEnum.CANCELED.equals(booking.getBookingStatus())){
+        if (BookingStatusEnum.CANCELED.equals(booking.getBookingStatus())) {
             validateCancelBooking(booking);
         }
 
@@ -220,7 +225,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private void validateCancelBooking(Booking booking) {
-        if(StringUtils.isBlank(booking.getObservation())){
+        if (StringUtils.isBlank(booking.getObservation())) {
             throw new BookingException("É obrigatório preencher uma observação sobre a reserva");
         }
         booking.getLaunchs().stream().forEach(e -> {
@@ -231,10 +236,10 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private void validateFinishBooking(Booking booking) {
-        if(booking.getCheckOut().isAfter(LocalDateTime.now())){
+        if (booking.getCheckOut().isAfter(LocalDateTime.now())) {
             throw new BookingException("Não é permitido finalizar a reserva antes do check-out");
         }
-        if(StringUtils.isBlank(booking.getObservation())){
+        if (StringUtils.isBlank(booking.getObservation())) {
             throw new BookingException("É obrigatório preencher uma observação sobre a reserva");
         }
         booking.getLaunchs().stream().forEach(e -> {
