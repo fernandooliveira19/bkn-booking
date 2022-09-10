@@ -7,6 +7,7 @@ import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
 import com.fernando.oliveira.booking.domain.request.CreateLaunchRequest;
 import com.fernando.oliveira.booking.domain.request.LaunchRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateLaunchRequest;
+import com.fernando.oliveira.booking.domain.response.LaunchDetailResponse;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -144,5 +145,14 @@ public class LaunchMother {
     }
 
 
-
+    public static LaunchDetailResponse getLaunchDetailResponse(Launch launch) {
+        return LaunchDetailResponse.builder()
+                .id(launch.getId())
+                .amount(launch.getAmount())
+                .paymentStatus(launch.getPaymentStatus())
+                .paymentType(launch.getPaymentType())
+                .scheduleDate(launch.getScheduleDate())
+                .paymentDate(launch.getPaymentDate())
+                .build();
+    }
 }

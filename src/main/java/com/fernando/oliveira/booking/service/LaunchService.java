@@ -2,6 +2,7 @@ package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
+import com.fernando.oliveira.booking.domain.response.LaunchDetailResponse;
 
 import java.util.List;
 
@@ -15,5 +16,5 @@ public interface LaunchService {
 
     void deleteLaunch(Long id);
 
-    List<Launch> findNextLaunches();
+    List<LaunchDetailResponse> findNextLaunches();
 }
