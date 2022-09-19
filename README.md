@@ -22,7 +22,7 @@ pull postgres image
 
 run database image
 
-* $ docker run -p 5434:5432 --name bkn-booking-pg13 --network bkn-net -e POSTGRES_PASSWORD=Famo2369 -e POSTGRES_DB=db_bkn_booking postgres:13
+* $ docker run -p 5434:5432 --name bkn-booking --network bkn-net -e POSTGRES_PASSWORD=Famo2369 -e POSTGRES_DB=bkn_booking postgres:13
 
 
 create network
