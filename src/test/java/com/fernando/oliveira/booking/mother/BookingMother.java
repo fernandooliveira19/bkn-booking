@@ -18,6 +18,14 @@ public class BookingMother {
 
     }
 
+    private static final LocalDateTime BOOKING_01_CHECK_IN = LocalDateTime.of(2021, Month.JANUARY, 1,10,0,0);
+    private static final LocalDateTime BOOKING_01_CHECK_OUT = LocalDateTime.of(2021, Month.JANUARY, 10,18,0,0);
+    private static final BigDecimal BOOKING_01_TOTAL_AMOUNT = BigDecimal.valueOf(1000.0);
+    private static final BigDecimal BOOKING_01_AMOUNT_PAID = BigDecimal.valueOf(500.0);
+    private static final BigDecimal BOOKING_01_AMOUNT_PENDING = BigDecimal.valueOf(500.0);
+    private static final Long BOOKING_01_BOOKING_ID = 10L;
+
+
     private static final LocalDateTime CHECK_IN_01 = LocalDateTime.of(2021, Month.OCTOBER, 15,12,30,0);
     private static final LocalDateTime CHECK_OUT_01 = LocalDateTime.of(2021, Month.OCTOBER, 20,18,30,0);
     private static final BigDecimal TOTAL_AMOUNT_01 = BigDecimal.valueOf(1500.0);
