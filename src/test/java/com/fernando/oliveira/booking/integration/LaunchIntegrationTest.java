@@ -39,7 +39,7 @@ public class LaunchIntegrationTest {
     @LocalServerPort
     private int port;
 
-    private static final String LAUNCH_MAPPING = "/launchs";
+    private static final String LAUNCH_MAPPING = "/launches";
 
     private static final String NEXT_LAUNCHES = LAUNCH_MAPPING + "/next";
 

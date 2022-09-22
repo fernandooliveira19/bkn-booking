@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags="Launchs")
+@Api(tags="Launches")
 @RestController
-@RequestMapping(value = "/launchs")
+@RequestMapping(value = "/launches")
 public class LaunchController {
 
     @Autowired
