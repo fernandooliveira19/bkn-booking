@@ -15,7 +15,7 @@ import java.util.List;
 
 @Api(tags="Launchs")
 @RestController
-@RequestMapping(value = "/v1/launchs")
+@RequestMapping(value = "/launchs")
 public class LaunchController {
 
     @Autowired

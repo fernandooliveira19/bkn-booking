@@ -45,7 +45,7 @@ public class BookingIntegrationTest {
     @LocalServerPort
     private int port;
 
-    private static final String BOOKING_MAPPING = "/v1/bookings";
+    private static final String BOOKING_MAPPING = "/bookings";
 
     private static final String NEXT_BOOKINGS = BOOKING_MAPPING + "/next";
 

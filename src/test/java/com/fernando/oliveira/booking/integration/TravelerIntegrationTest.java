@@ -35,7 +35,7 @@ public class TravelerIntegrationTest {
     @LocalServerPort
     private int port;
 
-    private static final String TRAVELER_MAPPING = "/v1/travelers";
+    private static final String TRAVELER_MAPPING = "/travelers";
 
     @Test
     void shouldReturnTravelerWhenConsultTravelerById() {
