@@ -37,7 +37,7 @@ public class PdfRequestDtoBuilderTest {
 
         PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
-        assertEquals("contrato_joao_2021-10-15", result.getContractName());
+        assertEquals("contrato_ana_2021-10-15", result.getContractName());
 
     }
 
@@ -51,10 +51,10 @@ public class PdfRequestDtoBuilderTest {
 
         PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
-        assertEquals("João da Silva", result.getTravelerName());
+        assertEquals("Ana Maria", result.getTravelerName());
         assertEquals("500.428.067-39", result.getTravelerDocument());
-        assertEquals("joao.silva@gmail.com", result.getTravelerEmail());
-        assertEquals("(11) 98888-7777", result.getTravelerPhone());
+        assertEquals("ana_maria@gmail.com", result.getTravelerEmail());
+        assertEquals("(11) 98888-1111", result.getTravelerPhone());
 
     }
 

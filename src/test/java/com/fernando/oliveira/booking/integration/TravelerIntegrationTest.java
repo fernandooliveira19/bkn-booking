@@ -73,22 +73,22 @@ public class TravelerIntegrationTest {
         assertThat(response[0].getStatus()).isEqualTo(StatusEnum.ACTIVE.getCode());
 
         assertThat(response[1].getId()).isEqualTo(2L);
-        assertThat(response[1].getName()).isEqualTo("Joao Carlos");
-        assertThat(response[1].getEmail()).isEqualTo("joao_carlos@gmail.com");
+        assertThat(response[1].getName()).isEqualTo("Bianca Silva");
+        assertThat(response[1].getEmail()).isEqualTo("bianca_silva@gmail.com");
         assertThat(response[1].getNumberPhone()).isEqualTo("98888-2222");
         assertThat(response[1].getPrefixPhone()).isEqualTo(22);
         assertThat(response[1].getStatus()).isEqualTo(StatusEnum.ACTIVE.getCode());
 
         assertThat(response[2].getId()).isEqualTo(3L);
-        assertThat(response[2].getName()).isEqualTo("Maria da Silva");
-        assertThat(response[2].getEmail()).isEqualTo("maria_silva@gmail.com");
+        assertThat(response[2].getName()).isEqualTo("Carlos Garcia");
+        assertThat(response[2].getEmail()).isEqualTo("carlos_garcia@gmail.com");
         assertThat(response[2].getNumberPhone()).isEqualTo("98888-3333");
         assertThat(response[2].getPrefixPhone()).isEqualTo(33);
         assertThat(response[2].getStatus()).isEqualTo(StatusEnum.ACTIVE.getCode());
 
         assertThat(response[3].getId()).isEqualTo(4L);
-        assertThat(response[3].getName()).isEqualTo("Beatriz Lisboa");
-        assertThat(response[3].getEmail()).isEqualTo("beatriz_lisboa@gmail.com");
+        assertThat(response[3].getName()).isEqualTo("David Souza");
+        assertThat(response[3].getEmail()).isEqualTo("david_souza@gmail.com");
         assertThat(response[3].getNumberPhone()).isEqualTo("98888-4444");
         assertThat(response[3].getPrefixPhone()).isEqualTo(44);
         assertThat(response[3].getStatus()).isEqualTo(StatusEnum.INACTIVE.getCode());

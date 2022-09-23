@@ -13,7 +13,7 @@ public class PdfUtilsTest {
         Booking booking = BookingMother.getFirstBookingSaved();
 
         String result = PdfUtils.getContractName(booking);
-        assertEquals("contrato_joao_2021-10-15", result);
+        assertEquals("contrato_ana_2021-10-15", result);
     }
 
     @Test
