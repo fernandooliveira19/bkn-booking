@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 @Api(tags="Bookings")
 @RestController
-@RequestMapping(value = "/v1/bookings")
+@RequestMapping(value = "/bookings")
 public class BookingController {
 
     @Autowired

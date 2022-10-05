@@ -18,7 +18,7 @@ import java.util.List;
 
 @Api(tags="Travelers")
 @RestController
-@RequestMapping(value = "/v1/travelers")
+@RequestMapping(value = "/travelers")
 public class TravelerController {
 
 	@Autowired
