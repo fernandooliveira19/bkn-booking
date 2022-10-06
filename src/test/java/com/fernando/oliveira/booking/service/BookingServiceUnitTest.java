@@ -281,7 +281,7 @@ public class BookingServiceUnitTest {
         then(result.get(0).getCheckIn()).isEqualTo(LocalDateTime.of(2021,10,15,12,30,0));
         then(result.get(0).getCheckOut()).isEqualTo(LocalDateTime.of(2021,10,20,18,30,0));
         then(result.get(0).getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
-        then(result.get(0).getTravelerName()).isEqualTo("João da Silva");
+        then(result.get(0).getTravelerName()).isEqualTo("Ana Maria");
 
         then(result.get(1).getId()).isEqualTo(20L);
         then(result.get(1).getAmountTotal()).isEqualTo(BigDecimal.valueOf(1500.0));
@@ -290,7 +290,7 @@ public class BookingServiceUnitTest {
         then(result.get(1).getCheckIn()).isEqualTo(LocalDateTime.of(2021,10,21,12,30,0));
         then(result.get(1).getCheckOut()).isEqualTo(LocalDateTime.of(2021,10,25,18,30,0));
         then(result.get(1).getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
-        then(result.get(1).getTravelerName()).isEqualTo("Joao Carlos");
+        then(result.get(1).getTravelerName()).isEqualTo("Bianca Silva");
 
     }
 

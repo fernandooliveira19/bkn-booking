@@ -20,25 +20,30 @@ public class TravelerMother {
 	}
 
 	public static final Long TRAVELER_01_ID = 1L;
-	public static final String TRAVELER_01_NAME = "João da Silva";
-	private static final String TRAVELER_01_EMAIL = "joao.silva@gmail.com";
+	public static final String TRAVELER_01_NAME = "Ana Maria";
+	private static final String TRAVELER_01_EMAIL = "ana_maria@gmail.com";
 	private static final String TRAVELER_01_DOCUMENT = "50042806739";
 	private static final Integer TRAVELER_01_PREFIX_PHONE= 11;
-	private static final String TRAVELER_01_NUMBER_PHONE = "98888-7777";
+	private static final String TRAVELER_01_NUMBER_PHONE = "98888-1111";
 
-	public static final String TRAVELER_02_NAME = "Joao Carlos";
-	private static final String TRAVELER_02_EMAIL = "joao_carlos@gmail.com";
+	public static final String TRAVELER_02_NAME = "Bianca Silva";
+	private static final String TRAVELER_02_EMAIL = "bianca_silva@gmail.com";
 	private static final String TRAVELER_02_DOCUMENT = "18421484869";
 	private static final Integer TRAVELER_02_PREFIX_PHONE= 22;
 	private static final String TRAVELER_02_NUMBER_PHONE = "98888-2222";
 
-	private static final String TRAVELER_03_NAME = "Maria da Silva";
-	private static final String TRAVELER_03_EMAIL = "maria_silva@gmail.com";
+	private static final String TRAVELER_03_NAME = "Carlos Garcia";
+	private static final String TRAVELER_03_EMAIL = "carlos_garcia@gmail.com";
 	private static final Integer TRAVELER_03_PREFIX_PHONE= 33;
 	private static final String TRAVELER_03_NUMBER_PHONE = "98888-3333";
 
-	private static final String TRAVELER_05_NAME = "Carlos Maia";
-	private static final String TRAVELER_05_EMAIL = "carlos_maia@gmail.com";
+	private static final String TRAVELER_04_NAME = "David Souza";
+	private static final String TRAVELER_04_EMAIL = "david_souza@gmail.com";
+	private static final Integer TRAVELER_04_PREFIX_PHONE= 44;
+	private static final String TRAVELER_04_NUMBER_PHONE = "98888-4444";
+
+	private static final String TRAVELER_05_NAME = "Elaine Matos";
+	private static final String TRAVELER_05_EMAIL = "elaine_matos@gmail.com";
 	private static final Integer TRAVELER_05_PREFIX_PHONE= 55;
 	private static final String TRAVELER_05_NUMBER_PHONE = "98888-5555";
 
