@@ -1,15 +1,18 @@
 package com.fernando.oliveira.booking.service;
 
 import com.itextpdf.text.*;
-import org.springframework.core.io.ClassPathResource;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+@Slf4j
 public class PdfServiceImpl implements PdfService {
 
     private static final String EMPTY_LINE = "\n";
@@ -71,9 +74,17 @@ public class PdfServiceImpl implements PdfService {
         DateFormat dateFormat = new SimpleDateFormat("dd '  de  ' MMMM '  de  ' yyyy", local);
         return dateFormat.format(data);
     }
-    private Image getSign() throws BadElementException, IOException {
+    private Image getSign()  {
 
-        File resource = new ClassPathResource("sign_small.jpg").getFile();
-        return Image.getInstance(resource.getAbsolutePath());
+        try {
+            BufferedImage buff = ImageIO.read(getClass().getClassLoader().getResourceAsStream("sign_small.jpg"));
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ImageIO.write(buff, "jpg", bos);
+            return Image.getInstance(bos.toByteArray());
+
+        } catch (BadElementException  | IOException ex) {
+            log.error("BadElementException: Erro ao recuperar instancia do arquivo de assinatura", ex);
+        }
+        return null;
     }
 }
