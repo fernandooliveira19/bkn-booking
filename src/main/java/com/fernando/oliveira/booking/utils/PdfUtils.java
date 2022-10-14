@@ -74,7 +74,7 @@ public class PdfUtils {
     }
     public static HttpHeaders getHttpHeaders(String fileName) {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition", "inline; filename="+ fileName +".pdf");
+        headers.add("Content-Disposition", "attachment; filename="+ fileName +".pdf");
 
         return headers;
     }
