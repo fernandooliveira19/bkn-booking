@@ -14,5 +14,3 @@ info:
     name: '@project.name@'
     description: '@project.description@'
     version: '@project.version@'
-
-

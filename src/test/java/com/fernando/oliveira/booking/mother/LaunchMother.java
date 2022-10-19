@@ -7,6 +7,7 @@ import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
 import com.fernando.oliveira.booking.domain.request.CreateLaunchRequest;
 import com.fernando.oliveira.booking.domain.request.LaunchRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateLaunchRequest;
+import com.fernando.oliveira.booking.domain.response.LaunchDetailResponse;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -24,21 +25,20 @@ public class LaunchMother {
     public static Launch getLaunchToSave(BigDecimal amount,
                                               PaymentTypeEnum paymentType,
                                               PaymentStatusEnum paymentStatus,
-                                              LocalDate scheculeDate,
+                                              LocalDate scheduleDate,
                                               LocalDate paymentDate){
         return Launch.builder()
                 .amount(amount)
                 .paymentType(paymentType)
-                .scheduleDate(scheculeDate)
+                .scheduleDate(scheduleDate)
                 .paymentStatus(paymentStatus)
                 .paymentDate(paymentDate)
                 .build();
     }
 
     public static Launch getFirstLaunchFromFirstBooking(){
-        Booking booking = BookingMother.getFirstBookingSaved();
         return Launch.builder()
-                .booking(booking)
+                .id(10L)
                 .amount(BigDecimal.valueOf(1000.0))
                 .scheduleDate(LocalDate.of(2021, Month.OCTOBER, 10))
                 .paymentStatus(PaymentStatusEnum.PAID)
@@ -49,9 +49,7 @@ public class LaunchMother {
     }
 
     public static Launch getSecondLaunchFromFirstBooking(){
-        Booking booking = BookingMother.getFirstBookingSaved();
         return Launch.builder()
-                .booking(booking)
                 .amount(BigDecimal.valueOf(300.0))
                 .scheduleDate(LocalDate.of(2021, Month.OCTOBER, 10))
                 .paymentStatus(PaymentStatusEnum.PENDING)
@@ -62,9 +60,7 @@ public class LaunchMother {
     }
 
     public static Launch getThirdLaunchFromFirstBooking(){
-        Booking booking = BookingMother.getFirstBookingSaved();
         return Launch.builder()
-                .booking(booking)
                 .amount(BigDecimal.valueOf(200.0))
                 .scheduleDate(LocalDate.of(2021, Month.OCTOBER, 15))
                 .paymentStatus(PaymentStatusEnum.PENDING)
@@ -124,5 +120,39 @@ public class LaunchMother {
         request.setPaymentDate(paymentDate);
 
         return request;
+    }
+
+    public static Launch getFirstLaunchFromSecondBooking(){
+        return Launch.builder()
+                .amount(BigDecimal.valueOf(2000.0))
+                .scheduleDate(LocalDate.of(2021, Month.FEBRUARY, 20))
+                .paymentStatus(PaymentStatusEnum.PAID)
+                .paymentDate(LocalDate.of(2021, Month.FEBRUARY, 20))
+                .paymentType(PaymentTypeEnum.PIX)
+                .build();
+
+    }
+
+    public static Launch getSecondLaunchFromSecondBooking(){
+        return Launch.builder()
+                .amount(BigDecimal.valueOf(200.0))
+                .scheduleDate(LocalDate.of(2021, Month.FEBRUARY, 27))
+                .paymentStatus(PaymentStatusEnum.PENDING)
+                .paymentDate(null)
+                .paymentType(PaymentTypeEnum.PIX)
+                .build();
+
+    }
+
+
+    public static LaunchDetailResponse getLaunchDetailResponse(Launch launch) {
+        return LaunchDetailResponse.builder()
+                .id(launch.getId())
+                .amount(launch.getAmount())
+                .paymentStatus(launch.getPaymentStatus())
+                .paymentType(launch.getPaymentType())
+                .scheduleDate(launch.getScheduleDate())
+                .paymentDate(launch.getPaymentDate())
+                .build();
     }
 }

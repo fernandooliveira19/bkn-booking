@@ -2,10 +2,20 @@ package com.fernando.oliveira.booking.utils;
 
 import com.fernando.oliveira.booking.exception.TravelerInvalidException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Component;
 
 import javax.swing.text.MaskFormatter;
+import java.math.BigDecimal;
+import java.text.Normalizer;
+import java.text.NumberFormat;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Locale;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Component
@@ -13,12 +23,16 @@ public class FormatterUtils {
 
     private static final String CPF_MASK= "###.###.###-##";
     private static final String PHONE_MASK="#####-####";
+    private static final String PHONE_MASK_WITH_PREFIX="(##) #####-####";
 
     private FormatterUtils(){
 
     }
 
     public static String formatCpf(String cpf){
+        if(cpf == null || cpf.isBlank()){
+            return "";
+        }
         try {
             String cpfFormatted = removeSpecialCharacters(cpf);
             MaskFormatter mask = new MaskFormatter(CPF_MASK);
@@ -47,6 +61,53 @@ public class FormatterUtils {
         value = value.replace(".", "");
         value = value.replace("-", "").trim();
         return value;
+
+    }
+
+    public static String removeAccent(String value){
+        String nfdNormalizedString = Normalizer.normalize(value, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(nfdNormalizedString).replaceAll("");
+    }
+
+    public static String getLocalDateTimeFormat(LocalDateTime date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        return date.format(formatter);
+    }
+
+
+    public static String formatNumberPhoneWithPrefix(Integer prefix, String numberPhone) {
+        String phone = String.valueOf(prefix).concat(numberPhone);
+        try {
+            String phoneNumberFormatted = removeSpecialCharacters(phone);
+            MaskFormatter mask = new MaskFormatter(PHONE_MASK_WITH_PREFIX);
+            mask.setValueContainsLiteralCharacters(false);
+            return mask.valueToString(phoneNumberFormatted);
+        }catch (ParseException ex){
+            throw new TravelerInvalidException("Erro ao formatar telefone: " + phone);
+        }
+    }
+
+    public static String formatCurrencyValue(BigDecimal value) {
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+
+        return numberFormat.format(value).replace("\u00a0"," ");
+    }
+
+    public static String getLocalDateFormat(LocalDate date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return date.format(formatter);
+    }
+
+    public static LocalDateTime getLocalDateFormat(String date) {
+        if(date == null){
+            return null;
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime localDate = LocalDate.parse(date).atStartOfDay();
+
+        return localDate;
 
     }
 }
