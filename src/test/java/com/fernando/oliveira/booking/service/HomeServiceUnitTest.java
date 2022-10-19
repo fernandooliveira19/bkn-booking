@@ -3,8 +3,11 @@ package com.fernando.oliveira.booking.service;
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.response.HomeResponse;
+import com.fernando.oliveira.booking.domain.response.ReservedDateResponse;
 import com.fernando.oliveira.booking.mother.BookingMother;
 import com.fernando.oliveira.booking.mother.LaunchMother;
+import com.fernando.oliveira.booking.mother.TravelerMother;
+import org.assertj.core.api.BDDAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,8 +20,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.List;
 
+import static com.fernando.oliveira.booking.mother.BookingMother.getFirstBookingSaved;
+import static com.fernando.oliveira.booking.mother.BookingMother.getSecondBookingSaved;
+import static org.assertj.core.api.BDDAssertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class HomeServiceUnitTest {
@@ -32,44 +40,62 @@ public class HomeServiceUnitTest {
     @Mock
     private LaunchServiceImpl launchService;
 
+
     @Test
-    public void givenWhenCallHomeDetailsThenReturnListNextLaunchsAndBookings(){
-        Booking firstBooking = BookingMother.getFirstBookingSaved();
+    void givenNextBookingsThenReturnReservedDateResponse(){
+        Booking firstBooking = getFirstBookingSaved();
+        Booking secondBooking = getSecondBookingSaved();
 
-        Launch firstLaunch = LaunchMother.getFirstLaunchFromFirstBooking();
-        Launch secondLaunch = LaunchMother.getSecondLaunchFromFirstBooking();
-        Launch thirdLaunch = LaunchMother.getThirdLaunchFromFirstBooking();
+        when(bookingService.findNextBookings()).thenReturn(Arrays.asList(firstBooking, secondBooking));
 
+        List<ReservedDateResponse> result = homeService.reservedDatesFromNextBookings();
 
-        Mockito.when(bookingService.findNextBookings()).thenReturn(Arrays.asList(firstBooking));
-        Mockito.when(launchService.findNextLaunchs()).thenReturn(Arrays.asList(firstLaunch, secondLaunch,thirdLaunch));
+        then(result.get(0).getYear()).isEqualTo(2021);
+        then(result.get(0).getMonth()).isEqualTo(10);
+        then(result.get(0).getDay()).isEqualTo(15);
 
-        HomeResponse result = homeService.getHomeResponse();
+        then(result.get(1).getYear()).isEqualTo(2021);
+        then(result.get(1).getMonth()).isEqualTo(10);
+        then(result.get(1).getDay()).isEqualTo(16);
 
-        assertEquals(1, result.getBookingHomeResponses().size());
+        then(result.get(2).getYear()).isEqualTo(2021);
+        then(result.get(2).getMonth()).isEqualTo(10);
+        then(result.get(2).getDay()).isEqualTo(17);
 
-        assertEquals(10L ,result.getBookingHomeResponses().get(0).getBookingId() );
-        assertEquals(BigDecimal.valueOf(500) ,result.getBookingHomeResponses().get(0).getAmountPending());
-        assertEquals(BigDecimal.valueOf(1500) ,result.getBookingHomeResponses().get(0).getAmountTotal());
-        assertEquals(LocalDateTime.of(2021, Month.OCTOBER, 15,12,30,0),result.getBookingHomeResponses().get(0).getCheckIn() );
-        assertEquals(LocalDateTime.of(2021, Month.OCTOBER, 20,18,30,0),result.getBookingHomeResponses().get(0).getCheckOut() );
-        assertEquals("First Traveler",result.getBookingHomeResponses().get(0).getTravelerName());
+        then(result.get(3).getYear()).isEqualTo(2021);
+        then(result.get(3).getMonth()).isEqualTo(10);
+        then(result.get(3).getDay()).isEqualTo(18);
 
-        assertEquals(2,result.getLaunchHomeResponses().size());
+        then(result.get(4).getYear()).isEqualTo(2021);
+        then(result.get(4).getMonth()).isEqualTo(10);
+        then(result.get(4).getDay()).isEqualTo(19);
 
-        assertEquals(10L,result.getLaunchHomeResponses().get(0).getBookingId());
-        assertEquals(BigDecimal.valueOf(300.0),result.getLaunchHomeResponses().get(0).getAmount());
-        assertEquals("First Traveler",result.getLaunchHomeResponses().get(0).getTravelerName());
-        assertEquals(LocalDateTime.of(2021, Month.OCTOBER, 15,12,30,0),result.getLaunchHomeResponses().get(0).getCheckIn());
-        assertEquals("Em atraso",result.getLaunchHomeResponses().get(0).getStatus());
-        assertEquals(LocalDate.of(2021, Month.OCTOBER, 10),result.getLaunchHomeResponses().get(0).getScheduleDate());
+        then(result.get(5).getYear()).isEqualTo(2021);
+        then(result.get(5).getMonth()).isEqualTo(10);
+        then(result.get(5).getDay()).isEqualTo(20);
 
-        assertEquals(10L,result.getLaunchHomeResponses().get(1).getBookingId());
-        assertEquals(BigDecimal.valueOf(200.0),result.getLaunchHomeResponses().get(1).getAmount());
-        assertEquals("First Traveler",result.getLaunchHomeResponses().get(1).getTravelerName());
-        assertEquals(LocalDateTime.of(2021, Month.OCTOBER, 15,12,30,0),result.getLaunchHomeResponses().get(1).getCheckIn());
-        assertEquals("Em atraso",result.getLaunchHomeResponses().get(1).getStatus());
-        assertEquals(LocalDate.of(2021, Month.OCTOBER, 15),result.getLaunchHomeResponses().get(1).getScheduleDate());
+        then(result.get(6).getYear()).isEqualTo(2021);
+        then(result.get(6).getMonth()).isEqualTo(10);
+        then(result.get(6).getDay()).isEqualTo(21);
+
+        then(result.get(7).getYear()).isEqualTo(2021);
+        then(result.get(7).getMonth()).isEqualTo(10);
+        then(result.get(7).getDay()).isEqualTo(22);
+
+        then(result.get(8).getYear()).isEqualTo(2021);
+        then(result.get(8).getMonth()).isEqualTo(10);
+        then(result.get(8).getDay()).isEqualTo(23);
+
+        then(result.get(9).getYear()).isEqualTo(2021);
+        then(result.get(9).getMonth()).isEqualTo(10);
+        then(result.get(9).getDay()).isEqualTo(24);
+
+        then(result.get(10).getYear()).isEqualTo(2021);
+        then(result.get(10).getMonth()).isEqualTo(10);
+        then(result.get(10).getDay()).isEqualTo(25);
+
 
     }
+
+
 }

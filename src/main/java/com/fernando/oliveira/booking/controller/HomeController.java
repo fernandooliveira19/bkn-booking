@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Api(tags="Home")
 @RestController
-@RequestMapping(value = "/v1/home")
+@RequestMapping(value = "/home")
 public class HomeController {
 
     @Autowired
@@ -19,10 +19,10 @@ public class HomeController {
 
     @GetMapping
     public ResponseEntity<HomeResponse> getHomeResponse(){
-        HomeResponse homeResponse = new HomeResponse();
+        HomeResponse response = HomeResponse.builder()
+                .reservedDates(homeService.reservedDatesFromNextBookings())
+                .build();
 
-
-
-        return ResponseEntity.ok(homeResponse);
+        return ResponseEntity.ok(response);
     }
 }
