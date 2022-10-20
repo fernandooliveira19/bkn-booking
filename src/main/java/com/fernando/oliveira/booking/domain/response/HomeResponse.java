@@ -12,6 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 public class HomeResponse implements Serializable {
 
-    private List<ReservedDateResponse> reservedDates;
+    private List<ReservedDateResponse> datesSelected;
 
 }
