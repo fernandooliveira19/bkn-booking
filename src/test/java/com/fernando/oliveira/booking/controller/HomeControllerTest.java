@@ -49,9 +49,9 @@ public class HomeControllerTest {
 		mockMvc.perform(get(BASE_MAPPING )
 						.header("Content-Type", ContentType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("reservedDates[0].year").value(2022))
-			.andExpect(jsonPath("reservedDates[0].month").value(10))
-			.andExpect(jsonPath("reservedDates[0].day").value(15));
+				.andExpect(jsonPath("[0].year").value(2022))
+			.andExpect(jsonPath("[0].month").value(10))
+			.andExpect(jsonPath("[0].day").value(15));
 
 	}
 
