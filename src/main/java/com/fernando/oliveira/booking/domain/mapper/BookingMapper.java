@@ -4,6 +4,7 @@ import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
 import com.fernando.oliveira.booking.domain.request.FinishBookingRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateBookingRequest;
+import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
 import com.fernando.oliveira.booking.domain.response.DetailBookingResponse;
 import org.apache.commons.lang.StringUtils;
 import org.mapstruct.Mapper;
@@ -54,6 +55,8 @@ public interface BookingMapper {
         value = value.trim();
         return BigDecimal.valueOf(Double.parseDouble(value));
     }
+    @Mapping(source = "id", target = "bookingId")
+    BookingTravelerResponse bookingToBookingTravelerResponse(Booking booking);
 
 
 }

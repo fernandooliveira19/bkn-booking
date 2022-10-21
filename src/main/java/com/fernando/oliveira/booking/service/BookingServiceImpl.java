@@ -1,6 +1,8 @@
 package com.fernando.oliveira.booking.service;
 
-import com.fernando.oliveira.booking.domain.dto.BookingSpec;
+import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
+import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
+import com.fernando.oliveira.booking.domain.spec.BookingSpec;
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.entity.Traveler;
@@ -32,6 +34,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Autowired
     private TravelerService travelerService;
+
+    @Autowired
+    private BookingMapper bookingMapper;
 
     @Override
     public Booking createBooking(Booking booking) {
@@ -148,6 +153,15 @@ public class BookingServiceImpl implements BookingService {
 
         return defineBookingDetails(booking);
     }
+
+    @Override
+    public List<BookingTravelerResponse> findBookingsByTraveler(Long travelerId) {
+        List<Booking> bookings = bookingRepository.findByTraveler(travelerId);
+        return bookings.stream()
+                .map((e) -> bookingMapper.bookingToBookingTravelerResponse(e))
+                .collect(Collectors.toList());
+    }
+
 
     public Booking defineBookingDetails(Booking booking) {
         defineTraveler(booking);

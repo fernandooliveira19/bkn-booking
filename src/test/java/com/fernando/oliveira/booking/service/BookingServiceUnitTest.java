@@ -6,6 +6,8 @@ import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
+import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
+import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
 import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.mother.BookingMother;
 import com.fernando.oliveira.booking.mother.LaunchMother;
@@ -57,6 +59,9 @@ public class BookingServiceUnitTest {
 
     @Mock
     private TravelerRepository travelerRepository;
+
+    @Mock
+    private BookingMapper bookingMapper;
 
     @Test
     void givenValidRequestWhenCreateBookingThenCreateBookingReservedWithPending(){
@@ -326,6 +331,21 @@ public class BookingServiceUnitTest {
 //        then(result.getBookingStatus()).isEqualTo(BookingStatusEnum.CANCELED);
 //        then(result.getLastUpdate()).isNotNull();
 //        then(result.getObservation()).isEqualTo(observation);
+
+    }
+
+    @Test
+    public void givenTravelerIdWhenFindBookingsByTravelerThenReturnBookingList(){
+        List<Booking> bookings = Arrays.asList(getSecondBookingSaved());
+        BookingTravelerResponse response = getBookingTravelerResponse(bookings.get(0));
+
+        when(bookingRepository.findByTraveler(anyLong())).thenReturn(bookings);
+        when(bookingMapper.bookingToBookingTravelerResponse(any(Booking.class))).thenReturn(response);
+        Long travelerId = 2L;
+
+        List<BookingTravelerResponse> result = bookingService.findBookingsByTraveler(travelerId);
+
+        then(result.size()).isEqualTo(1);
 
     }
 

@@ -3,6 +3,7 @@ package com.fernando.oliveira.booking.service;
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
+import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
 import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
 
 import java.util.List;
@@ -27,4 +28,6 @@ public interface TravelerService {
 	void inactivateTraveler(Long id);
 
 	List<TravelerDetailResponse> findActiveTravelers();
+
+
 }
