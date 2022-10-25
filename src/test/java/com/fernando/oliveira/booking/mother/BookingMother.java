@@ -234,4 +234,8 @@ public class BookingMother {
 
         return request;
     }
+
+    public static List<Booking> getNextBookings(){
+        return Arrays.asList(getFirstBookingSaved(), getSecondBookingSaved());
+    }
 }

@@ -54,4 +54,6 @@ public interface BookingMapper {
         value = value.trim();
         return BigDecimal.valueOf(Double.parseDouble(value));
     }
+
+
 }
