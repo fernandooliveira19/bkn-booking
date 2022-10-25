@@ -6,6 +6,7 @@ import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
+import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
 import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.mother.BookingMother;
 import com.fernando.oliveira.booking.mother.LaunchMother;
@@ -57,6 +58,9 @@ public class BookingServiceUnitTest {
 
     @Mock
     private TravelerRepository travelerRepository;
+
+    @Mock
+    private BookingMapper bookingMapper;
 
     @Test
     void givenValidRequestWhenCreateBookingThenCreateBookingReservedWithPending(){

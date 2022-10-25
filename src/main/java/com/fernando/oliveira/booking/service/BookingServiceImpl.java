@@ -6,7 +6,10 @@ import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
+import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
+import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
 import com.fernando.oliveira.booking.domain.request.SearchBookingRequest;
+import com.fernando.oliveira.booking.domain.response.DetailBookingResponse;
 import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.repository.BookingRepository;
 import org.apache.commons.lang.StringUtils;
@@ -33,8 +36,13 @@ public class BookingServiceImpl implements BookingService {
     @Autowired
     private TravelerService travelerService;
 
+    @Autowired
+    private BookingMapper bookingMapper;
+
     @Override
-    public Booking createBooking(Booking booking) {
+    public DetailBookingResponse createBooking(CreateBookingRequest request) {
+
+        Booking booking = bookingMapper.createRequestToEntity(request);
 
         validateBooking(booking);
 
@@ -47,7 +55,7 @@ public class BookingServiceImpl implements BookingService {
                 .stream()
                 .forEach(e -> launchService.createLaunch(e, bookingSaved));
 
-        return bookingSaved;
+        return bookingMapper.bookingToDetailBookingResponse(bookingSaved);
     }
 
     private void defineAmountPending(Booking booking) {
@@ -147,6 +155,11 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = findById(id);
 
         return defineBookingDetails(booking);
+    }
+
+    @Override
+    public Booking cancelBooking(Booking booking) {
+        return null;
     }
 
     public Booking defineBookingDetails(Booking booking) {
