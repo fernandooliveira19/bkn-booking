@@ -44,9 +44,10 @@ public class BookingServiceImpl implements BookingService {
 
         Booking booking = bookingMapper.createRequestToEntity(request);
 
-        validateBooking(booking);
+        validateCreateUpdateBooking(booking);
 
-        Booking bookingToSave = defineBookingDetails(booking);
+        Booking bookingToSave = prepareBookingToSave(booking);
+//        Booking bookingToSave = defineBookingDetails(booking);
         bookingToSave.setInsertDate(LocalDateTime.now());
 
         Booking bookingSaved = bookingRepository.save(bookingToSave);
@@ -56,6 +57,51 @@ public class BookingServiceImpl implements BookingService {
                 .forEach(e -> launchService.createLaunch(e, bookingSaved));
 
         return bookingMapper.bookingToDetailBookingResponse(bookingSaved);
+    }
+    
+    private Booking prepareBookingToSave(Booking booking){
+        
+        defineTraveler(booking);
+        defineBookingStatus(booking);
+        definePaymentStatus(booking);
+        defineAmountPending(booking);
+        defineAmountPaid(booking);
+        
+        return  booking;
+    } 
+
+    private void validateCreateUpdateBooking(Booking booking){
+
+        if (BookingStatusEnum.FINISHED.equals(booking.getBookingStatus())) {
+            validateFinishBooking(booking);
+        }
+        if (BookingStatusEnum.CANCELED.equals(booking.getBookingStatus())) {
+            validateCancelBooking(booking);
+        }
+
+        List<Booking> otherBookings = bookingRepository.findBookingsByDate(booking.getCheckIn(), booking.getCheckOut());
+
+        if (!otherBookings.isEmpty()) {
+
+            if (booking.getId() == null) {
+                throw new BookingException("Já existe outra reserva para o mesmo periodo");
+            }
+            for (Booking bkn : otherBookings) {
+                if (!bkn.getId().equals(booking.getId())) {
+                    throw new BookingException("Já existe outra reserva para o mesmo periodo");
+                }
+            }
+
+        }
+
+        if (booking.getLaunches() == null || booking.getLaunches().isEmpty()) {
+            throw new BookingException("Reserva deve possuir lançamentos");
+        }
+
+        if (!booking.getAmountTotal().equals(getTotalAmountByLaunches(booking.getLaunches()))) {
+            throw new BookingException("Soma dos lançamentos estão diferentes do valor total da reserva");
+        }
+
     }
 
     private void defineAmountPending(Booking booking) {
@@ -226,7 +272,7 @@ public class BookingServiceImpl implements BookingService {
             throw new BookingException("Reserva deve possuir lançamentos");
         }
 
-        if (!booking.getAmountTotal().equals(getTotalAmountByLaunchs(booking.getLaunches()))) {
+        if (!booking.getAmountTotal().equals(getTotalAmountByLaunches(booking.getLaunches()))) {
             throw new BookingException("Soma dos lançamentos estão diferentes do valor total da reserva");
         }
 
@@ -257,9 +303,9 @@ public class BookingServiceImpl implements BookingService {
         });
     }
 
-    public BigDecimal getTotalAmountByLaunchs(List<Launch> launchs) {
+    public BigDecimal getTotalAmountByLaunches(List<Launch> launches) {
 
-        return launchs.stream()
+        return launches.stream()
                 .map(Launch::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
