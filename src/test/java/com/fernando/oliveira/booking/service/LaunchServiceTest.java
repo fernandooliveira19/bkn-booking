@@ -42,31 +42,25 @@ public class LaunchServiceTest {
 
         Launch launch = getFirstLaunchFromFirstBooking();
         when(launchRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(launch));
-        Long launchId = 10L;
+        Long launchId = 100L;
         Launch result = launchService.findById(launchId);
 
         then(result.getId()).isEqualTo( launchId);
-        then(result.getAmount()).isEqualTo( BigDecimal.valueOf(1000.0));
-        then(result.getScheduleDate()).isEqualTo( LocalDate.of(2021, Month.OCTOBER, 10));
+        then(result.getAmount()).isEqualTo( BigDecimal.valueOf(500.0));
+        then(result.getScheduleDate()).isEqualTo( LocalDate.of(2021, Month.DECEMBER, 1));
         then(result.getPaymentStatus()).isEqualTo( PAID);
-        then(result.getPaymentDate()).isEqualTo( LocalDate.of(2021, Month.OCTOBER, 10));
+        then(result.getPaymentDate()).isEqualTo( LocalDate.of(2021, Month.DECEMBER, 2));
         then(result.getPaymentType()).isEqualTo( PaymentTypeEnum.PIX);
 
     }
     @Test
     void shouldReturnNextPendingLaunches(){
 
-//       2021-10-10
-        Launch launch01 = getSecondLaunchFromFirstBooking();
-        launch01.setId(10L);
+        Launch launch01 = getThirdLaunchFromSecondBooking();
 
-//      2021, 10, 15
-        Launch launch02 = getThirdLaunchFromFirstBooking();
-        launch02.setId(20L);
+        Launch launch02 = getFirstLaunchFromThirdBooking();
 
-//      2021-02-27
-        Launch launch03 = getSecondLaunchFromSecondBooking();
-        launch03.setId(30L);
+        Launch launch03 = getSecondLaunchFromThirdBooking();
 
         when(launchRepository.findNextLaunches()).thenReturn(Arrays.asList(launch01, launch02, launch03));
         when(launchMapper.launchToDetailLaunchResponse(launch01)).thenReturn(getLaunchDetailResponse(launch01));
@@ -76,13 +70,13 @@ public class LaunchServiceTest {
         List<LaunchDetailResponse> result = launchService.findNextLaunches();
 
         then(result.get(0).getPaymentStatus()).isEqualTo(PENDING);
-        then(result.get(0).getId()).isEqualTo(10L);
+        then(result.get(0).getId()).isEqualTo(105L);
 
         then(result.get(1).getPaymentStatus()).isEqualTo(PENDING);
-        then(result.get(1).getId()).isEqualTo(20L);
+        then(result.get(1).getId()).isEqualTo(106L);
 
         then(result.get(2).getPaymentStatus()).isEqualTo(PENDING);
-        then(result.get(2).getId()).isEqualTo(30L);
+        then(result.get(2).getId()).isEqualTo(107L);
 
     }
 }

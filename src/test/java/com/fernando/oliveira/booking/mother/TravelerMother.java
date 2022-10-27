@@ -9,15 +9,15 @@ import com.fernando.oliveira.booking.domain.enums.StatusEnum;
 import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
 import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 import java.util.List;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TravelerMother {
 	
-	private TravelerMother() {
-		
-	}
 
 	public static final Long TRAVELER_01_ID = 1L;
 	public static final String TRAVELER_01_NAME = "Ana Maria";
@@ -176,6 +176,17 @@ public class TravelerMother {
 				.email(TRAVELER_03_EMAIL)
 				.prefixPhone(TRAVELER_03_PREFIX_PHONE)
 				.numberPhone(TRAVELER_03_NUMBER_PHONE)
+				.status(StatusEnum.ACTIVE.getCode())
+				.build();
+	}
+
+	public static Traveler getTravelerSaved04(){
+		return Traveler.builder()
+				.id(4L)
+				.name(TRAVELER_04_NAME)
+				.email(TRAVELER_04_EMAIL)
+				.prefixPhone(TRAVELER_04_PREFIX_PHONE)
+				.numberPhone(TRAVELER_04_NUMBER_PHONE)
 				.status(StatusEnum.ACTIVE.getCode())
 				.build();
 	}

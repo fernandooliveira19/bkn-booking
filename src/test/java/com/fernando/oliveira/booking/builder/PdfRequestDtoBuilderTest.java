@@ -37,7 +37,7 @@ public class PdfRequestDtoBuilderTest {
 
         PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
-        assertEquals("contrato_ana_2021-10-15", result.getContractName());
+        assertEquals("contrato_ana_2020-12-15", result.getContractName());
 
     }
 
@@ -68,8 +68,8 @@ public class PdfRequestDtoBuilderTest {
 
         PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
         LocalDateTime.of(2021, Month.OCTOBER, 15,12,30,0);
-        assertEquals("início: 15/10/2021 após 12:30", result.getDescriptionCheckIn());
-        assertEquals("término: 20/10/2021 até 18:30", result.getDescriptionCheckOut());
+        assertEquals("início: 15/12/2020 após 10:00", result.getDescriptionCheckIn());
+        assertEquals("término: 30/12/2020 até 18:00", result.getDescriptionCheckOut());
     }
 
     @Test
@@ -98,8 +98,8 @@ public class PdfRequestDtoBuilderTest {
 
         PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
-        assertEquals("O locatário efetuou o pagamento no valor de R$ 1.500,00", result.getDescriptionPayment());
-        assertEquals("Com isso totalizando, o locatário pagou pela importância de R$ 1.500,00, o qual já está incluso a\n" +
+        assertEquals("O locatário efetuou o pagamento no valor de R$ 1.000,00", result.getDescriptionPayment());
+        assertEquals("Com isso totalizando, o locatário pagou pela importância de R$ 1.000,00, o qual já está incluso a\n" +
                 "taxa de limpeza.", result.getSummaryBooking());
 
     }
@@ -130,7 +130,7 @@ public class PdfRequestDtoBuilderTest {
         PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
         assertEquals("O locatário efetuou o pagamento no valor de R$ 1.000,00 a título de sinal. O restante de R$ 500,00 será pago até o dia 15/10/2021", result.getDescriptionPayment());
-        assertEquals("Com isso totalizando, o locatário pagará pela importância de R$ 1.500,00, o qual já está incluso a taxa de limpeza.", result.getSummaryBooking());
+        assertEquals("Com isso totalizando, o locatário pagará pela importância de R$ 1.000,00, o qual já está incluso a taxa de limpeza.", result.getSummaryBooking());
 
     }
 
@@ -154,8 +154,8 @@ public class PdfRequestDtoBuilderTest {
 
         PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
-        assertEquals("O locatário efetuou o pagamento no valor de R$ 1.500,00 através do site vrbo.com (antigo aluguetemporada.com.br)", result.getDescriptionPayment());
-        assertEquals("Com isso totalizando, o locatário pagou pela importância de R$ 1.500,00, o qual já está incluso a\n" +
+        assertEquals("O locatário efetuou o pagamento no valor de R$ 1.000,00 através do site vrbo.com (antigo aluguetemporada.com.br)", result.getDescriptionPayment());
+        assertEquals("Com isso totalizando, o locatário pagou pela importância de R$ 1.000,00, o qual já está incluso a\n" +
                 "taxa de limpeza.", result.getSummaryBooking());
 
     }
