@@ -159,7 +159,7 @@ public class PdfUtils {
     }
 
     public static Launch getLastPendingLaunch(Booking booking){
-        return booking.getLaunchs().stream()
+        return booking.getLaunches().stream()
                 .filter(e -> e.getPaymentStatus().equals(PaymentStatusEnum.PENDING))
                 .max(Comparator.comparing(Launch::getScheduleDate))
                 .get();

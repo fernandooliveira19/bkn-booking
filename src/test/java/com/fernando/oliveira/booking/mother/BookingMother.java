@@ -7,6 +7,8 @@ import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.ContractTypeEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.domain.request.*;
+import com.fernando.oliveira.booking.domain.response.BookingDetailResponse;
+import com.fernando.oliveira.booking.domain.response.LaunchDetailResponse;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BookingMother {
@@ -150,7 +153,7 @@ public class BookingMother {
                 .contractType(BOOKING_01_CONTRACT_TYPE)
                 .observation(BOOKING_01_OBSERVATION)
                 .bookingStatus(BOOKING_01_BOOKING_STATUS)
-                .launchs(Arrays.asList(launch01, launch02, launch03))
+                .launches(Arrays.asList(launch01, launch02, launch03))
                 .build();
     }
 
@@ -175,7 +178,7 @@ public class BookingMother {
                 .contractType(BOOKING_02_CONTRACT_TYPE)
                 .observation(BOOKING_02_OBSERVATION)
                 .bookingStatus(BOOKING_02_BOOKING_STATUS)
-                .launchs(Arrays.asList(launch01, launch02, launch03))
+                .launches(Arrays.asList(launch01, launch02, launch03))
                 .build();
     }
 
@@ -201,7 +204,7 @@ public class BookingMother {
                 .contractType(BOOKING_03_CONTRACT_TYPE)
                 .observation(BOOKING_03_OBSERVATION)
                 .bookingStatus(BOOKING_03_BOOKING_STATUS)
-                .launchs(Arrays.asList(launch01, launch02))
+                .launches(Arrays.asList(launch01, launch02))
                 .build();
     }
 
@@ -224,7 +227,7 @@ public class BookingMother {
                 .contractType(BOOKING_04_CONTRACT_TYPE)
                 .observation(BOOKING_04_OBSERVATION)
                 .bookingStatus(BOOKING_04_BOOKING_STATUS)
-                .launchs(Arrays.asList(launch01))
+                .launches(Arrays.asList(launch01))
                 .build();
     }
 
@@ -247,7 +250,7 @@ public class BookingMother {
                 .contractType(BOOKING_05_CONTRACT_TYPE)
                 .observation(BOOKING_05_OBSERVATION)
                 .bookingStatus(BOOKING_05_BOOKING_STATUS)
-                .launchs(Arrays.asList(launch01))
+                .launches(Arrays.asList(launch01))
                 .build();
     }
 
@@ -307,7 +310,7 @@ public class BookingMother {
                 .amountTotal(amountTotal)
                 .adults(adults)
                 .children(children)
-                .launchs(launches)
+                .launches(launches)
                 .traveler(traveler)
                 .build();
     }
@@ -327,7 +330,7 @@ public class BookingMother {
                 .adults(adults)
                 .children(children)
                 .observation(observation)
-                .launchs(launchs)
+                .launches(launchs)
                 .traveler(traveler)
                 .build();
     }
@@ -340,7 +343,7 @@ public class BookingMother {
                 .amountTotal(amountTotal)
                 .adults(adults)
                 .children(children)
-                .launchs(launchs)
+                .launches(launchs)
                 .bookingStatus(bookingStatus)
                 .paymentStatus(paymentStatus)
                 .insertDate(LocalDateTime.of(2021, Month.AUGUST,22, 9, 39))
@@ -369,14 +372,14 @@ public class BookingMother {
         return request;
     }
 
-    public static CreateBookingRequest getCreateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal amountTotal, String contractType, List<CreateLaunchRequest> launchs) {
+    public static CreateBookingRequest getCreateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal amountTotal, String contractType, List<CreateLaunchRequest> launches) {
 
         CreateBookingRequest request = new CreateBookingRequest();
         request.setCheckIn(checkIn);
         request.setCheckOut(checkOut);
         request.setAmountTotal(amountTotal);
         request.setTravelerId(travelerId);
-        request.setLaunchs(launchs);
+        request.setLaunches(launches);
         request.setContractType(contractType);
 
 
@@ -397,5 +400,29 @@ public class BookingMother {
 
     public static List<Booking> getNextBookings(){
         return Arrays.asList(getFirstBookingSaved(), getSecondBookingSaved());
+    }
+
+    public static BookingDetailResponse getBookingDetailResponse(Booking booking) {
+        List<LaunchDetailResponse> launches = booking.getLaunches().stream()
+                .map(e -> LaunchMother.getLaunchDetailResponse(e))
+                        .collect(Collectors.toList());
+
+        return BookingDetailResponse.builder()
+                .id(booking.getId())
+                .checkIn(booking.getCheckIn())
+                .checkOut(booking.getCheckOut())
+                .amountTotal(booking.getAmountTotal())
+                .amountPaid(booking.getAmountPaid())
+                .amountPending(booking.getAmountPending())
+                .bookingStatus(booking.getBookingStatus())
+                .contractType(booking.getContractType())
+                .paymentStatus(booking.getPaymentStatus())
+                .adults(booking.getAdults())
+                .children(booking.getChildren())
+                .observation(booking.getObservation())
+                .travelerId(booking.getTraveler().getId())
+                .travelerName(booking.getTravelerName())
+                .launches(launches)
+                .build();
     }
 }

@@ -8,7 +8,7 @@ import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
 import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
 import com.fernando.oliveira.booking.domain.request.SearchBookingRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateBookingRequest;
-import com.fernando.oliveira.booking.domain.response.DetailBookingResponse;
+import com.fernando.oliveira.booking.domain.response.BookingDetailResponse;
 import com.fernando.oliveira.booking.service.AuthorizationAccessService;
 import com.fernando.oliveira.booking.service.BookingService;
 import com.fernando.oliveira.booking.service.ContractService;
@@ -55,12 +55,11 @@ public class BookingController {
             @ApiResponse(code = 403, message = "Você não possui permissão para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
     @PostMapping
-    public ResponseEntity<DetailBookingResponse> create(@RequestBody @Valid CreateBookingRequest request){
+    public ResponseEntity<BookingDetailResponse> create(@RequestBody @Valid CreateBookingRequest request){
 
-      Booking bookingToCreate = bookingMapper.createRequestToEntity(request);
-      Booking bookingCreated = bookingService.createBooking(bookingToCreate);
-      DetailBookingResponse response = bookingMapper.bookingToDetailBookingResponse(bookingCreated);
-      return ResponseEntity.status(HttpStatus.CREATED).body(response);
+      return ResponseEntity
+              .status(HttpStatus.CREATED)
+              .body(bookingService.createBooking(request));
 
     }
 
@@ -69,10 +68,10 @@ public class BookingController {
             @ApiResponse(code = 403, message = "Você não possui permissão para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
     @GetMapping
-    public ResponseEntity<List<DetailBookingResponse>> findAll(){
+    public ResponseEntity<List<BookingDetailResponse>> findAll(){
 
         List<Booking> bookings = bookingService.findAll();
-        List<DetailBookingResponse> response = bookings.stream()
+        List<BookingDetailResponse> response = bookings.stream()
                 .map(e -> bookingMapper.bookingToDetailBookingResponse(e))
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -84,12 +83,12 @@ public class BookingController {
             @ApiResponse(code = 403, message = "Você não possui permissão para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
     @PutMapping(value = "/{id}")
-    public ResponseEntity<DetailBookingResponse> update(@RequestBody @Valid UpdateBookingRequest request,
+    public ResponseEntity<BookingDetailResponse> update(@RequestBody @Valid UpdateBookingRequest request,
                                                         @PathVariable("id") Long id){
 
         Booking bookingToUpdate = bookingMapper.updateRequestToEntity(request);
         Booking bookingUpdated = bookingService.updateBooking(bookingToUpdate, id);
-        DetailBookingResponse response = bookingMapper.bookingToDetailBookingResponse(bookingUpdated);
+        BookingDetailResponse response = bookingMapper.bookingToDetailBookingResponse(bookingUpdated);
         return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }
@@ -101,10 +100,10 @@ public class BookingController {
             @ApiResponse(code = 403, message = "Você não possui permissão para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
     @GetMapping(value = "/{id}")
-    public ResponseEntity<DetailBookingResponse> detail(@PathVariable("id") Long id){
+    public ResponseEntity<BookingDetailResponse> detail(@PathVariable("id") Long id){
 
         Booking booking = bookingService.detailBooking(id);
-        DetailBookingResponse response = bookingMapper.bookingToDetailBookingResponse(booking);
+        BookingDetailResponse response = bookingMapper.bookingToDetailBookingResponse(booking);
         return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }
@@ -114,10 +113,10 @@ public class BookingController {
             @ApiResponse(code = 403, message = "Você não possui permissão para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
     @GetMapping("/next")
-    public ResponseEntity<List<DetailBookingResponse>> findNext(){
+    public ResponseEntity<List<BookingDetailResponse>> findNext(){
 
         List<Booking> bookings = bookingService.findNextBookings();
-        List<DetailBookingResponse> response = bookings.stream()
+        List<BookingDetailResponse> response = bookings.stream()
                 .map(e -> bookingMapper.bookingToDetailBookingResponse(e))
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -168,7 +167,7 @@ public class BookingController {
             @ApiResponse(code = 403, message = "Você não possui permissão para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
     @GetMapping("/search")
-    public ResponseEntity<List<DetailBookingResponse>> search(
+    public ResponseEntity<List<BookingDetailResponse>> search(
             @RequestParam(value = "date", required = false) String date,
             @RequestParam(value = "paymentStatus", required = false) PaymentStatusEnum paymentStatus,
             @RequestParam(value = "bookingStatus", required = false) BookingStatusEnum bookingStatus,
@@ -185,7 +184,7 @@ public class BookingController {
 
         List<Booking> bookings = bookingService.search(request);
 
-        List<DetailBookingResponse> response = bookings.stream()
+        List<BookingDetailResponse> response = bookings.stream()
                 .map(e -> bookingMapper.bookingToDetailBookingResponse(e))
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(response);

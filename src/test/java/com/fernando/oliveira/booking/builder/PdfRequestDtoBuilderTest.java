@@ -30,7 +30,7 @@ public class PdfRequestDtoBuilderTest {
     @Test
     void givenBookingPendingWhenBuilderRequestThenReturnContractName(){
         Booking booking = BookingMother.getFirstBookingSaved();
-        booking.setLaunchs(Arrays.asList(
+        booking.setLaunches(Arrays.asList(
                 LaunchMother.getFirstLaunchFromFirstBooking(),
                 LaunchMother.getSecondLaunchFromFirstBooking(),
                 LaunchMother.getThirdLaunchFromFirstBooking()));
@@ -44,7 +44,7 @@ public class PdfRequestDtoBuilderTest {
     @Test
     void givenBookingPendingWhenBuilderRequestThenReturnTravelerDetails(){
         Booking booking = BookingMother.getFirstBookingSaved();
-        booking.setLaunchs(Arrays.asList(
+        booking.setLaunches(Arrays.asList(
                 LaunchMother.getFirstLaunchFromFirstBooking(),
                 LaunchMother.getSecondLaunchFromFirstBooking(),
                 LaunchMother.getThirdLaunchFromFirstBooking()));
@@ -61,7 +61,7 @@ public class PdfRequestDtoBuilderTest {
     @Test
     void givenBookingPendingWhenBuilderRequestThenReturnRentDetails(){
         Booking booking = BookingMother.getFirstBookingSaved();
-        booking.setLaunchs(Arrays.asList(
+        booking.setLaunches(Arrays.asList(
                 LaunchMother.getFirstLaunchFromFirstBooking(),
                 LaunchMother.getSecondLaunchFromFirstBooking(),
                 LaunchMother.getThirdLaunchFromFirstBooking()));
@@ -94,7 +94,7 @@ public class PdfRequestDtoBuilderTest {
                 LocalDate.of(2021,10,15),
                 LocalDate.of(2021, 10, 15)
         );
-        booking.setLaunchs(Arrays.asList(launch01,launch02));
+        booking.setLaunches(Arrays.asList(launch01,launch02));
 
         PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
@@ -125,7 +125,7 @@ public class PdfRequestDtoBuilderTest {
                 LocalDate.of(2021,10,15),
                 null
         );
-        booking.setLaunchs(Arrays.asList(launch01,launch02));
+        booking.setLaunches(Arrays.asList(launch01,launch02));
 
         PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
@@ -150,7 +150,7 @@ public class PdfRequestDtoBuilderTest {
                 LocalDate.of(2021, 10, 01)
         );
 
-        booking.setLaunchs(Arrays.asList(launch01));
+        booking.setLaunches(Arrays.asList(launch01));
 
         PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 

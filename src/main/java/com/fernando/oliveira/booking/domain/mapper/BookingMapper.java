@@ -4,7 +4,7 @@ import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
 import com.fernando.oliveira.booking.domain.request.FinishBookingRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateBookingRequest;
-import com.fernando.oliveira.booking.domain.response.DetailBookingResponse;
+import com.fernando.oliveira.booking.domain.response.BookingDetailResponse;
 import org.apache.commons.lang.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -28,7 +28,7 @@ public interface BookingMapper {
     Booking createRequestToEntity(CreateBookingRequest request);
 
     @Mapping(source = "traveler.id", target = "travelerId")
-    DetailBookingResponse bookingToDetailBookingResponse(Booking booking);
+    BookingDetailResponse bookingToDetailBookingResponse(Booking booking);
 
     @Mapping(source = "travelerId", target = "traveler.id")
     @Mapping(source = "checkIn", target = "checkIn", qualifiedByName = "formatLocalDateTime")

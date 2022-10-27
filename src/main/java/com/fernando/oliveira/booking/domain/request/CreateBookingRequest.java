@@ -14,5 +14,5 @@ import java.util.List;
 @ApiModel(value = "Requisição para cadastro de reservas")
 public class CreateBookingRequest extends BookingRequest implements Serializable {
 
-    private List<CreateLaunchRequest> launchs;
+    private List<CreateLaunchRequest> launches;
 }
