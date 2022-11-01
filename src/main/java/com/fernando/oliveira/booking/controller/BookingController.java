@@ -4,7 +4,6 @@ import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.ContractTypeEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
-import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
 import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
 import com.fernando.oliveira.booking.domain.request.SearchBookingRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateBookingRequest;
