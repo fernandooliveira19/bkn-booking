@@ -37,6 +37,7 @@ import java.util.Optional;
 
 import static com.fernando.oliveira.booking.mother.BookingMother.*;
 import static com.fernando.oliveira.booking.mother.LaunchMother.getLaunchToSave;
+import static com.fernando.oliveira.booking.mother.LaunchMother.getUpdateLaunchRequest;
 import static org.assertj.core.api.Assertions.fail;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.ArgumentMatchers.any;
@@ -229,7 +230,7 @@ public class BookingServiceUnitTest {
         when(bookingRepository.save(any(Booking.class))).thenReturn(bookingUpdated);
         when(travelerService.findById(anyLong())).thenReturn(booking.getTraveler());
 
-        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(travelerId, "2021-01-01", "2021-01-15", BigDecimal.valueOf(1500.0), Arrays.asList());
+        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(travelerId, "2021-01-01", "2021-01-15", BigDecimal.valueOf(1500.0),"", Arrays.asList());
 
         BookingDetailResponse result = bookingService.updateBooking(request, bookingId);
 
@@ -289,7 +290,7 @@ public class BookingServiceUnitTest {
                 TravelerMother.getTravelerSaved02());
         when(bookingMapper.updateRequestToEntity(any(UpdateBookingRequest.class))).thenReturn(booking);
 
-        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(2L, "2021-01-01", "2021-01-15", BigDecimal.valueOf(1500.0), Arrays.asList());
+        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(2L, "2021-01-01", "2021-01-15", BigDecimal.valueOf(1500.0),"", Arrays.asList());
 
         try {
             bookingService.updateBooking(request, 1L);
@@ -381,19 +382,41 @@ public class BookingServiceUnitTest {
     }
 
     @Test
-    void givenBookingWhenUpdateToFinishThenReturnBookingFinished(){
-//        String observation = "finished successfully";
-//        Booking bookingSaved = BookingMother.getFirstBookingSaved();
-//        Long bookingId = 10L;
-//
-//        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(bookingSaved));
-//        when(bookingRepository.save(any(Booking.class))).thenReturn(bookingSaved);
-//
-//        Booking result = bookingService.finishBooking(observation, bookingId);
-//
-//        then(result.getBookingStatus()).isEqualTo(BookingStatusEnum.FINISHED);
-//        then(result.getLastUpdate()).isNotNull();
-//        then(result.getObservation()).isEqualTo(observation);
+    void givenBookingToFinishThenReturnBookingFinished(){
+        String observation = "finished successfully";
+
+        UpdateLaunchRequest launchRequest01 = getUpdateLaunchRequest(100L, BigDecimal.valueOf(500.0), "2020-12-01", PaymentTypeEnum.PIX.name(),PaymentStatusEnum.PAID.name(),"2020-12-02" );
+        UpdateLaunchRequest launchRequest02 = getUpdateLaunchRequest(101L, BigDecimal.valueOf(250.0), "2020-12-05", PaymentTypeEnum.PIX.name(),PaymentStatusEnum.PAID.name(),"2020-12-06" );
+        UpdateLaunchRequest launchRequest03 = getUpdateLaunchRequest(102L, BigDecimal.valueOf(250.0), "2020-12-08", PaymentTypeEnum.PIX.name(),PaymentStatusEnum.PAID.name(),"2020-12-09" );
+        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(1L,"2020-12-15T10:00","2020-12-30T18:00",BigDecimal.valueOf(1000.0),observation,Arrays.asList(launchRequest01,launchRequest02,launchRequest03));
+
+        Booking bookingSaved = BookingMother.getBookingSaved01();
+        bookingSaved.setObservation(observation);
+        bookingSaved.setBookingStatus(BookingStatusEnum.FINISHED);
+
+
+        Booking bookingToFinish = BookingMother.getBookingToUpdate(LocalDateTime.of(2021,Month.JANUARY,1,10,0) ,
+                LocalDateTime.of(2021,Month.JANUARY,15,18,0),
+                BigDecimal.valueOf(1000.0),1L,
+                4,
+                3,
+                observation,
+                LaunchMother.getLaunchsFromFirstBooking(),
+                TravelerMother.getTravelerSaved01());
+
+        BookingDetailResponse response = BookingMother.getBookingDetailResponse(bookingSaved);
+
+        when(travelerService.findById(anyLong())).thenReturn(TravelerMother.getTravelerSaved01());
+        when(bookingMapper.updateRequestToEntity(any(UpdateBookingRequest.class))).thenReturn(bookingToFinish);
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(bookingSaved));
+        when(bookingRepository.save(any(Booking.class))).thenReturn(bookingSaved);
+        when(bookingMapper.bookingToDetailBookingResponse(any(Booking.class))).thenReturn(response);
+
+
+        BookingDetailResponse result = bookingService.updateBooking(request, 10L);
+
+        then(result.getBookingStatus()).isEqualTo(BookingStatusEnum.FINISHED);
+        then(result.getObservation()).isEqualTo(observation);
 
     }
 

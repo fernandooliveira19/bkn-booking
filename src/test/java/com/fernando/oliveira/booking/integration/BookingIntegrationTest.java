@@ -371,7 +371,7 @@ public class BookingIntegrationTest {
                 PaymentStatusEnum.PENDING.name(),
                 "");
 
-        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(travelerId,checkIn, checkOut, amountTotal, Arrays.asList(launch01, launch02));
+        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(travelerId,checkIn, checkOut, amountTotal, "", Arrays.asList(launch01, launch02));
 
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<UpdateBookingRequest> httpEntity = new HttpEntity<UpdateBookingRequest>(request, headers);

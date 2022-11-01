@@ -1,8 +1,7 @@
 package com.fernando.oliveira.booking.domain.request;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
@@ -10,6 +9,9 @@ import java.util.List;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UpdateBookingRequest extends BookingRequest {
 
     @ApiModelProperty(name="bookingStatus", value="Situação da reserva", example="RESERVED", required = true)
@@ -20,5 +22,5 @@ public class UpdateBookingRequest extends BookingRequest {
     @NotBlank(message = "Situação do pagamento da reserva é obrigatória")
     private String paymentStatus;
 
-    private List<UpdateLaunchRequest> launchs;
+    private List<UpdateLaunchRequest> launches;
 }

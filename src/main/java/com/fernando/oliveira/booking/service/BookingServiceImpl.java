@@ -114,8 +114,7 @@ public class BookingServiceImpl implements BookingService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         booking.setAmountPending(amountPending);
-
-    }
+   }
 
 
     @Override
@@ -141,7 +140,6 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDetailResponse> search(SearchBookingRequest request) {
 
-
         if (request.getBookingStatus() == null
                 && request.getPaymentStatus() == null
                 && request.getContractType() == null) {
@@ -161,7 +159,6 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
-
     @Override
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public BookingDetailResponse updateBooking(UpdateBookingRequest request, Long id) {
@@ -171,7 +168,7 @@ public class BookingServiceImpl implements BookingService {
         booking.setId(id);
         validateBooking(booking);
 
-        Booking bookingToUpdate = defineBookingDetails(booking);
+        Booking bookingToUpdate = prepareBookingToSave(booking);
 
         Booking bookingBase = findById(id);
         bookingToUpdate.setInsertDate(bookingBase.getInsertDate());
@@ -187,7 +184,6 @@ public class BookingServiceImpl implements BookingService {
             } else {
                 launchService.createLaunch(launch, bookingUpdated);
             }
-
 
         }
 
@@ -205,6 +201,7 @@ public class BookingServiceImpl implements BookingService {
 
     }
 
+
     public BookingDetailResponse detailBooking(Long id) {
         Booking booking = findById(id);
 
@@ -214,11 +211,9 @@ public class BookingServiceImpl implements BookingService {
     }
 
     public Booking defineBookingDetails(Booking booking) {
+
         getTraveler(booking);
-//        defineBookingStatus(booking);
-//        definePaymentStatus(booking);
-//        defineAmountPending(booking);
-//        defineAmountPaid(booking);
+
         return booking;
     }
 
@@ -308,7 +303,7 @@ public class BookingServiceImpl implements BookingService {
         }
         booking.getLaunches().stream().forEach(e -> {
             if (e.getPaymentStatus().equals(PaymentStatusEnum.PENDING)) {
-                throw new BookingException("Não é possível finalizar a reserva. Verificar lancçamentos pendentes");
+                throw new BookingException("Não é possível finalizar a reserva. Verificar lançamentos pendentes");
             }
         });
     }

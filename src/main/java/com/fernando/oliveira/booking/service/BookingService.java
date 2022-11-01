@@ -27,6 +27,4 @@ public interface BookingService {
 
     Booking findById(Long id);
 
-
-
 }

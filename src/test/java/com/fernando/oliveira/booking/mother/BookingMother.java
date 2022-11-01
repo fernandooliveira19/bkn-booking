@@ -386,14 +386,14 @@ public class BookingMother {
         return request;
     }
 
-    public static UpdateBookingRequest getUpdateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal amountTotal, List<UpdateLaunchRequest> launches) {
+    public static UpdateBookingRequest getUpdateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal amountTotal, String observation, List<UpdateLaunchRequest> launches) {
         UpdateBookingRequest request = new UpdateBookingRequest();
         request.setCheckIn(checkIn);
         request.setCheckOut(checkOut);
         request.setAmountTotal(amountTotal);
         request.setTravelerId(travelerId);
-        request.setLaunchs(launches);
-
+        request.setObservation(observation);
+        request.setLaunches(launches);
 
         return request;
     }
