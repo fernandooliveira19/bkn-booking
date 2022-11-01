@@ -160,7 +160,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Transactional(propagation = Propagation.REQUIRED)
     public BookingDetailResponse updateBooking(UpdateBookingRequest request, Long id) {
 
         Booking booking = bookingMapper.updateRequestToEntity(request);
@@ -193,20 +193,15 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Booking findById(Long id) {
-
         Optional<Booking> result = bookingRepository.findById(id);
-
         return result
                 .orElseThrow(() -> new BookingException("Não foi encontrado reserva pelo id: " + id));
-
     }
 
 
     public BookingDetailResponse detailBooking(Long id) {
         Booking booking = findById(id);
-
         defineBookingDetails(booking);
-
         return bookingMapper.bookingToDetailBookingResponse(booking);
     }
 
