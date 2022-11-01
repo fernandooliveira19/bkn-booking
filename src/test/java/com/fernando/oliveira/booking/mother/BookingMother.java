@@ -132,7 +132,7 @@ public class BookingMother {
                 .traveler(getTraveler())
                 .build();
     }
-    public static Booking getFirstBookingSaved(){
+    public static Booking getBookingSaved01(){
         Launch launch01 = LaunchMother.getFirstLaunchFromFirstBooking();
         Launch launch02 = LaunchMother.getSecondLaunchFromFirstBooking();
         Launch launch03 = LaunchMother.getThirdLaunchFromFirstBooking();
@@ -157,7 +157,7 @@ public class BookingMother {
                 .build();
     }
 
-    public static Booking getSecondBookingSaved(){
+    public static Booking getBookingSaved02(){
         Launch launch01 = LaunchMother.getFirstLaunchFromSecondBooking();
         Launch launch02 = LaunchMother.getSecondLaunchFromSecondBooking();
         Launch launch03 = LaunchMother.getThirdLaunchFromSecondBooking();
@@ -183,7 +183,7 @@ public class BookingMother {
     }
 
 
-    public static Booking getThirdBookingSaved(){
+    public static Booking getBookingSaved03(){
         Launch launch01 = LaunchMother.getFirstLaunchFromThirdBooking();
         Launch launch02 = LaunchMother.getSecondLaunchFromThirdBooking();
 
@@ -208,7 +208,7 @@ public class BookingMother {
                 .build();
     }
 
-    public static Booking getForthBookingSaved(){
+    public static Booking getBookingSaved04(){
         Launch launch01 = LaunchMother.getFirstLaunchFromForthBooking();
 
         return Booking.builder()
@@ -231,7 +231,7 @@ public class BookingMother {
                 .build();
     }
 
-    public static Booking getFifthBookingSaved(){
+    public static Booking getBookingSaved05(){
         Launch launch01 = LaunchMother.getFirstLaunchFromFifthBooking();
 
         return Booking.builder()
@@ -321,7 +321,7 @@ public class BookingMother {
                                            Integer adults,
                                            Integer children,
                                            String observation,
-                                           List<Launch> launchs,
+                                           List<Launch> launches,
                                            Traveler traveler) {
         return Booking.builder()
                 .checkIn(checkIn)
@@ -330,7 +330,7 @@ public class BookingMother {
                 .adults(adults)
                 .children(children)
                 .observation(observation)
-                .launches(launchs)
+                .launches(launches)
                 .traveler(traveler)
                 .build();
     }
@@ -386,20 +386,20 @@ public class BookingMother {
         return request;
     }
 
-    public static UpdateBookingRequest getUpdateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal amountTotal, List<UpdateLaunchRequest> launchs) {
+    public static UpdateBookingRequest getUpdateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal amountTotal, List<UpdateLaunchRequest> launches) {
         UpdateBookingRequest request = new UpdateBookingRequest();
         request.setCheckIn(checkIn);
         request.setCheckOut(checkOut);
         request.setAmountTotal(amountTotal);
         request.setTravelerId(travelerId);
-        request.setLaunchs(launchs);
+        request.setLaunchs(launches);
 
 
         return request;
     }
 
     public static List<Booking> getNextBookings(){
-        return Arrays.asList(getFirstBookingSaved(), getSecondBookingSaved());
+        return Arrays.asList(getBookingSaved01(), getBookingSaved02());
     }
 
     public static BookingDetailResponse getBookingDetailResponse(Booking booking) {

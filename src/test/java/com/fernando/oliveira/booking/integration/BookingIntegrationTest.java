@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,7 +62,7 @@ public class BookingIntegrationTest {
 
         BookingDetailResponse[] response = result.getBody();
 
-        assertThat(response.length).isEqualTo(1);
+        assertThat(response.length).isEqualTo(5);
 
     }
 
@@ -78,36 +79,36 @@ public class BookingIntegrationTest {
         assertThat(response.getId()).isEqualTo(10);
         assertThat(response.getTravelerId()).isEqualTo(1);
 
-        assertThat(response.getAdults()).isEqualTo(5);
+        assertThat(response.getAdults()).isEqualTo(3);
         assertThat(response.getChildren()).isEqualTo(2);
-        assertThat(response.getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
-        assertThat(response.getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
-        assertThat(response.getCheckIn()).isEqualTo(LocalDateTime.of(2021, 10,01,10,0 ));
-        assertThat(response.getCheckOut()).isEqualTo(LocalDateTime.of(2021, 10,30,18,30 ));
-        assertThat(response.getAmountTotal()).isEqualByComparingTo(BigDecimal.valueOf(1500.00));
-        assertThat(response.getAmountPending()).isEqualByComparingTo(BigDecimal.valueOf(200.00));
-        assertThat(response.getAmountPaid()).isEqualByComparingTo(BigDecimal.valueOf(1300.00));
+        assertThat(response.getBookingStatus()).isEqualTo(BookingStatusEnum.FINISHED);
+        assertThat(response.getPaymentStatus()).isEqualTo(PaymentStatusEnum.PAID);
+        assertThat(response.getCheckIn()).isEqualTo(LocalDateTime.of(2020, Month.DECEMBER,15,10,0 ));
+        assertThat(response.getCheckOut()).isEqualTo(LocalDateTime.of(2020, Month.DECEMBER,30,18,0 ));
+        assertThat(response.getAmountTotal()).isEqualByComparingTo(BigDecimal.valueOf(1000.00));
+        assertThat(response.getAmountPending()).isEqualByComparingTo(BigDecimal.valueOf(0.00));
+        assertThat(response.getAmountPaid()).isEqualByComparingTo(BigDecimal.valueOf(1000.00));
 
         assertThat(response.getLaunches().get(0).getId()).isEqualTo(100);
-        assertThat(response.getLaunches().get(0).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(1000.00));
-        assertThat(response.getLaunches().get(0).getScheduleDate()).isEqualTo(LocalDate.of(2021,10,10));
+        assertThat(response.getLaunches().get(0).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(500.00));
+        assertThat(response.getLaunches().get(0).getScheduleDate()).isEqualTo(LocalDate.of(2020,Month.DECEMBER,1));
         assertThat(response.getLaunches().get(0).getPaymentType()).isEqualTo(PaymentTypeEnum.PIX);
         assertThat(response.getLaunches().get(0).getPaymentStatus()).isEqualTo(PaymentStatusEnum.PAID);
-        assertThat(response.getLaunches().get(0).getPaymentDate()).isEqualTo(LocalDate.of(2021,10,10));
+        assertThat(response.getLaunches().get(0).getPaymentDate()).isEqualTo(LocalDate.of(2020,Month.DECEMBER,2));
 
         assertThat(response.getLaunches().get(1).getId()).isEqualTo(101);
-        assertThat(response.getLaunches().get(1).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(300.00));
-        assertThat(response.getLaunches().get(1).getScheduleDate()).isEqualTo(LocalDate.of(2021,10,20));
-        assertThat(response.getLaunches().get(1).getPaymentType()).isEqualTo(PaymentTypeEnum.TRANSFER);
+        assertThat(response.getLaunches().get(1).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(250.00));
+        assertThat(response.getLaunches().get(1).getScheduleDate()).isEqualTo(LocalDate.of(2020,Month.DECEMBER,5));
+        assertThat(response.getLaunches().get(1).getPaymentType()).isEqualTo(PaymentTypeEnum.PIX);
         assertThat(response.getLaunches().get(1).getPaymentStatus()).isEqualTo(PaymentStatusEnum.PAID);
-        assertThat(response.getLaunches().get(1).getPaymentDate()).isEqualTo(LocalDate.of(2021,10,20));
+        assertThat(response.getLaunches().get(1).getPaymentDate()).isEqualTo(LocalDate.of(2020,Month.DECEMBER,6));
 
         assertThat(response.getLaunches().get(2).getId()).isEqualTo(102);
-        assertThat(response.getLaunches().get(2).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(200.00));
-        assertThat(response.getLaunches().get(2).getScheduleDate()).isEqualTo(LocalDate.of(2021,10,30));
-        assertThat(response.getLaunches().get(2).getPaymentType()).isEqualTo(PaymentTypeEnum.LOCAL);
-        assertThat(response.getLaunches().get(2).getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
-        assertThat(response.getLaunches().get(2).getPaymentDate()).isNull();
+        assertThat(response.getLaunches().get(2).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(250.00));
+        assertThat(response.getLaunches().get(2).getScheduleDate()).isEqualTo(LocalDate.of(2020,Month.DECEMBER,8));
+        assertThat(response.getLaunches().get(2).getPaymentType()).isEqualTo(PaymentTypeEnum.PIX);
+        assertThat(response.getLaunches().get(2).getPaymentStatus()).isEqualTo(PaymentStatusEnum.PAID);
+        assertThat(response.getLaunches().get(2).getPaymentDate()).isEqualTo(LocalDate.of(2020,Month.DECEMBER,9));
 
     }
     @Test
@@ -212,8 +213,8 @@ public class BookingIntegrationTest {
     void givenDateInsideOtherBookingWhenCreateBookingThenReturnExceptionMessage(){
 
         Long travelerId = 2L;
-        String checkIn = "2021-10-05T10:00";
-        String checkOut = "2021-10-20T18:00";
+        String checkIn = "2021-01-02T10:00";
+        String checkOut = "2021-01-14T18:00";
         String contractType = "DIRECT";
         BigDecimal amountTotal = BigDecimal.valueOf(2000.0);
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
@@ -244,8 +245,8 @@ public class BookingIntegrationTest {
     @Test
     void givenDateWithConflictCheckInWhenCreateBookingThenReturnExceptionMessage(){
         Long travelerId = 2L;
-        String checkIn = "2021-09-30T10:00";
-        String checkOut = "2021-10-05T18:00";
+        String checkIn = "2020-12-31T10:00";
+        String checkOut = "2021-01-05T18:00";
         String contractType = "DIRECT";
         BigDecimal amountTotal = BigDecimal.valueOf(2000.0);
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
@@ -279,8 +280,8 @@ public class BookingIntegrationTest {
     @Test
     void givenDateWithOutsideConflictCheckOutWhenCreateBookingThenReturnExceptionMessage(){
         Long travelerId = 2L;
-        String checkIn = "2021-09-30T10:00";
-        String checkOut = "2021-11-05T18:00";
+        String checkIn = "2021-01-15T22:00";
+        String checkOut = "2021-01-31T18:00";
         String contractType = "DIRECT";
         BigDecimal amountTotal = BigDecimal.valueOf(2000.0);
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
@@ -312,8 +313,8 @@ public class BookingIntegrationTest {
     @Test
     void givenDateWithConflictCheckOutWhenCreateBookingThenReturnExceptionMessage(){
         Long travelerId = 2L;
-        String checkIn = "2021-10-30T10:00";
-        String checkOut = "2021-11-05T18:00";
+        String checkIn = "2021-01-30T10:00";
+        String checkOut = "2021-01-31T18:00";
         String contractType = "DIRECT";
         BigDecimal amountTotal = BigDecimal.valueOf(2000.0);
         CreateLaunchRequest launch01 = LaunchMother.getCreateLaunchRequest(
@@ -392,7 +393,7 @@ public class BookingIntegrationTest {
 
         BookingDetailResponse[] response = result.getBody();
 
-        assertThat(response.length).isEqualTo(1);
+        assertThat(response.length).isEqualTo(3);
 
     }
 

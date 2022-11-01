@@ -9,6 +9,7 @@ import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
 import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
 import com.fernando.oliveira.booking.domain.request.SearchBookingRequest;
+import com.fernando.oliveira.booking.domain.request.UpdateBookingRequest;
 import com.fernando.oliveira.booking.domain.response.BookingDetailResponse;
 import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.repository.BookingRepository;
@@ -47,7 +48,7 @@ public class BookingServiceImpl implements BookingService {
         validateCreateUpdateBooking(booking);
 
         Booking bookingToSave = prepareBookingToSave(booking);
-//        Booking bookingToSave = defineBookingDetails(booking);
+
         bookingToSave.setInsertDate(LocalDateTime.now());
 
         Booking bookingSaved = bookingRepository.save(bookingToSave);
@@ -61,7 +62,7 @@ public class BookingServiceImpl implements BookingService {
     
     private Booking prepareBookingToSave(Booking booking){
         
-        defineTraveler(booking);
+        getTraveler(booking);
         defineBookingStatus(booking);
         definePaymentStatus(booking);
         defineAmountPending(booking);
@@ -118,24 +119,27 @@ public class BookingServiceImpl implements BookingService {
 
 
     @Override
-    public List<Booking> findAll() {
+    public List<BookingDetailResponse> findAll() {
+
         return bookingRepository.findAll()
                 .stream()
                 .map((e) -> defineBookingDetails(e))
+                .map( (e) -> bookingMapper.bookingToDetailBookingResponse(e))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Booking> findNextBookings() {
+    public List<BookingDetailResponse> findNextBookings() {
         return bookingRepository.findNextBookings()
                 .stream()
                 .map((e) -> defineBookingDetails(e))
+                .map( (e) -> bookingMapper.bookingToDetailBookingResponse(e))
                 .collect(Collectors.toList());
 
     }
 
     @Override
-    public List<Booking> search(SearchBookingRequest request) {
+    public List<BookingDetailResponse> search(SearchBookingRequest request) {
 
 
         if (request.getBookingStatus() == null
@@ -151,6 +155,7 @@ public class BookingServiceImpl implements BookingService {
 
             return result.stream()
                     .map((e) -> defineBookingDetails((Booking) e))
+                    .map((e) -> bookingMapper.bookingToDetailBookingResponse(e))
                     .collect(Collectors.toList());
 
         }
@@ -159,7 +164,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-    public Booking updateBooking(Booking booking, Long id) {
+    public BookingDetailResponse updateBooking(UpdateBookingRequest request, Long id) {
+
+        Booking booking = bookingMapper.updateRequestToEntity(request);
 
         booking.setId(id);
         validateBooking(booking);
@@ -184,10 +191,11 @@ public class BookingServiceImpl implements BookingService {
 
         }
 
-        return bookingUpdated;
+        return bookingMapper.bookingToDetailBookingResponse(bookingUpdated);
 
     }
 
+    @Override
     public Booking findById(Long id) {
 
         Optional<Booking> result = bookingRepository.findById(id);
@@ -197,18 +205,20 @@ public class BookingServiceImpl implements BookingService {
 
     }
 
-    public Booking detailBooking(Long id) {
+    public BookingDetailResponse detailBooking(Long id) {
         Booking booking = findById(id);
 
-        return defineBookingDetails(booking);
+        defineBookingDetails(booking);
+
+        return bookingMapper.bookingToDetailBookingResponse(booking);
     }
 
     public Booking defineBookingDetails(Booking booking) {
-        defineTraveler(booking);
-        defineBookingStatus(booking);
-        definePaymentStatus(booking);
-        defineAmountPending(booking);
-        defineAmountPaid(booking);
+        getTraveler(booking);
+//        defineBookingStatus(booking);
+//        definePaymentStatus(booking);
+//        defineAmountPending(booking);
+//        defineAmountPaid(booking);
         return booking;
     }
 
@@ -311,7 +321,7 @@ public class BookingServiceImpl implements BookingService {
 
     }
 
-    private void defineTraveler(Booking booking) {
+    private void getTraveler(Booking booking) {
         Traveler traveler = travelerService.findById(booking.getTraveler().getId());
         booking.setTraveler(traveler);
         booking.setTravelerName(traveler.getName());

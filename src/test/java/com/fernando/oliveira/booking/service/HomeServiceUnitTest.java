@@ -1,25 +1,16 @@
 package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
-import com.fernando.oliveira.booking.domain.entity.Launch;
-import com.fernando.oliveira.booking.domain.response.HomeResponse;
+import com.fernando.oliveira.booking.domain.response.BookingDetailResponse;
 import com.fernando.oliveira.booking.domain.response.ReservedDateResponse;
 import com.fernando.oliveira.booking.mother.BookingMother;
-import com.fernando.oliveira.booking.mother.LaunchMother;
-import com.fernando.oliveira.booking.mother.TravelerMother;
-import org.assertj.core.api.BDDAssertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,11 +36,12 @@ public class HomeServiceUnitTest {
     @Disabled
     void givenNextBookingsThenReturnReservedDateResponse(){
 
-        Booking secondBooking = getSecondBookingSaved();
-        Booking thirdBooking = getThirdBookingSaved();
-        Booking forthBooking = getForthBookingSaved();
+        BookingDetailResponse bookingDetailResponse02 = BookingMother.getBookingDetailResponse(getBookingSaved02());
+        BookingDetailResponse bookingDetailResponse03 = BookingMother.getBookingDetailResponse(getBookingSaved03());
+        BookingDetailResponse bookingDetailResponse04 = BookingMother.getBookingDetailResponse(getBookingSaved04());
 
-        when(bookingService.findNextBookings()).thenReturn(Arrays.asList(secondBooking, thirdBooking, forthBooking));
+
+        when(bookingService.findNextBookings()).thenReturn(Arrays.asList(bookingDetailResponse02, bookingDetailResponse03, bookingDetailResponse04));
 
         List<ReservedDateResponse> result = homeService.reservedDatesFromNextBookings();
 

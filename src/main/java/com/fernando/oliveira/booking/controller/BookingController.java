@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.ByteArrayInputStream;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Api(tags="Bookings")
 @RestController
@@ -37,9 +36,6 @@ public class BookingController {
 
     @Autowired
     private BookingService bookingService;
-
-    @Autowired
-    private BookingMapper bookingMapper;
 
     @Autowired
     private ContractService contractService;
@@ -70,11 +66,9 @@ public class BookingController {
     @GetMapping
     public ResponseEntity<List<BookingDetailResponse>> findAll(){
 
-        List<Booking> bookings = bookingService.findAll();
-        List<BookingDetailResponse> response = bookings.stream()
-                .map(e -> bookingMapper.bookingToDetailBookingResponse(e))
-                .collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(bookingService.findAll());
     }
     @ApiOperation(value = "Realiza atualização de reserva")
     @ApiResponses(value = {
@@ -85,11 +79,9 @@ public class BookingController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<BookingDetailResponse> update(@RequestBody @Valid UpdateBookingRequest request,
                                                         @PathVariable("id") Long id){
-
-        Booking bookingToUpdate = bookingMapper.updateRequestToEntity(request);
-        Booking bookingUpdated = bookingService.updateBooking(bookingToUpdate, id);
-        BookingDetailResponse response = bookingMapper.bookingToDetailBookingResponse(bookingUpdated);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(bookingService.updateBooking(request, id));
 
     }
 
@@ -102,9 +94,9 @@ public class BookingController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<BookingDetailResponse> detail(@PathVariable("id") Long id){
 
-        Booking booking = bookingService.detailBooking(id);
-        BookingDetailResponse response = bookingMapper.bookingToDetailBookingResponse(booking);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(bookingService.detailBooking(id));
 
     }
 
@@ -115,11 +107,9 @@ public class BookingController {
     @GetMapping("/next")
     public ResponseEntity<List<BookingDetailResponse>> findNext(){
 
-        List<Booking> bookings = bookingService.findNextBookings();
-        List<BookingDetailResponse> response = bookings.stream()
-                .map(e -> bookingMapper.bookingToDetailBookingResponse(e))
-                .collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(bookingService.findNextBookings());
     }
 
     @ApiOperation(value = "Gera contrato de reserva no formato pdf")
@@ -130,7 +120,7 @@ public class BookingController {
             @ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
     @GetMapping("/{id}/contract")
     public ResponseEntity<InputStreamResource> createContract(@PathVariable("id") Long bookingId){
-        Booking booking = bookingService.detailBooking(bookingId);
+        Booking booking = bookingService.findById(bookingId);
         ByteArrayInputStream bis = contractService.createContract(booking);
 
         return ResponseEntity
@@ -149,7 +139,7 @@ public class BookingController {
             @ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
     @GetMapping("/{id}/authorization")
     public ResponseEntity<InputStreamResource> authorizationAccess(@PathVariable("id") Long bookingId){
-        Booking booking = bookingService.detailBooking(bookingId);
+        Booking booking = bookingService.findById(bookingId);
         ByteArrayInputStream bis = authorizationAccessService.createAuthorizationAccess(booking);
 
         return ResponseEntity
@@ -173,8 +163,6 @@ public class BookingController {
             @RequestParam(value = "bookingStatus", required = false) BookingStatusEnum bookingStatus,
             @RequestParam(value = "contractType", required = false) ContractTypeEnum contractType){
 
-
-
         SearchBookingRequest request = SearchBookingRequest.builder()
                 .date(FormatterUtils.getLocalDateFormat(date))
                 .bookingStatus(bookingStatus)
@@ -182,12 +170,9 @@ public class BookingController {
                 .contractType(contractType)
                 .build();
 
-        List<Booking> bookings = bookingService.search(request);
-
-        List<BookingDetailResponse> response = bookings.stream()
-                .map(e -> bookingMapper.bookingToDetailBookingResponse(e))
-                .collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(bookingService.search(request));
 
     }
 

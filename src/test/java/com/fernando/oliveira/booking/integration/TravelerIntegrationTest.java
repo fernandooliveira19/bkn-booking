@@ -63,7 +63,7 @@ public class TravelerIntegrationTest {
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         TravelerDetailResponse[] response = result.getBody();
-        assertThat(response.length).isEqualTo(4);
+        assertThat(response.length).isEqualTo(5);
 
         assertThat(response[0].getId()).isEqualTo(1L);
         assertThat(response[0].getName()).isEqualTo("Ana Maria");
@@ -98,7 +98,13 @@ public class TravelerIntegrationTest {
     @Test
     void shouldReturnTravelerDetailsWhenCreateTraveler() {
 
-        CreateTravelerRequest request = getCreateTraveler05Request();
+        CreateTravelerRequest request = getNewTravelerRequest(
+                "Fernando Oliveira",
+                "fernando.oliveira@teste.com",
+                66,
+                "98888-6666",
+                ""
+        );
 
         ResponseEntity<TravelerDetailResponse> result = restTemplate
                 .postForEntity(
@@ -107,7 +113,7 @@ public class TravelerIntegrationTest {
                         TravelerDetailResponse.class
                 );
 
-        assertThat(result.getBody().getId()).isEqualTo(5L);
+        assertThat(result.getBody().getId()).isEqualTo(6L);
         assertThat(result.getBody().getStatus()).isEqualTo(StatusEnum.ACTIVE.getCode());
 
     }

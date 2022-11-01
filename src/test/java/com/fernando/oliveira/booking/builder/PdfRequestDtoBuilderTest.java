@@ -29,7 +29,7 @@ public class PdfRequestDtoBuilderTest {
 
     @Test
     void givenBookingPendingWhenBuilderRequestThenReturnContractName(){
-        Booking booking = BookingMother.getFirstBookingSaved();
+        Booking booking = BookingMother.getBookingSaved01();
         booking.setLaunches(Arrays.asList(
                 LaunchMother.getFirstLaunchFromFirstBooking(),
                 LaunchMother.getSecondLaunchFromFirstBooking(),
@@ -43,7 +43,7 @@ public class PdfRequestDtoBuilderTest {
 
     @Test
     void givenBookingPendingWhenBuilderRequestThenReturnTravelerDetails(){
-        Booking booking = BookingMother.getFirstBookingSaved();
+        Booking booking = BookingMother.getBookingSaved01();
         booking.setLaunches(Arrays.asList(
                 LaunchMother.getFirstLaunchFromFirstBooking(),
                 LaunchMother.getSecondLaunchFromFirstBooking(),
@@ -60,7 +60,7 @@ public class PdfRequestDtoBuilderTest {
 
     @Test
     void givenBookingPendingWhenBuilderRequestThenReturnRentDetails(){
-        Booking booking = BookingMother.getFirstBookingSaved();
+        Booking booking = BookingMother.getBookingSaved01();
         booking.setLaunches(Arrays.asList(
                 LaunchMother.getFirstLaunchFromFirstBooking(),
                 LaunchMother.getSecondLaunchFromFirstBooking(),
@@ -74,7 +74,7 @@ public class PdfRequestDtoBuilderTest {
 
     @Test
     void givenBookingPaidWhenBuilderRequestThenReturnPaymentDetails(){
-        Booking booking = BookingMother.getFirstBookingSaved();
+        Booking booking = BookingMother.getBookingSaved01();
         booking.setPaymentStatus(PaymentStatusEnum.PAID);
         booking.setAmountPaid(BigDecimal.valueOf(1500.0));
         booking.setAmountPending(BigDecimal.valueOf(0.0));
@@ -106,7 +106,7 @@ public class PdfRequestDtoBuilderTest {
 
     @Test
     void givenBookingPendingWhenBuilderRequestThenReturnPaymentDetails(){
-        Booking booking = BookingMother.getFirstBookingSaved();
+        Booking booking = BookingMother.getBookingSaved01();
         booking.setPaymentStatus(PaymentStatusEnum.PENDING);
         booking.setAmountPaid(BigDecimal.valueOf(1000.0));
         booking.setAmountPending(BigDecimal.valueOf(500.0));
@@ -136,7 +136,7 @@ public class PdfRequestDtoBuilderTest {
 
     @Test
     void givenBookingPaidFromSiteWhenBuilderRequestThenReturnPaymentDetails(){
-        Booking booking = BookingMother.getFirstBookingSaved();
+        Booking booking = BookingMother.getBookingSaved01();
         booking.setPaymentStatus(PaymentStatusEnum.PAID);
         booking.setAmountPaid(BigDecimal.valueOf(1500.0));
         booking.setAmountPending(BigDecimal.valueOf(0.0));

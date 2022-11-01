@@ -1,6 +1,7 @@
 package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
+import com.fernando.oliveira.booking.domain.response.BookingDetailResponse;
 import com.fernando.oliveira.booking.domain.response.ReservedDateResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,10 @@ public class HomeServiceImpl implements HomeService{
 
     public List<ReservedDateResponse> reservedDatesFromNextBookings() {
 
-        List<Booking> nextBookings = bookingService.findNextBookings();
+        List<BookingDetailResponse> nextBookings = bookingService.findNextBookings();
 
         List<ReservedDateResponse> response = new ArrayList<>();
-        for(Booking booking : nextBookings){
+        for(BookingDetailResponse booking : nextBookings){
             response.addAll(reservedDatesFromBooking(booking));
         }
 
@@ -30,7 +31,7 @@ public class HomeServiceImpl implements HomeService{
 
     }
 
-    private List<ReservedDateResponse> reservedDatesFromBooking(Booking booking) {
+    private List<ReservedDateResponse> reservedDatesFromBooking(BookingDetailResponse booking) {
 
         LocalDateTime checkIn = booking.getCheckIn();
         LocalDateTime checkOut = booking.getCheckOut();

@@ -22,24 +22,24 @@ public class LaunchMother {
 
     private static final Long BOOKING_01_LAUNCH_01_ID= 100L;
     private static final BigDecimal BOOKING_01_LAUNCH_01_AMOUNT = BigDecimal.valueOf(500.0);
-    private static final LocalDate BOOKING_01_LAUNCH_01_SCHEDULE_DATE = LocalDate.of(2021, Month.DECEMBER, 1);
+    private static final LocalDate BOOKING_01_LAUNCH_01_SCHEDULE_DATE = LocalDate.of(2020, Month.DECEMBER, 1);
     private static final PaymentTypeEnum BOOKING_01_LAUNCH_01_PAYMENT_TYPE = PaymentTypeEnum.PIX;
     private static final PaymentStatusEnum BOOKING_01_LAUNCH_01_PAYMENT_STATUS = PaymentStatusEnum.PAID;
-    private static final LocalDate BOOKING_01_LAUNCH_01_PAYMENT_DATE = LocalDate.of(2021, Month.DECEMBER, 2);
+    private static final LocalDate BOOKING_01_LAUNCH_01_PAYMENT_DATE = LocalDate.of(2020, Month.DECEMBER, 2);
 
     private static final Long BOOKING_01_LAUNCH_02_ID= 101L;
     private static final BigDecimal BOOKING_01_LAUNCH_02_AMOUNT = BigDecimal.valueOf(250.0);
-    private static final LocalDate BOOKING_01_LAUNCH_02_SCHEDULE_DATE = LocalDate.of(2021, Month.DECEMBER, 5);
+    private static final LocalDate BOOKING_01_LAUNCH_02_SCHEDULE_DATE = LocalDate.of(2020, Month.DECEMBER, 5);
     private static final PaymentTypeEnum BOOKING_01_LAUNCH_02_PAYMENT_TYPE = PaymentTypeEnum.PIX;
     private static final PaymentStatusEnum BOOKING_01_LAUNCH_02_PAYMENT_STATUS = PaymentStatusEnum.PAID;
-    private static final LocalDate BOOKING_01_LAUNCH_02_PAYMENT_DATE = LocalDate.of(2021, Month.DECEMBER, 6);
+    private static final LocalDate BOOKING_01_LAUNCH_02_PAYMENT_DATE = LocalDate.of(2020, Month.DECEMBER, 6);
 
     private static final Long BOOKING_01_LAUNCH_03_ID= 102L;
     private static final BigDecimal BOOKING_01_LAUNCH_03_AMOUNT = BigDecimal.valueOf(250.0);
-    private static final LocalDate BOOKING_01_LAUNCH_03_SCHEDULE_DATE = LocalDate.of(2021, Month.DECEMBER, 8);
+    private static final LocalDate BOOKING_01_LAUNCH_03_SCHEDULE_DATE = LocalDate.of(2020, Month.DECEMBER, 8);
     private static final PaymentTypeEnum BOOKING_01_LAUNCH_03_PAYMENT_TYPE = PaymentTypeEnum.PIX;
     private static final PaymentStatusEnum BOOKING_01_LAUNCH_03_PAYMENT_STATUS = PaymentStatusEnum.PAID;
-    private static final LocalDate BOOKING_01_LAUNCH_03_PAYMENT_DATE = LocalDate.of(2021, Month.DECEMBER, 9);
+    private static final LocalDate BOOKING_01_LAUNCH_03_PAYMENT_DATE = LocalDate.of(2020, Month.DECEMBER, 9);
 
     // booking 2
 

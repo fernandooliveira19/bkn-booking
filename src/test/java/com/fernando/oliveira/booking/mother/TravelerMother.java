@@ -73,6 +73,15 @@ public class TravelerMother {
 		request.setNumberPhone(TRAVELER_05_NUMBER_PHONE);
 		return request;
 	}
+	public static CreateTravelerRequest getNewTravelerRequest(String name, String email, Integer prefixPhone, String numberPhone, String document) {
+		CreateTravelerRequest request = new CreateTravelerRequest();
+		request.setName(name);
+		request.setEmail(email);
+		request.setPrefixPhone(prefixPhone);
+		request.setNumberPhone(numberPhone);
+		request.setDocument(document);
+		return request;
+	}
 
 	public static TravelerDetailResponse getDetailTraveler01Response() {
 

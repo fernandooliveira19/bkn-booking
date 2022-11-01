@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -53,14 +54,14 @@ public class LaunchIntegrationTest {
 
         LaunchDetailResponse [] response = result.getBody();
 
-        assertThat(response.length).isEqualTo(1);
-        assertThat(response[0].getId()).isEqualTo(102);
-        assertThat(response[0].getAmount().doubleValue()).isEqualTo(200.00d);
-        assertThat(response[0].getScheduleDate()).isEqualTo(LocalDate.of(2021,10,30));
-        assertThat(response[0].getPaymentType()).isEqualTo(PaymentTypeEnum.LOCAL);
+        assertThat(response.length).isEqualTo(3);
+        assertThat(response[0].getId()).isEqualTo(105);
+        assertThat(response[0].getAmount().doubleValue()).isEqualTo(1000.00d);
+        assertThat(response[0].getScheduleDate()).isEqualTo(LocalDate.of(2021, Month.JANUARY,8));
+        assertThat(response[0].getPaymentType()).isEqualTo(PaymentTypeEnum.PIX);
         assertThat(response[0].getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
-        assertThat(response[0].getCheckIn()).isEqualTo(LocalDateTime.of(2021,10,1, 10,00));
-        assertThat(response[0].getTravelerName()).isEqualTo("Ana Maria");
+        assertThat(response[0].getCheckIn()).isEqualTo(LocalDateTime.of(2021,Month.JANUARY,1, 10,00));
+        assertThat(response[0].getTravelerName()).isEqualTo("Bianca Silva");
 
     }
 

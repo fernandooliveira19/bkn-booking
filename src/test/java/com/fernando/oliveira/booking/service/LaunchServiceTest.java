@@ -47,9 +47,9 @@ public class LaunchServiceTest {
 
         then(result.getId()).isEqualTo( launchId);
         then(result.getAmount()).isEqualTo( BigDecimal.valueOf(500.0));
-        then(result.getScheduleDate()).isEqualTo( LocalDate.of(2021, Month.DECEMBER, 1));
+        then(result.getScheduleDate()).isEqualTo( LocalDate.of(2020, Month.DECEMBER, 1));
         then(result.getPaymentStatus()).isEqualTo( PAID);
-        then(result.getPaymentDate()).isEqualTo( LocalDate.of(2021, Month.DECEMBER, 2));
+        then(result.getPaymentDate()).isEqualTo( LocalDate.of(2020, Month.DECEMBER, 2));
         then(result.getPaymentType()).isEqualTo( PaymentTypeEnum.PIX);
 
     }
