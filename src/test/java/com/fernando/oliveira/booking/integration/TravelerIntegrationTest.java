@@ -1,10 +1,16 @@
 package com.fernando.oliveira.booking.integration;
 
+import com.fernando.oliveira.booking.domain.entity.Booking;
+import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
+import com.fernando.oliveira.booking.domain.enums.ContractTypeEnum;
 import com.fernando.oliveira.booking.domain.enums.StatusEnum;
 import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
+import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
 import com.fernando.oliveira.booking.domain.response.ExceptionResponse;
 import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
+import com.fernando.oliveira.booking.mother.BookingMother;
+import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +23,17 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+
 import static com.fernando.oliveira.booking.mother.TravelerMother.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @ExtendWith(SpringExtension.class)
@@ -198,6 +213,29 @@ public class TravelerIntegrationTest {
         assertThat(response[0].getNumberPhone()).isEqualTo("98888-1111");
         assertThat(response[0].getPrefixPhone()).isEqualTo(11);
         assertThat(response[0].getStatus()).isEqualTo(StatusEnum.ACTIVE.getCode());
+    }
+
+    @Test
+    public void shouldReturnAllBookingByTraveler() throws Exception {
+        Long id = 1L;
+        ResponseEntity<BookingTravelerResponse[]> result = restTemplate
+                .getForEntity(
+                        TRAVELER_MAPPING + "/" + id + "/bookings", BookingTravelerResponse[].class);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        BookingTravelerResponse[] response = result.getBody();
+        assertThat(response.length).isEqualTo(1);
+
+        assertThat(response[0].getBookingId()).isEqualTo(10L);
+        assertThat(response[0].getCheckIn()).isEqualTo("2021-10-01T10:00:00");
+        assertThat(response[0].getCheckOut()).isEqualTo("2021-10-30T18:30:00");
+        assertThat(response[0].getAmountTotal()).isEqualByComparingTo(BigDecimal.valueOf(1500.00));
+
+        assertThat(response[0].getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
+        assertThat(response[0].getContractType()).isEqualTo(ContractTypeEnum.DIRECT);
+        assertThat(response[0].getObservation()).isEqualTo("Primeira reserva");
+
     }
 
 }

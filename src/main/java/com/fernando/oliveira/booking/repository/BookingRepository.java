@@ -24,4 +24,8 @@ public interface BookingRepository extends JpaRepository<Booking,Long>, JpaSpeci
  @Query(value = "select b from booking b order by b.checkIn")
  List<Booking> findAll();
 
+ @Query(value = "select b from booking b inner join b.traveler t where t.id = :travelerId order by b.checkIn")
+ List<Booking> findByTraveler(
+         @Param("travelerId") Long travelerId);
+
  }

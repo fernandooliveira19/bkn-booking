@@ -1,4 +1,4 @@
-package com.fernando.oliveira.booking.domain.dto;
+package com.fernando.oliveira.booking.domain.spec;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.request.SearchBookingRequest;

@@ -4,8 +4,10 @@ import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
+import com.fernando.oliveira.booking.domain.enums.ContractTypeEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.domain.request.*;
+import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -88,6 +90,9 @@ public class BookingMother {
                 .paymentStatus(PaymentStatusEnum.PENDING)
                 .amountPaid(AMOUNT_PAID_01)
                 .amountPending(AMOUNT_PENDING_01)
+                .bookingStatus(BookingStatusEnum.RESERVED)
+                .contractType(ContractTypeEnum.DIRECT)
+                .observation("First booking saved")
                 .launchs(Arrays.asList(launch01, launch02, launch03))
                 .build();
     }
@@ -237,5 +242,17 @@ public class BookingMother {
 
     public static List<Booking> getNextBookings(){
         return Arrays.asList(getFirstBookingSaved(), getSecondBookingSaved());
+    }
+
+    public static BookingTravelerResponse getBookingTravelerResponse(Booking booking) {
+        return BookingTravelerResponse.builder()
+                .bookingId(booking.getId())
+                .checkIn(booking.getCheckIn())
+                .checkOut(booking.getCheckOut())
+                .bookingStatus(booking.getBookingStatus())
+                .contractType(booking.getContractType())
+                .amountTotal(booking.getAmountTotal())
+                .observation(booking.getObservation())
+                .build();
     }
 }

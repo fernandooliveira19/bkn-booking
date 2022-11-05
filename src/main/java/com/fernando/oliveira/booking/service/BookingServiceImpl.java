@@ -1,15 +1,14 @@
 package com.fernando.oliveira.booking.service;
 
-import com.fernando.oliveira.booking.domain.dto.BookingSpec;
+import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
+import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
+import com.fernando.oliveira.booking.domain.spec.BookingSpec;
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
-import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
-import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
 import com.fernando.oliveira.booking.domain.request.SearchBookingRequest;
-import com.fernando.oliveira.booking.domain.response.DetailBookingResponse;
 import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.repository.BookingRepository;
 import org.apache.commons.lang.StringUtils;
@@ -40,9 +39,7 @@ public class BookingServiceImpl implements BookingService {
     private BookingMapper bookingMapper;
 
     @Override
-    public DetailBookingResponse createBooking(CreateBookingRequest request) {
-
-        Booking booking = bookingMapper.createRequestToEntity(request);
+    public Booking createBooking(Booking booking) {
 
         validateBooking(booking);
 
@@ -55,7 +52,7 @@ public class BookingServiceImpl implements BookingService {
                 .stream()
                 .forEach(e -> launchService.createLaunch(e, bookingSaved));
 
-        return bookingMapper.bookingToDetailBookingResponse(bookingSaved);
+        return bookingSaved;
     }
 
     private void defineAmountPending(Booking booking) {
@@ -158,9 +155,13 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Booking cancelBooking(Booking booking) {
-        return null;
+    public List<BookingTravelerResponse> findBookingsByTraveler(Long travelerId) {
+        List<Booking> bookings = bookingRepository.findByTraveler(travelerId);
+        return bookings.stream()
+                .map((e) -> bookingMapper.bookingToBookingTravelerResponse(e))
+                .collect(Collectors.toList());
     }
+
 
     public Booking defineBookingDetails(Booking booking) {
         defineTraveler(booking);

@@ -2,7 +2,9 @@ package com.fernando.oliveira.booking.controller;
 
 import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
+import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
 import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
+import com.fernando.oliveira.booking.service.BookingService;
 import com.fernando.oliveira.booking.service.TravelerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,6 +25,9 @@ public class TravelerController {
 
 	@Autowired
 	private TravelerService travelerService;
+
+	@Autowired
+	private BookingService bookingService;
 
 	@ApiOperation(value = "Realiza cadastro de viajante")
 	@ApiResponses(value = {
@@ -121,6 +126,20 @@ public class TravelerController {
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(travelerService.findActiveTravelers());
+
+	}
+
+	@ApiOperation(value = "Realiza busca de reservas por viajante")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Viajante retornado com sucesso"),
+			@ApiResponse(code = 403, message = "Você não possui permissão para acessar esse recurso"),
+			@ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
+	@GetMapping("/{id}/bookings")
+	public ResponseEntity<List<BookingTravelerResponse>> findBookingsByTravelerId(@PathVariable("id") Long id) {
+
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(bookingService.findBookingsByTraveler(id));
 
 	}
 }

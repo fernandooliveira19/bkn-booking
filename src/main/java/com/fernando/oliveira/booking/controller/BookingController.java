@@ -57,9 +57,10 @@ public class BookingController {
     @PostMapping
     public ResponseEntity<DetailBookingResponse> create(@RequestBody @Valid CreateBookingRequest request){
 
-      return ResponseEntity
-              .status(HttpStatus.CREATED)
-              .body(bookingService.createBooking(request));
+      Booking bookingToCreate = bookingMapper.createRequestToEntity(request);
+      Booking bookingCreated = bookingService.createBooking(bookingToCreate);
+      DetailBookingResponse response = bookingMapper.bookingToDetailBookingResponse(bookingCreated);
+      return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
     }
 
