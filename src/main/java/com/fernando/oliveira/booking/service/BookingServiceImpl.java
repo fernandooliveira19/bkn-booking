@@ -127,6 +127,10 @@ public class BookingServiceImpl implements BookingService {
 
             if (launch.getId() != null) {
                 launch.setBooking(bookingUpdated);
+
+                if(BookingStatusEnum.CANCELED.equals(bookingUpdated.getBookingStatus())){
+                    launch.setPaymentStatus(PaymentStatusEnum.CANCELED);
+                }
                 launchService.updateLaunch(launch);
             } else {
                 launchService.createLaunch(launch, bookingUpdated);
@@ -211,6 +215,7 @@ public class BookingServiceImpl implements BookingService {
         }
         if (BookingStatusEnum.CANCELED.equals(booking.getBookingStatus())) {
             validateCancelBooking(booking);
+
         }
 
         List<Booking> otherBookings = bookingRepository.findBookingsByDate(booking.getCheckIn(), booking.getCheckOut());
@@ -237,6 +242,8 @@ public class BookingServiceImpl implements BookingService {
         }
 
     }
+
+
 
     private void validateCancelBooking(Booking booking) {
         if (StringUtils.isBlank(booking.getObservation())) {
