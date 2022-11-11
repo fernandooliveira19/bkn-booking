@@ -1,9 +1,7 @@
 package com.fernando.oliveira.booking.domain.request;
 
 import io.swagger.annotations.ApiModel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 

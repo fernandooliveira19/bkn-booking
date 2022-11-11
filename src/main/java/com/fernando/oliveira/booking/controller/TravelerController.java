@@ -1,5 +1,7 @@
 package com.fernando.oliveira.booking.controller;
 
+import com.fernando.oliveira.booking.domain.entity.Traveler;
+import com.fernando.oliveira.booking.domain.mapper.TravelerMapper;
 import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
 import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
@@ -29,6 +31,9 @@ public class TravelerController {
 	@Autowired
 	private BookingService bookingService;
 
+	@Autowired
+	private TravelerMapper travelerMapper;
+
 	@ApiOperation(value = "Realiza cadastro de viajante")
 	@ApiResponses(value = {
 			@ApiResponse(code = 201, message = "Viajante cadastrado com sucesso"),
@@ -38,9 +43,16 @@ public class TravelerController {
 	@PostMapping
 	public ResponseEntity<TravelerDetailResponse> createTraveler(@RequestBody @Valid CreateTravelerRequest request) {
 
+		Traveler traveler = travelerMapper.requestToCreateTraveler(request);
+
+		Traveler travelerCreated = travelerService.createTraveler(traveler);
+
+		TravelerDetailResponse response = travelerMapper
+				.travelerToTravelerDetailResponse(travelerCreated);
+
 		return ResponseEntity
 				.status(HttpStatus.CREATED)
-				.body(travelerService.createTraveler(request));
+				.body(response);
 
 	}
 

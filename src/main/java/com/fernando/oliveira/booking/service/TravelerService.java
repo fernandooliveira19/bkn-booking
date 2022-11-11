@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface TravelerService {
 
-	TravelerDetailResponse createTraveler(CreateTravelerRequest request) ;
+	Traveler createTraveler(Traveler traveler) ;
 
 	List<Traveler> findTravelersByNameOrEmail(String name, String email);
 

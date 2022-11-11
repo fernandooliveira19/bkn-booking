@@ -31,16 +31,14 @@ public class TravelerServiceImpl implements TravelerService {
     private TravelerMapper travelerMapper;
 
 
-    public TravelerDetailResponse createTraveler(CreateTravelerRequest request) {
-
-        Traveler traveler = travelerMapper.requestToCreateTraveler(request);
+    public Traveler createTraveler(Traveler traveler) {
 
         formatFields(traveler);
         validate(traveler);
         traveler.setStatus(ACTIVE.getCode());
         traveler.setInsertDate(LocalDateTime.now());
 
-        return travelerMapper.travelerToTravelerDetailResponse(repository.save(traveler))   ;
+        return repository.save(traveler);
     }
 
     private void validate(Traveler traveler) {

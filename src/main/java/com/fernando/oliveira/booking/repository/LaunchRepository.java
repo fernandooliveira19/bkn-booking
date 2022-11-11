@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface LaunchRepository extends JpaRepository<Launch, Long> {
 
-    @Query(value = "select obj from launch obj where obj.paymentStatus in ('PENDING') order by obj.scheduleDate")
+    @Query(value = "select obj from launch obj where obj.paymentStatus in ('PENDING', 'TO_RECEIVE') order by obj.scheduleDate")
     List<Launch> findNextLaunches();
 }

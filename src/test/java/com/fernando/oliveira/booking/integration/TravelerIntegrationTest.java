@@ -68,7 +68,7 @@ public class TravelerIntegrationTest {
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         TravelerDetailResponse[] response = result.getBody();
-        assertThat(response.length).isEqualTo(4);
+        assertThat(response.length).isEqualTo(5);
 
         assertThat(response[0].getId()).isEqualTo(1L);
         assertThat(response[0].getName()).isEqualTo("Ana Maria");
@@ -96,24 +96,31 @@ public class TravelerIntegrationTest {
         assertThat(response[3].getEmail()).isEqualTo("david_souza@gmail.com");
         assertThat(response[3].getNumberPhone()).isEqualTo("98888-4444");
         assertThat(response[3].getPrefixPhone()).isEqualTo(44);
-        assertThat(response[3].getStatus()).isEqualTo(StatusEnum.INACTIVE.getCode());
+        assertThat(response[3].getStatus()).isEqualTo(StatusEnum.ACTIVE.getCode());
+
+        assertThat(response[4].getId()).isEqualTo(5L);
+        assertThat(response[4].getName()).isEqualTo("Elaine Matos");
+        assertThat(response[4].getEmail()).isEqualTo("elaine_matos@gmail.com");
+        assertThat(response[4].getNumberPhone()).isEqualTo("98888-5555");
+        assertThat(response[4].getPrefixPhone()).isEqualTo(55);
+        assertThat(response[4].getStatus()).isEqualTo(StatusEnum.INACTIVE.getCode());
 
     }
 
     @Test
     void shouldReturnTravelerDetailsWhenCreateTraveler() {
 
-        CreateTravelerRequest request = getCreateTraveler05Request();
-
-        ResponseEntity<TravelerDetailResponse> result = restTemplate
-                .postForEntity(
-                        TRAVELER_MAPPING,
-                        request,
-                        TravelerDetailResponse.class
-                );
-
-        assertThat(result.getBody().getId()).isEqualTo(5L);
-        assertThat(result.getBody().getStatus()).isEqualTo(StatusEnum.ACTIVE.getCode());
+//        CreateTravelerRequest request = getCreateTravelerRequest("Fernando Oliveira", "fernando.oliveira@teste.com", 66, "988886666",  "");
+//
+//        ResponseEntity<TravelerDetailResponse> result = restTemplate
+//                .postForEntity(
+//                        TRAVELER_MAPPING,
+//                        request,
+//                        TravelerDetailResponse.class
+//                );
+//
+//        assertThat(result.getBody().getId()).isEqualTo(6L);
+//        assertThat(result.getBody().getStatus()).isEqualTo(StatusEnum.ACTIVE.getCode());
 
     }
 
@@ -140,12 +147,12 @@ public class TravelerIntegrationTest {
 
         TravelerDetailResponse[] response = result.getBody();
 
-        assertThat(response.length).isEqualTo(3);
+        assertThat(response.length).isEqualTo(4);
 
     }
 
     @Test
-    void shouldInactiveTravalerById() {
+    void shouldInactiveTravelerById() {
         Long travelerId = 1L;
 
         restTemplate
@@ -158,7 +165,7 @@ public class TravelerIntegrationTest {
 
         TravelerDetailResponse[] response = result.getBody();
 
-        assertThat(response.length).isEqualTo(2);
+        assertThat(response.length).isEqualTo(3);
 
     }
 
@@ -218,11 +225,11 @@ public class TravelerIntegrationTest {
         assertThat(response.length).isEqualTo(1);
 
         assertThat(response[0].getBookingId()).isEqualTo(10L);
-        assertThat(response[0].getCheckIn()).isEqualTo("2021-10-01T10:00:00");
-        assertThat(response[0].getCheckOut()).isEqualTo("2021-10-30T18:30:00");
-        assertThat(response[0].getAmountTotal()).isEqualByComparingTo(BigDecimal.valueOf(1500.00));
+        assertThat(response[0].getCheckIn()).isEqualTo("2020-12-15T10:00:00");
+        assertThat(response[0].getCheckOut()).isEqualTo("2020-12-30T18:00:00");
+        assertThat(response[0].getAmountTotal()).isEqualByComparingTo(BigDecimal.valueOf(1000.00));
 
-        assertThat(response[0].getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
+        assertThat(response[0].getBookingStatus()).isEqualTo(BookingStatusEnum.FINISHED);
         assertThat(response[0].getContractType()).isEqualTo(ContractTypeEnum.DIRECT);
         assertThat(response[0].getObservation()).isEqualTo("Primeira reserva");
 
