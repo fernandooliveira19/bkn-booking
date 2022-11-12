@@ -70,6 +70,15 @@ public class LaunchServiceTest {
 
     @Test
     void shouldUpdateLaunchAndReturnLaunchUpdated(){
-        Launch launch = 
+        Launch launch = getBooking02Launch03();
+        launch.setPaymentStatus(PAID);
+        launch.setPaymentDate(LocalDate.now());
+
+        when(launchRepository.save(Mockito.any(Launch.class))).thenReturn(launch);
+
+        Launch result = launchService.updateLaunch(launch);
+
+        then(result.getId()).isNotNull();
+
     }
 }
