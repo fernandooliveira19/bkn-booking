@@ -16,5 +16,5 @@ public interface LaunchService {
 
     void deleteLaunch(Long id);
 
-    List<LaunchDetailResponse> findNextLaunches();
+    List<Launch> findNextLaunches();
 }

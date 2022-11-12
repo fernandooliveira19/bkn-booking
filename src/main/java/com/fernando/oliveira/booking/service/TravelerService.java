@@ -17,17 +17,17 @@ public interface TravelerService {
 
 	Traveler findById(Long id);
 
-	TravelerDetailResponse getTravelerDetail(Long id) ;
+	Traveler getTravelerDetail(Long id) ;
 
-	List<TravelerDetailResponse> findAll();
+	List<Traveler> findAll();
 
-	TravelerDetailResponse updateTraveler(Long id, UpdateTravelerRequest request);
+	Traveler updateTraveler(Long id, UpdateTravelerRequest request);
 
-	List<TravelerDetailResponse> findByNameContainingOrderByNameAsc(String name);
+	List<Traveler> findByNameContainingOrderByNameAsc(String name);
 
 	void inactivateTraveler(Long id);
 
-	List<TravelerDetailResponse> findActiveTravelers();
+	List<Traveler> findActiveTravelers();
 
 
 }

@@ -20,9 +20,6 @@ public class LaunchServiceImpl implements LaunchService{
     @Autowired
     private LaunchRepository launchRepository;
 
-    @Autowired
-    private LaunchMapper launchMapper;
-
     @Override
     public Launch createLaunch(Launch launch, Booking booking) {
         launch.setBooking(booking);
@@ -49,12 +46,9 @@ public class LaunchServiceImpl implements LaunchService{
     }
 
     @Override
-    public List<LaunchDetailResponse> findNextLaunches() {
+    public List<Launch> findNextLaunches() {
 
-        return launchRepository.findNextLaunches()
-                .stream()
-                .map(e -> launchMapper.launchToDetailLaunchResponse(e))
-                .collect(Collectors.toList());
+        return launchRepository.findNextLaunches();
 
     }
 

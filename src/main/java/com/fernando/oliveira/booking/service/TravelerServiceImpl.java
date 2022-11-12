@@ -2,11 +2,7 @@ package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.StatusEnum;
-import com.fernando.oliveira.booking.domain.mapper.TravelerMapper;
-import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
-import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
-import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
 import com.fernando.oliveira.booking.exception.TravelerException;
 import com.fernando.oliveira.booking.repository.TravelerRepository;
 import org.apache.commons.lang.StringUtils;
@@ -15,10 +11,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.fernando.oliveira.booking.domain.enums.StatusEnum.ACTIVE;
-import static com.fernando.oliveira.booking.utils.FormatterUtils.*;
+import static com.fernando.oliveira.booking.utils.FormatterUtils.formatCpf;
+import static com.fernando.oliveira.booking.utils.FormatterUtils.formatPhoneNumber;
 
 @Service
 public class TravelerServiceImpl implements TravelerService {
@@ -26,9 +22,6 @@ public class TravelerServiceImpl implements TravelerService {
 
     @Autowired
     private TravelerRepository repository;
-
-    @Autowired
-    private TravelerMapper travelerMapper;
 
 
     public Traveler createTraveler(Traveler traveler) {
@@ -79,23 +72,19 @@ public class TravelerServiceImpl implements TravelerService {
     }
 
     @Override
-    public TravelerDetailResponse getTravelerDetail(Long id) {
-        return travelerMapper.travelerToTravelerDetailResponse(this.findById(id));
+    public Traveler getTravelerDetail(Long id) {
+        return this.findById(id);
     }
 
     @Override
-    public List<TravelerDetailResponse> findAll() {
+    public List<Traveler> findAll() {
 
-        return repository
-                .findAll()
-                .stream()
-                .map(e -> travelerMapper.travelerToTravelerDetailResponse(e))
-                .collect(Collectors.toList());
+        return repository.findAll();
 
     }
 
     @Override
-    public TravelerDetailResponse updateTraveler(Long id, UpdateTravelerRequest request) {
+    public Traveler updateTraveler(Long id, UpdateTravelerRequest request) {
         Traveler travelerToUpdate = findById(id);
         travelerToUpdate.setName(request.getName());
         travelerToUpdate.setEmail(request.getEmail());
@@ -106,17 +95,13 @@ public class TravelerServiceImpl implements TravelerService {
         formatFields(travelerToUpdate);
         validate(travelerToUpdate);
         travelerToUpdate.setLastUpdateDate(LocalDateTime.now());
-        return travelerMapper
-                .travelerToTravelerDetailResponse(repository.save(travelerToUpdate));
+        return repository.save(travelerToUpdate);
     }
 
     @Override
-    public List<TravelerDetailResponse> findByNameContainingOrderByNameAsc(String name) {
+    public List<Traveler> findByNameContainingOrderByNameAsc(String name) {
 
-        return repository.findByNameContainingIgnoreCaseOrderByNameAsc(name)
-                .stream()
-                .map(traveler -> travelerMapper.travelerToTravelerDetailResponse(traveler))
-                .collect(Collectors.toList());
+        return repository.findByNameContainingIgnoreCaseOrderByNameAsc(name);
 
     }
 
@@ -128,12 +113,9 @@ public class TravelerServiceImpl implements TravelerService {
     }
 
     @Override
-    public List<TravelerDetailResponse> findActiveTravelers() {
-        return repository
-                .findActiveTravelers()
-                .stream()
-                .map(traveler -> travelerMapper.travelerToTravelerDetailResponse(traveler))
-                .collect(Collectors.toList());
+    public List<Traveler> findActiveTravelers() {
+        return repository.findActiveTravelers();
+
     }
 
     private void formatFields(Traveler traveler) {

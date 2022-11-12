@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Api(tags="Travelers")
 @RestController
@@ -64,9 +65,11 @@ public class TravelerController {
 	@GetMapping("/{id}")
 	public ResponseEntity<TravelerDetailResponse> findById(@PathVariable("id") Long id) {
 
+		Traveler traveler = travelerService.getTravelerDetail(id);
+		TravelerDetailResponse response = travelerMapper.travelerToTravelerDetailResponse(traveler);
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body(travelerService.getTravelerDetail(id));
+				.body(response);
 
 	}
 
@@ -77,10 +80,14 @@ public class TravelerController {
 			@ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
 	@GetMapping
 	public ResponseEntity<List<TravelerDetailResponse>> findAll() {
-
+		List<Traveler> travelerList = travelerService.findAll();
+		List<TravelerDetailResponse> responses = travelerList
+				.stream()
+				.map(e -> travelerMapper.travelerToTravelerDetailResponse(e))
+				.collect(Collectors.toList());
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body(travelerService.findAll());
+				.body(responses);
 
 	}
 
@@ -94,9 +101,11 @@ public class TravelerController {
 	@PutMapping
 	public ResponseEntity<TravelerDetailResponse> update(@Valid  @RequestBody UpdateTravelerRequest request) {
 
+		Traveler traveler = travelerService.updateTraveler(request.getId(), request);
+		TravelerDetailResponse response = travelerMapper.travelerToTravelerDetailResponse(traveler);
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body(travelerService.updateTraveler(request.getId(), request));
+				.body(response);
 	}
 
 	@ApiOperation(value = "Realiza pesquisa de viajantes pelo nome")
@@ -108,9 +117,15 @@ public class TravelerController {
 	@GetMapping("/find")
 	public ResponseEntity<List<TravelerDetailResponse>> findByName(@RequestParam String name) {
 
+		List<Traveler> travelerList = travelerService.findByNameContainingOrderByNameAsc(name);
+		List<TravelerDetailResponse> responses = travelerList
+				.stream()
+				.map(e -> travelerMapper.travelerToTravelerDetailResponse(e))
+				.collect(Collectors.toList());
+
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body(travelerService.findByNameContainingOrderByNameAsc(name));
+				.body(responses);
 	}
 
 	@ApiOperation(value = "Realiza inativação de viajante pelo identificador")
@@ -135,9 +150,15 @@ public class TravelerController {
 	@GetMapping("/actives/")
 	public ResponseEntity<List<TravelerDetailResponse>> findAllActive() {
 
+		List<Traveler> travelerList = travelerService.findActiveTravelers();
+		List<TravelerDetailResponse> responses = travelerList
+				.stream()
+				.map(e -> travelerMapper.travelerToTravelerDetailResponse(e))
+				.collect(Collectors.toList());
+
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body(travelerService.findActiveTravelers());
+				.body(responses);
 
 	}
 
