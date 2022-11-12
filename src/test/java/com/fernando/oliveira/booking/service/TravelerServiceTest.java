@@ -123,14 +123,13 @@ public class TravelerServiceTest {
 
 		Long id = 1L;
 		Traveler travelerToUpdate = getTravelerToSaved01();
-		UpdateTravelerRequest request = getUpdateTraveler01Request();
 
 		Traveler travelerUpdated = getTravelerSaved01();
 
 		when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(travelerToUpdate));
 		when(repository.save(Mockito.any(Traveler.class))).thenReturn(travelerUpdated);
 
-		Traveler result = travelerService.updateTraveler(id,request);
+		Traveler result = travelerService.updateTraveler(id,travelerToUpdate);
 
 		assertNotNull(result.getId());
 		assertEquals(travelerUpdated.getId(),result.getId());
@@ -185,10 +184,8 @@ public class TravelerServiceTest {
 	@Test
 	public void shouldReturnExceptionWhenUpdateTravelerAlreadyExistsWithSameName() {
 
-		UpdateTravelerRequest request = getUpdateTraveler01Request();
-		request.setName("Maria da Silva");
 		Traveler travelerToUpdate = getTravelerSaved01();
-		travelerToUpdate.setName("Maria da Silva");
+		travelerToUpdate.setName("Carlos Garcia");
 
 		Traveler travelerSaved = getTravelerSaved03();
 		when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(travelerToUpdate));
@@ -197,7 +194,7 @@ public class TravelerServiceTest {
 				.thenReturn(Arrays.asList(travelerSaved));
 
 		Exception exception = assertThrows(TravelerException.class, () ->{
-			travelerService.updateTraveler(request.getId(), request);
+			travelerService.updateTraveler(1L, travelerToUpdate);
 		});
 
 		assertEquals(exception.getMessage(), "Já existe outro viajante cadastrado com mesmo nome ou email" );

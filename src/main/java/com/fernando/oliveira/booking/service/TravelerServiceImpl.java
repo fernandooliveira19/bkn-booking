@@ -84,14 +84,14 @@ public class TravelerServiceImpl implements TravelerService {
     }
 
     @Override
-    public Traveler updateTraveler(Long id, UpdateTravelerRequest request) {
+    public Traveler updateTraveler(Long id, Traveler traveler) {
         Traveler travelerToUpdate = findById(id);
-        travelerToUpdate.setName(request.getName());
-        travelerToUpdate.setEmail(request.getEmail());
-        travelerToUpdate.setDocument(request.getDocument());
-        travelerToUpdate.setStatus(request.getStatus());
-        travelerToUpdate.setPrefixPhone(request.getPrefixPhone());
-        travelerToUpdate.setNumberPhone(request.getNumberPhone());
+        travelerToUpdate.setName(traveler.getName());
+        travelerToUpdate.setEmail(traveler.getEmail());
+        travelerToUpdate.setDocument(traveler.getDocument());
+        travelerToUpdate.setStatus(traveler.getStatus());
+        travelerToUpdate.setPrefixPhone(traveler.getPrefixPhone());
+        travelerToUpdate.setNumberPhone(traveler.getNumberPhone());
         formatFields(travelerToUpdate);
         validate(travelerToUpdate);
         travelerToUpdate.setLastUpdateDate(LocalDateTime.now());

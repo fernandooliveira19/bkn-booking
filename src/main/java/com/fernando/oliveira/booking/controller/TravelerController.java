@@ -101,8 +101,9 @@ public class TravelerController {
 	@PutMapping
 	public ResponseEntity<TravelerDetailResponse> update(@Valid  @RequestBody UpdateTravelerRequest request) {
 
-		Traveler traveler = travelerService.updateTraveler(request.getId(), request);
-		TravelerDetailResponse response = travelerMapper.travelerToTravelerDetailResponse(traveler);
+		Traveler travelerToUpdate = travelerMapper.requestToUpdateTraveler(request);
+		Traveler travelerUpdated = travelerService.updateTraveler(request.getId(), travelerToUpdate);
+		TravelerDetailResponse response = travelerMapper.travelerToTravelerDetailResponse(travelerUpdated);
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(response);
