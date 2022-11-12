@@ -31,7 +31,7 @@ import java.util.Optional;
 
 import static com.fernando.oliveira.booking.mother.BookingMother.*;
 import static com.fernando.oliveira.booking.mother.LaunchMother.getLaunchToSave;
-import static com.fernando.oliveira.booking.mother.LaunchMother.getLaunchsFromFirstBooking;
+import static com.fernando.oliveira.booking.mother.LaunchMother.getLaunchesFromFirstBooking;
 import static org.assertj.core.api.Assertions.fail;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.ArgumentMatchers.any;
@@ -67,10 +67,10 @@ public class BookingServiceUnitTest {
     void givenValidRequestWhenCreateBookingThenCreateBookingReservedWithPending(){
 
         Booking bookingToSave = getFirstBooking();
-        bookingToSave.setLaunchs(getLaunchsFromFirstBooking());
+        bookingToSave.setLaunchs(getLaunchesFromFirstBooking());
 
-        Booking bookingSaved = getFirstBookingSaved();
-        bookingSaved.setLaunchs(LaunchMother.getLaunchsFromFirstBooking());
+        Booking bookingSaved = getBooking01Saved();
+        bookingSaved.setLaunchs(LaunchMother.getLaunchesFromFirstBooking());
         bookingSaved.setBookingStatus(BookingStatusEnum.RESERVED);
         bookingSaved.setPaymentStatus(PaymentStatusEnum.PENDING);
 
@@ -99,7 +99,7 @@ public class BookingServiceUnitTest {
         Launch thirdLaunch = getLaunchToSave(BigDecimal.valueOf(200.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PAID, LocalDate.of(2021, 12,10), LocalDate.of(2021,10,10) );
 
         Booking bookingToSave = getBookingToSave(checkIn, checkOut, totalAmount,travelerId, adults, children, Arrays.asList(firstLaunch, secondLaunch, thirdLaunch), TravelerMother.getTravelerSaved01());
-        Booking bookingSaved = getFirstBookingSaved();
+        Booking bookingSaved = getBooking01Saved();
         bookingSaved.setBookingStatus(BookingStatusEnum.RESERVED);
         bookingSaved.setPaymentStatus(PaymentStatusEnum.PAID);
         bookingSaved.setLaunchs(Arrays.asList(firstLaunch, secondLaunch, thirdLaunch));
@@ -176,9 +176,9 @@ public class BookingServiceUnitTest {
         Integer adults = 2;
         Integer children = 3;
 
-        Launch firstLaunch = LaunchMother.getFirstLaunchFromFirstBooking();
-        Launch secondLaunch = LaunchMother.getSecondLaunchFromFirstBooking();
-        Launch thirdLaunch = LaunchMother.getThirdLaunchFromFirstBooking();
+        Launch firstLaunch = LaunchMother.getBooking01Launch01();
+        Launch secondLaunch = LaunchMother.getBooking01Launch02();
+        Launch thirdLaunch = LaunchMother.getBooking01Launch03();
         Long bookingId = 1L;
 
         Booking booking = BookingMother.getBookingToSave(
@@ -188,7 +188,7 @@ public class BookingServiceUnitTest {
         firstLaunch.setBooking(bookingToUpdate);
         bookingToUpdate.setLaunchs(Arrays.asList(firstLaunch, secondLaunch, thirdLaunch));
 
-        Booking bookingUpdated = getFirstBookingSaved();
+        Booking bookingUpdated = getBooking01Saved();
         firstLaunch.setId(10L);
         secondLaunch.setId(20L);
         thirdLaunch.setId(30L);
@@ -268,7 +268,7 @@ public class BookingServiceUnitTest {
 
     @Test
     void givenWhenCallNextBookingsThenReturnNextBookings(){
-        Booking firstBooking = getFirstBookingSaved();
+        Booking firstBooking = getBooking01Saved();
         Booking secondBooking = getSecondBookingSaved();
 
         when(bookingRepository.findNextBookings()).thenReturn(Arrays.asList(firstBooking, secondBooking));

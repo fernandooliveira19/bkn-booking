@@ -2,8 +2,6 @@ package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
-import com.fernando.oliveira.booking.domain.mapper.LaunchMapper;
-import com.fernando.oliveira.booking.domain.response.LaunchDetailResponse;
 import com.fernando.oliveira.booking.repository.LaunchRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,8 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum.PAID;
-import static com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum.PENDING;
+import static com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum.*;
 import static com.fernando.oliveira.booking.mother.LaunchMother.*;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.Mockito.when;
@@ -37,49 +34,42 @@ public class LaunchServiceTest {
     @Test
     void shouldReturnLaunchById(){
 
-        Launch launch = getFirstLaunchFromFirstBooking();
+        Launch launch = getBooking01Launch01();
         when(launchRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(launch));
-        Long launchId = 10L;
+        Long launchId = 100L;
         Launch result = launchService.findById(launchId);
 
         then(result.getId()).isEqualTo( launchId);
-        then(result.getAmount()).isEqualTo( BigDecimal.valueOf(1000.0));
-        then(result.getScheduleDate()).isEqualTo( LocalDate.of(2021, Month.OCTOBER, 10));
+        then(result.getAmount()).isEqualTo( BigDecimal.valueOf(500.0));
+        then(result.getScheduleDate()).isEqualTo( LocalDate.of(2020, Month.DECEMBER, 1));
         then(result.getPaymentStatus()).isEqualTo( PAID);
-        then(result.getPaymentDate()).isEqualTo( LocalDate.of(2021, Month.OCTOBER, 10));
+        then(result.getPaymentDate()).isEqualTo( LocalDate.of(2020, Month.DECEMBER, 2));
         then(result.getPaymentType()).isEqualTo( PaymentTypeEnum.PIX);
 
     }
     @Test
-    void shouldReturnNextPendingLaunches(){
+    void shouldReturnNextLaunches(){
 
-////       2021-10-10
-//        Launch launch01 = getSecondLaunchFromFirstBooking();
-//        launch01.setId(10L);
-//
-////      2021, 10, 15
-//        Launch launch02 = getThirdLaunchFromFirstBooking();
-//        launch02.setId(20L);
-//
-////      2021-02-27
-//        Launch launch03 = getSecondLaunchFromSecondBooking();
-//        launch03.setId(30L);
-//
-//        when(launchRepository.findNextLaunches()).thenReturn(Arrays.asList(launch01, launch02, launch03));
-//        when(launchMapper.launchToDetailLaunchResponse(launch01)).thenReturn(getLaunchDetailResponse(launch01));
-//        when(launchMapper.launchToDetailLaunchResponse(launch02)).thenReturn(getLaunchDetailResponse(launch02));
-//        when(launchMapper.launchToDetailLaunchResponse(launch03)).thenReturn(getLaunchDetailResponse(launch03));
-//
-//        List<LaunchDetailResponse> result = launchService.findNextLaunches();
-//
-//        then(result.get(0).getPaymentStatus()).isEqualTo(PENDING);
-//        then(result.get(0).getId()).isEqualTo(10L);
-//
-//        then(result.get(1).getPaymentStatus()).isEqualTo(PENDING);
-//        then(result.get(1).getId()).isEqualTo(20L);
-//
-//        then(result.get(2).getPaymentStatus()).isEqualTo(PENDING);
-//        then(result.get(2).getId()).isEqualTo(30L);
+        when(launchRepository.findNextLaunches()).thenReturn(Arrays.asList(getBooking02Launch03(), getBooking03Launch01(), getBooking03Launch02(), getBooking04Launch01()));
 
+        List<Launch> result = launchService.findNextLaunches();
+        then(result.size()).isEqualTo(4);
+        then(result.get(0).getPaymentStatus()).isEqualTo(PENDING);
+        then(result.get(0).getId()).isEqualTo(105L);
+
+        then(result.get(1).getPaymentStatus()).isEqualTo(PENDING);
+        then(result.get(1).getId()).isEqualTo(106L);
+
+        then(result.get(2).getPaymentStatus()).isEqualTo(PENDING);
+        then(result.get(2).getId()).isEqualTo(107L);
+
+        then(result.get(3).getPaymentStatus()).isEqualTo(TO_RECEIVE);
+        then(result.get(3).getId()).isEqualTo(108L);
+
+    }
+
+    @Test
+    void shouldUpdateLaunchAndReturnLaunchUpdated(){
+        Launch launch = 
     }
 }

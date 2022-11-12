@@ -72,10 +72,10 @@ public class BookingMother {
                 .traveler(getTraveler())
                 .build();
     }
-    public static Booking getFirstBookingSaved(){
-        Launch launch01 = LaunchMother.getFirstLaunchFromFirstBooking();
-        Launch launch02 = LaunchMother.getSecondLaunchFromFirstBooking();
-        Launch launch03 = LaunchMother.getThirdLaunchFromFirstBooking();
+    public static Booking getBooking01Saved(){
+        Launch launch01 = LaunchMother.getBooking01Launch01();
+        Launch launch02 = LaunchMother.getBooking01Launch02();
+        Launch launch03 = LaunchMother.getBooking01Launch03();
 
         return Booking.builder()
                 .id(BOOKING_ID_01)
@@ -109,8 +109,8 @@ public class BookingMother {
 
     public static Booking getSecondBookingSaved(){
 
-        Launch launch01 = LaunchMother.getFirstLaunchFromSecondBooking();
-        Launch launch02 = LaunchMother.getSecondLaunchFromSecondBooking();
+        Launch launch01 = LaunchMother.getBooking02Launch01();
+        Launch launch02 = LaunchMother.getBooking02Launch02();
 
         return Booking.builder()
                 .id(BOOKING_ID_02)
@@ -241,7 +241,7 @@ public class BookingMother {
     }
 
     public static List<Booking> getNextBookings(){
-        return Arrays.asList(getFirstBookingSaved(), getSecondBookingSaved());
+        return Arrays.asList(getBooking01Saved(), getSecondBookingSaved());
     }
 
     public static BookingTravelerResponse getBookingTravelerResponse(Booking booking) {

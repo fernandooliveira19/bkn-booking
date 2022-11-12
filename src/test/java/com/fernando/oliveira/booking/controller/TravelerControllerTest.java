@@ -3,7 +3,6 @@ package com.fernando.oliveira.booking.controller;
 import com.fernando.oliveira.booking.domain.builder.ExceptionResponseBuilder;
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Traveler;
-import com.fernando.oliveira.booking.domain.enums.StatusEnum;
 import com.fernando.oliveira.booking.domain.mapper.TravelerMapper;
 import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
 import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
@@ -15,8 +14,6 @@ import com.fernando.oliveira.booking.service.TravelerServiceImpl;
 import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -122,7 +119,7 @@ public class TravelerControllerTest {
 
 	@Test
 	public void shouldReturnAllBookingByTraveler() throws Exception {
-		Booking booking = BookingMother.getFirstBookingSaved();
+		Booking booking = BookingMother.getBooking01Saved();
 		List<BookingTravelerResponse> responseList = Arrays.asList(getBookingTravelerResponse(booking));
 
 		when(bookingService.findBookingsByTraveler(anyLong())).thenReturn(responseList);

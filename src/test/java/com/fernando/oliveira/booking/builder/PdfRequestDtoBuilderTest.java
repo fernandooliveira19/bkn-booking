@@ -29,11 +29,11 @@ public class PdfRequestDtoBuilderTest {
 
     @Test
     void givenBookingPendingWhenBuilderRequestThenReturnContractName(){
-        Booking booking = BookingMother.getFirstBookingSaved();
+        Booking booking = BookingMother.getBooking01Saved();
         booking.setLaunchs(Arrays.asList(
-                LaunchMother.getFirstLaunchFromFirstBooking(),
-                LaunchMother.getSecondLaunchFromFirstBooking(),
-                LaunchMother.getThirdLaunchFromFirstBooking()));
+                LaunchMother.getBooking01Launch01(),
+                LaunchMother.getBooking01Launch02(),
+                LaunchMother.getBooking01Launch03()));
 
         PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
@@ -43,11 +43,11 @@ public class PdfRequestDtoBuilderTest {
 
     @Test
     void givenBookingPendingWhenBuilderRequestThenReturnTravelerDetails(){
-        Booking booking = BookingMother.getFirstBookingSaved();
+        Booking booking = BookingMother.getBooking01Saved();
         booking.setLaunchs(Arrays.asList(
-                LaunchMother.getFirstLaunchFromFirstBooking(),
-                LaunchMother.getSecondLaunchFromFirstBooking(),
-                LaunchMother.getThirdLaunchFromFirstBooking()));
+                LaunchMother.getBooking01Launch01(),
+                LaunchMother.getBooking01Launch02(),
+                LaunchMother.getBooking01Launch03()));
 
         PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
 
@@ -60,11 +60,11 @@ public class PdfRequestDtoBuilderTest {
 
     @Test
     void givenBookingPendingWhenBuilderRequestThenReturnRentDetails(){
-        Booking booking = BookingMother.getFirstBookingSaved();
+        Booking booking = BookingMother.getBooking01Saved();
         booking.setLaunchs(Arrays.asList(
-                LaunchMother.getFirstLaunchFromFirstBooking(),
-                LaunchMother.getSecondLaunchFromFirstBooking(),
-                LaunchMother.getThirdLaunchFromFirstBooking()));
+                LaunchMother.getBooking01Launch01(),
+                LaunchMother.getBooking01Launch02(),
+                LaunchMother.getBooking01Launch03()));
 
         PdfRequestDto result = requestContractDtoBuilder.getRequestContractDto(booking);
         LocalDateTime.of(2021, Month.OCTOBER, 15,12,30,0);
@@ -74,7 +74,7 @@ public class PdfRequestDtoBuilderTest {
 
     @Test
     void givenBookingPaidWhenBuilderRequestThenReturnPaymentDetails(){
-        Booking booking = BookingMother.getFirstBookingSaved();
+        Booking booking = BookingMother.getBooking01Saved();
         booking.setPaymentStatus(PaymentStatusEnum.PAID);
         booking.setAmountPaid(BigDecimal.valueOf(1500.0));
         booking.setAmountPending(BigDecimal.valueOf(0.0));
@@ -106,7 +106,7 @@ public class PdfRequestDtoBuilderTest {
 
     @Test
     void givenBookingPendingWhenBuilderRequestThenReturnPaymentDetails(){
-        Booking booking = BookingMother.getFirstBookingSaved();
+        Booking booking = BookingMother.getBooking01Saved();
         booking.setPaymentStatus(PaymentStatusEnum.PENDING);
         booking.setAmountPaid(BigDecimal.valueOf(1000.0));
         booking.setAmountPending(BigDecimal.valueOf(500.0));
@@ -136,7 +136,7 @@ public class PdfRequestDtoBuilderTest {
 
     @Test
     void givenBookingPaidFromSiteWhenBuilderRequestThenReturnPaymentDetails(){
-        Booking booking = BookingMother.getFirstBookingSaved();
+        Booking booking = BookingMother.getBooking01Saved();
         booking.setPaymentStatus(PaymentStatusEnum.PAID);
         booking.setAmountPaid(BigDecimal.valueOf(1500.0));
         booking.setAmountPending(BigDecimal.valueOf(0.0));
