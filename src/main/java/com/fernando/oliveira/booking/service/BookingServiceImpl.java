@@ -242,7 +242,7 @@ public class BookingServiceImpl implements BookingService {
             throw new BookingException("Reserva deve possuir lançamentos");
         }
 
-        if (!booking.getAmountTotal().equals(getTotalAmountByLaunchs(booking.getLaunches()))) {
+        if (!booking.getAmountTotal().equals(getTotalAmountByLaunches(booking.getLaunches()))) {
             throw new BookingException("Soma dos lançamentos estão diferentes do valor total da reserva");
         }
 
@@ -275,9 +275,10 @@ public class BookingServiceImpl implements BookingService {
         });
     }
 
-    public BigDecimal getTotalAmountByLaunchs(List<Launch> launchs) {
+    public BigDecimal getTotalAmountByLaunches(List<Launch> launches) {
 
-        return launchs.stream()
+        return launches.stream()
+
                 .map(Launch::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 

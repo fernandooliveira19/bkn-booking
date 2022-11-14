@@ -392,7 +392,7 @@ public class BookingMother {
                 .build();
     }
 
-    public static Booking getBookingSaved(LocalDateTime checkIn, LocalDateTime checkOut, BigDecimal amountTotal, Long travelerId, Integer adults, Integer children, List<Launch> launchs, BookingStatusEnum bookingStatus, PaymentStatusEnum paymentStatus) {
+    public static Booking getBookingSaved(LocalDateTime checkIn, LocalDateTime checkOut, BigDecimal amountTotal, Long travelerId, Integer adults, Integer children, List<Launch> launches, BookingStatusEnum bookingStatus, PaymentStatusEnum paymentStatus) {
         return Booking.builder()
                 .id(1L)
                 .checkIn(checkIn)
@@ -400,18 +400,12 @@ public class BookingMother {
                 .amountTotal(amountTotal)
                 .adults(adults)
                 .children(children)
-                .launches(launchs)
+                .launches(launches)
                 .bookingStatus(bookingStatus)
                 .paymentStatus(paymentStatus)
                 .insertDate(LocalDateTime.of(2021, Month.AUGUST,22, 9, 39))
                 .build();
 
-    }
-
-    public static Traveler getTraveler(){
-        return Traveler.builder()
-                .id(TravelerMother.TRAVELER_01_ID)
-                .build();
     }
 
     public static CreateBookingRequest getCreateBookingRequest() {
@@ -450,7 +444,7 @@ public class BookingMother {
         request.setAmountTotal(amountTotal);
         request.setTravelerId(travelerId);
         request.setObservation(observation);
-        request.setLaunchs(launches);
+        request.setLaunches(launches);
 
         return request;
     }

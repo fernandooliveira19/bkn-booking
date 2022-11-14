@@ -5,7 +5,7 @@ public enum PaymentStatusEnum {
     CANCELED("Cancelado"),
     PAID("Pago"),
     PENDING("Pendente"),
-    TO_RECEIVE("A receber");
+    TO_RECEIVE("A receber pelo site");
 
     private String description;
 
