@@ -10,6 +10,7 @@ import com.fernando.oliveira.booking.domain.response.ExceptionResponse;
 import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -68,7 +69,7 @@ public class TravelerIntegrationTest {
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         TravelerDetailResponse[] response = result.getBody();
-        assertThat(response.length).isEqualTo(5);
+        assertThat(response.length).isEqualTo(6);
 
         assertThat(response[0].getId()).isEqualTo(1L);
         assertThat(response[0].getName()).isEqualTo("Ana Maria");
@@ -105,12 +106,19 @@ public class TravelerIntegrationTest {
         assertThat(response[4].getPrefixPhone()).isEqualTo(55);
         assertThat(response[4].getStatus()).isEqualTo(StatusEnum.INACTIVE.getCode());
 
+        assertThat(response[5].getId()).isEqualTo(6L);
+        assertThat(response[5].getName()).isEqualTo("Fernando Oliveira");
+        assertThat(response[5].getEmail()).isEqualTo("fernando_oliveira@gmail.com");
+        assertThat(response[5].getNumberPhone()).isEqualTo("98888-6666");
+        assertThat(response[5].getPrefixPhone()).isEqualTo(66);
+        assertThat(response[5].getStatus()).isEqualTo(StatusEnum.ACTIVE.getCode());
+
     }
 
     @Test
     void shouldReturnTravelerDetailsWhenCreateTraveler() {
 
-//        CreateTravelerRequest request = getCreateTravelerRequest("Fernando Oliveira", "fernando.oliveira@teste.com", 66, "988886666",  "");
+//        CreateTravelerRequest request = getNewTravelerRequest("Gustavo Andrade", "gustavo_andrade@gmail.com", 77, "988887777",  "");
 //
 //        ResponseEntity<TravelerDetailResponse> result = restTemplate
 //                .postForEntity(
@@ -119,8 +127,9 @@ public class TravelerIntegrationTest {
 //                        TravelerDetailResponse.class
 //                );
 //
-//        assertThat(result.getBody().getId()).isEqualTo(6L);
+//        assertThat(result.getBody().getId()).isEqualTo(7L);
 //        assertThat(result.getBody().getStatus()).isEqualTo(StatusEnum.ACTIVE.getCode());
+//
 
     }
 
@@ -147,7 +156,7 @@ public class TravelerIntegrationTest {
 
         TravelerDetailResponse[] response = result.getBody();
 
-        assertThat(response.length).isEqualTo(4);
+        assertThat(response.length).isEqualTo(5);
 
     }
 
@@ -165,7 +174,7 @@ public class TravelerIntegrationTest {
 
         TravelerDetailResponse[] response = result.getBody();
 
-        assertThat(response.length).isEqualTo(3);
+        assertThat(response.length).isEqualTo(4);
 
     }
 

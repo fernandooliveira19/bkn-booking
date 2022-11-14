@@ -92,6 +92,20 @@ public class LaunchMother {
     private static final PaymentStatusEnum BOOKING_05_LAUNCH_01_PAYMENT_STATUS = PaymentStatusEnum.CANCELED;
     private static final LocalDate BOOKING_05_LAUNCH_01_PAYMENT_DATE = null;
 
+    private static final Long BOOKING_06_LAUNCH_01_ID= 110L;
+    private static final BigDecimal BOOKING_06_LAUNCH_01_AMOUNT = BigDecimal.valueOf(2000.0);
+    private static final LocalDate BOOKING_06_LAUNCH_01_SCHEDULE_DATE = LocalDate.of(2021, Month.MARCH, 1);
+    private static final PaymentTypeEnum BOOKING_06_LAUNCH_01_PAYMENT_TYPE = PaymentTypeEnum.PIX;
+    private static final PaymentStatusEnum BOOKING_06_LAUNCH_01_PAYMENT_STATUS = PaymentStatusEnum.PAID;
+    private static final LocalDate BOOKING_06_LAUNCH_01_PAYMENT_DATE = LocalDate.of(2021, Month.MARCH, 2);
+
+    private static final Long BOOKING_06_LAUNCH_02_ID= 111L;
+    private static final BigDecimal BOOKING_06_LAUNCH_02_AMOUNT = BigDecimal.valueOf(2000.0);
+    private static final LocalDate BOOKING_06_LAUNCH_02_SCHEDULE_DATE = LocalDate.of(2021, Month.FEBRUARY, 5);
+    private static final PaymentTypeEnum BOOKING_06_LAUNCH_02_PAYMENT_TYPE = PaymentTypeEnum.PIX;
+    private static final PaymentStatusEnum BOOKING_06_LAUNCH_02_PAYMENT_STATUS = PaymentStatusEnum.PAID;
+    private static final LocalDate BOOKING_06_LAUNCH_02_PAYMENT_DATE = LocalDate.of(2021, Month.MARCH, 6);
+
 
     public static Launch getLaunchToSave(BigDecimal amount,
                                               PaymentTypeEnum paymentType,
@@ -228,26 +242,49 @@ public class LaunchMother {
 
     }
 
+    public static Launch getBooking06Launch01(){
+        return Launch.builder()
+                .id(BOOKING_06_LAUNCH_01_ID)
+                .amount(BOOKING_06_LAUNCH_01_AMOUNT)
+                .scheduleDate(BOOKING_06_LAUNCH_01_SCHEDULE_DATE)
+                .paymentStatus(BOOKING_06_LAUNCH_01_PAYMENT_STATUS)
+                .paymentDate(BOOKING_06_LAUNCH_01_PAYMENT_DATE)
+                .paymentType(BOOKING_06_LAUNCH_01_PAYMENT_TYPE)
+                .build();
+
+    }
+    public static Launch getBooking06Launch02(){
+        return Launch.builder()
+                .id(BOOKING_06_LAUNCH_02_ID)
+                .amount(BOOKING_06_LAUNCH_02_AMOUNT)
+                .scheduleDate(BOOKING_06_LAUNCH_02_SCHEDULE_DATE)
+                .paymentStatus(BOOKING_06_LAUNCH_02_PAYMENT_STATUS)
+                .paymentDate(BOOKING_06_LAUNCH_02_PAYMENT_DATE)
+                .paymentType(BOOKING_06_LAUNCH_02_PAYMENT_TYPE)
+                .build();
+
+    }
+
 
     public static List<Launch> getLaunchesFromFirstBooking(){
         return Arrays.asList(getBooking01Launch01(), getBooking01Launch02(), getBooking01Launch03());
     }
 
-    public static Launch getLaunchSaved(Booking booking,
-                                        BigDecimal amount,
-                                        PaymentTypeEnum paymentType,
-                                        PaymentStatusEnum paymentStatus,
-                                        LocalDate scheduleDate,
-                                        LocalDate paymentDate){
-        return Launch.builder()
-                .booking(booking)
-                .amount(amount)
-                .paymentType(paymentType)
-                .scheduleDate(scheduleDate)
-                .paymentStatus(paymentStatus)
-                .paymentDate(paymentDate)
-                .build();
-    }
+//    public static Launch getLaunchSaved(Booking booking,
+//                                        BigDecimal amount,
+//                                        PaymentTypeEnum paymentType,
+//                                        PaymentStatusEnum paymentStatus,
+//                                        LocalDate scheduleDate,
+//                                        LocalDate paymentDate){
+//        return Launch.builder()
+//                .booking(booking)
+//                .amount(amount)
+//                .paymentType(paymentType)
+//                .scheduleDate(scheduleDate)
+//                .paymentStatus(paymentStatus)
+//                .paymentDate(paymentDate)
+//                .build();
+//    }
 
     public static CreateLaunchRequest getCreateLaunchRequest(BigDecimal amount,
                                                        String scheduleDate,
@@ -280,29 +317,6 @@ public class LaunchMother {
 
         return request;
     }
-
-//    public static Launch getFirstLaunchFromSecondBooking(){
-//        return Launch.builder()
-//                .amount(BigDecimal.valueOf(2000.0))
-//                .scheduleDate(LocalDate.of(2021, Month.FEBRUARY, 20))
-//                .paymentStatus(PaymentStatusEnum.PAID)
-//                .paymentDate(LocalDate.of(2021, Month.FEBRUARY, 20))
-//                .paymentType(PaymentTypeEnum.PIX)
-//                .build();
-//
-//    }
-//
-//    public static Launch getSecondLaunchFromSecondBooking(){
-//        return Launch.builder()
-//                .amount(BigDecimal.valueOf(200.0))
-//                .scheduleDate(LocalDate.of(2021, Month.FEBRUARY, 27))
-//                .paymentStatus(PaymentStatusEnum.PENDING)
-//                .paymentDate(null)
-//                .paymentType(PaymentTypeEnum.PIX)
-//                .build();
-//
-//    }
-
 
     public static LaunchDetailResponse getLaunchDetailResponse(Launch launch) {
         return LaunchDetailResponse.builder()

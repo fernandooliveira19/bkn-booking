@@ -3,9 +3,9 @@ package com.fernando.oliveira.booking.controller;
 import com.fernando.oliveira.booking.domain.builder.ExceptionResponseBuilder;
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Traveler;
+import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
 import com.fernando.oliveira.booking.domain.mapper.TravelerMapper;
 import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
-import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
 import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
 import com.fernando.oliveira.booking.mother.BookingMother;
 import com.fernando.oliveira.booking.mother.TravelerMother;
@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.fernando.oliveira.booking.mother.BookingMother.getBookingTravelerResponse;
 import static com.fernando.oliveira.booking.mother.TravelerMother.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -56,6 +55,9 @@ public class TravelerControllerTest {
 
 	@MockBean
 	private TravelerMapper travelerMapper;
+
+	@MockBean
+	private BookingMapper bookingMapper;
 	
 	@Test
 	public void shouldCreateTravelerAndReturnTravelerDetails() throws Exception {
@@ -119,22 +121,23 @@ public class TravelerControllerTest {
 
 	@Test
 	public void shouldReturnAllBookingByTraveler() throws Exception {
-		Booking booking = BookingMother.getBooking01Saved();
-		List<BookingTravelerResponse> responseList = Arrays.asList(getBookingTravelerResponse(booking));
 
-		when(bookingService.findBookingsByTraveler(anyLong())).thenReturn(responseList);
+		Booking booking = BookingMother.getBookingSaved01();
+		when(bookingService.findBookingsByTraveler(anyLong())).thenReturn(Arrays.asList(booking));
+		when(bookingMapper.bookingToBookingTravelerResponse(any(Booking.class))).thenReturn(BookingMother.getBookingTravelerResponse(booking));
+
 		Long travelerId = 1L;
 
 		mockMvc.perform(get(BASE_MAPPING +"/"+ travelerId + "/bookings" )
 						.header("Content-Type", ContentType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].bookingId").value(10))
-				.andExpect(jsonPath("$[0].checkIn").value("2021-10-15T12:30:00"))
-				.andExpect(jsonPath("$[0].checkOut").value("2021-10-20T18:30:00"))
-				.andExpect(jsonPath("$[0].bookingStatus").value("RESERVED"))
-				.andExpect(jsonPath("$[0].amountTotal").value(1500.0))
+				.andExpect(jsonPath("$[0].checkIn").value("2020-12-15T10:00:00"))
+				.andExpect(jsonPath("$[0].checkOut").value("2020-12-30T18:00:00"))
+				.andExpect(jsonPath("$[0].bookingStatus").value("FINISHED"))
+				.andExpect(jsonPath("$[0].amountTotal").value(1000.0))
 				.andExpect(jsonPath("$[0].contractType").value("DIRECT"))
-				.andExpect(jsonPath("$[0].observation").value("First booking saved"));
+				.andExpect(jsonPath("$[0].observation").value("First booking"));
 
 	}
 

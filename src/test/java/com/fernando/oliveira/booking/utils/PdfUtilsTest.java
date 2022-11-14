@@ -10,26 +10,26 @@ public class PdfUtilsTest {
 
     @Test
     void givenBookingWhenBuildRequestContractThenReturnContractName(){
-        Booking booking = BookingMother.getBooking01Saved();
+        Booking booking = BookingMother.getBookingSaved01();
 
         String result = PdfUtils.getContractName(booking);
-        assertEquals("contrato_ana_2021-10-15", result);
+        assertEquals("contrato_ana_2020-12-15", result);
     }
 
     @Test
     void givenLocalDateTimeWhenBuildRequestContractThenReturnDateFormatted(){
-        Booking booking = BookingMother.getBooking01Saved();
+        Booking booking = BookingMother.getBookingSaved01();
 
         String result = PdfUtils.getContractDateFormat(booking.getCheckIn());
-        assertEquals("2021-10-15", result);
+        assertEquals("2020-12-15", result);
     }
 
     @Test
     void givenCheckInWhenBuildRequestContractThenReturnDescriptionCheckIn(){
-        Booking booking = BookingMother.getBooking01Saved();
+        Booking booking = BookingMother.getBookingSaved01();
 
         String result = PdfUtils.getDescriptionCheckIn(booking.getCheckIn());
-        assertEquals("início: 15/10/2021 após 12:30", result);
+        assertEquals("início: 15/12/2020 após 10:00", result);
 
     }
 }

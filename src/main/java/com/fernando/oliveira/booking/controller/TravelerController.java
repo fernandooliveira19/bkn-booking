@@ -1,6 +1,8 @@
 package com.fernando.oliveira.booking.controller;
 
+import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Traveler;
+import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
 import com.fernando.oliveira.booking.domain.mapper.TravelerMapper;
 import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
@@ -34,6 +36,9 @@ public class TravelerController {
 
 	@Autowired
 	private TravelerMapper travelerMapper;
+
+	@Autowired
+	private BookingMapper bookingMapper;
 
 	@ApiOperation(value = "Realiza cadastro de viajante")
 	@ApiResponses(value = {
@@ -171,9 +176,13 @@ public class TravelerController {
 	@GetMapping("/{id}/bookings")
 	public ResponseEntity<List<BookingTravelerResponse>> findBookingsByTravelerId(@PathVariable("id") Long id) {
 
+		List<Booking> bookingList = bookingService.findBookingsByTraveler(id);
+		List<BookingTravelerResponse> responses = bookingList.stream()
+				.map(e -> bookingMapper.bookingToBookingTravelerResponse(e))
+				.collect(Collectors.toList());
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body(bookingService.findBookingsByTraveler(id));
+				.body(responses);
 
 	}
 }

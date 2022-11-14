@@ -4,7 +4,7 @@ import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
 import com.fernando.oliveira.booking.domain.request.*;
-import com.fernando.oliveira.booking.domain.response.DetailBookingResponse;
+import com.fernando.oliveira.booking.domain.response.BookingDetailResponse;
 import com.fernando.oliveira.booking.domain.response.ExceptionResponse;
 import com.fernando.oliveira.booking.mother.BookingMother;
 import com.fernando.oliveira.booking.mother.LaunchMother;
@@ -55,26 +55,26 @@ public class BookingIntegrationTest {
 
     @Test
     void shouldReturnAllBookings(){
-        ResponseEntity<DetailBookingResponse[]> result = restTemplate
+        ResponseEntity<BookingDetailResponse[]> result = restTemplate
                 .getForEntity(
-                        BOOKING_MAPPING, DetailBookingResponse[].class);
+                        BOOKING_MAPPING, BookingDetailResponse[].class);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        DetailBookingResponse [] response = result.getBody();
+        BookingDetailResponse[] response = result.getBody();
 
-        assertThat(response.length).isEqualTo(5);
+        assertThat(response.length).isEqualTo(6);
 
     }
 
     @Test
     void shouldReturnBookingDetailsById(){
 
-        ResponseEntity<DetailBookingResponse> result = restTemplate
+        ResponseEntity<BookingDetailResponse> result = restTemplate
                 .getForEntity(
-                        BOOKING_MAPPING +"/10" , DetailBookingResponse.class);
+                        BOOKING_MAPPING +"/10" , BookingDetailResponse.class);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        DetailBookingResponse response = result.getBody();
+        BookingDetailResponse response = result.getBody();
 
         assertThat(response.getId()).isEqualTo(10);
         assertThat(response.getTravelerId()).isEqualTo(1);
@@ -89,26 +89,26 @@ public class BookingIntegrationTest {
         assertThat(response.getAmountPending()).isEqualByComparingTo(BigDecimal.valueOf(0.00));
         assertThat(response.getAmountPaid()).isEqualByComparingTo(BigDecimal.valueOf(1000.00));
 
-        assertThat(response.getLaunchs().get(0).getId()).isEqualTo(100);
-        assertThat(response.getLaunchs().get(0).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(500.00));
-        assertThat(response.getLaunchs().get(0).getScheduleDate()).isEqualTo(LocalDate.of(2020,Month.DECEMBER,1));
-        assertThat(response.getLaunchs().get(0).getPaymentType()).isEqualTo(PaymentTypeEnum.PIX);
-        assertThat(response.getLaunchs().get(0).getPaymentStatus()).isEqualTo(PaymentStatusEnum.PAID);
-        assertThat(response.getLaunchs().get(0).getPaymentDate()).isEqualTo(LocalDate.of(2020,Month.DECEMBER,2));
+        assertThat(response.getLaunches().get(0).getId()).isEqualTo(100);
+        assertThat(response.getLaunches().get(0).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(500.00));
+        assertThat(response.getLaunches().get(0).getScheduleDate()).isEqualTo(LocalDate.of(2020,Month.DECEMBER,1));
+        assertThat(response.getLaunches().get(0).getPaymentType()).isEqualTo(PaymentTypeEnum.PIX);
+        assertThat(response.getLaunches().get(0).getPaymentStatus()).isEqualTo(PaymentStatusEnum.PAID);
+        assertThat(response.getLaunches().get(0).getPaymentDate()).isEqualTo(LocalDate.of(2020,Month.DECEMBER,2));
 
-        assertThat(response.getLaunchs().get(1).getId()).isEqualTo(101);
-        assertThat(response.getLaunchs().get(1).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(250.00));
-        assertThat(response.getLaunchs().get(1).getScheduleDate()).isEqualTo(LocalDate.of(2020,Month.DECEMBER,5));
-        assertThat(response.getLaunchs().get(1).getPaymentType()).isEqualTo(PaymentTypeEnum.PIX);
-        assertThat(response.getLaunchs().get(1).getPaymentStatus()).isEqualTo(PaymentStatusEnum.PAID);
-        assertThat(response.getLaunchs().get(1).getPaymentDate()).isEqualTo(LocalDate.of(2020,Month.DECEMBER,6));
+        assertThat(response.getLaunches().get(1).getId()).isEqualTo(101);
+        assertThat(response.getLaunches().get(1).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(250.00));
+        assertThat(response.getLaunches().get(1).getScheduleDate()).isEqualTo(LocalDate.of(2020,Month.DECEMBER,5));
+        assertThat(response.getLaunches().get(1).getPaymentType()).isEqualTo(PaymentTypeEnum.PIX);
+        assertThat(response.getLaunches().get(1).getPaymentStatus()).isEqualTo(PaymentStatusEnum.PAID);
+        assertThat(response.getLaunches().get(1).getPaymentDate()).isEqualTo(LocalDate.of(2020,Month.DECEMBER,6));
 
-        assertThat(response.getLaunchs().get(2).getId()).isEqualTo(102);
-        assertThat(response.getLaunchs().get(2).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(250.00));
-        assertThat(response.getLaunchs().get(2).getScheduleDate()).isEqualTo(LocalDate.of(2020,Month.DECEMBER,8));
-        assertThat(response.getLaunchs().get(2).getPaymentType()).isEqualTo(PaymentTypeEnum.PIX);
-        assertThat(response.getLaunchs().get(2).getPaymentStatus()).isEqualTo(PaymentStatusEnum.PAID);
-        assertThat(response.getLaunchs().get(2).getPaymentDate()).isEqualTo(LocalDate.of(2020,Month.DECEMBER,9));
+        assertThat(response.getLaunches().get(2).getId()).isEqualTo(102);
+        assertThat(response.getLaunches().get(2).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(250.00));
+        assertThat(response.getLaunches().get(2).getScheduleDate()).isEqualTo(LocalDate.of(2020,Month.DECEMBER,8));
+        assertThat(response.getLaunches().get(2).getPaymentType()).isEqualTo(PaymentTypeEnum.PIX);
+        assertThat(response.getLaunches().get(2).getPaymentStatus()).isEqualTo(PaymentStatusEnum.PAID);
+        assertThat(response.getLaunches().get(2).getPaymentDate()).isEqualTo(LocalDate.of(2020,Month.DECEMBER,9));
 
     }
     @Test
@@ -135,9 +135,9 @@ public class BookingIntegrationTest {
         CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, amountTotal,contractType, Arrays.asList(launch01, launch02));
 
 
-        ResponseEntity<DetailBookingResponse> result = restTemplate
+        ResponseEntity<BookingDetailResponse> result = restTemplate
                 .postForEntity(
-                        BOOKING_MAPPING, request, DetailBookingResponse.class);
+                        BOOKING_MAPPING, request, BookingDetailResponse.class);
 
         assertThat(result.getBody().getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
         assertThat(result.getBody().getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
@@ -168,9 +168,9 @@ public class BookingIntegrationTest {
         CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, amountTotal, contractType, Arrays.asList(launch01, launch02));
 
 
-        ResponseEntity<DetailBookingResponse> result = restTemplate
+        ResponseEntity<BookingDetailResponse> result = restTemplate
                 .postForEntity(
-                        BOOKING_MAPPING, request, DetailBookingResponse.class);
+                        BOOKING_MAPPING, request, BookingDetailResponse.class);
 
         assertThat(result.getBody().getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
         assertThat(result.getBody().getPaymentStatus()).isEqualTo(PaymentStatusEnum.PAID);
@@ -200,9 +200,9 @@ public class BookingIntegrationTest {
         CreateBookingRequest request = BookingMother.getCreateBookingRequest(travelerId,checkIn, checkOut, amountTotal, contractType, Arrays.asList(launch01, launch02));
 
 
-        ResponseEntity<DetailBookingResponse> result = restTemplate
+        ResponseEntity<BookingDetailResponse> result = restTemplate
                 .postForEntity(
-                        BOOKING_MAPPING, request, DetailBookingResponse.class);
+                        BOOKING_MAPPING, request, BookingDetailResponse.class);
 
         assertThat(result.getBody().getBookingStatus()).isEqualTo(BookingStatusEnum.PRE_RESERVED);
         assertThat(result.getBody().getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
@@ -345,55 +345,55 @@ public class BookingIntegrationTest {
 
 //    @Test
     void shouldUpdateReservedBooking(){
-        Long travelerId = 1L;
-        String checkIn = "2021-10-01 10:00";
-        String checkOut = "2021-10-30 18:00";;
-        BigDecimal amountTotal = BigDecimal.valueOf(2000.0);
-        UpdateLaunchRequest launch01 = LaunchMother.getUpdateLaunchRequest(
-                100L,
-                BigDecimal.valueOf(1000.0),
-                "2021-09-01",
-                PaymentTypeEnum.PIX.name(),
-                PaymentStatusEnum.PAID.name(),
-                "2021-09-01");
-        UpdateLaunchRequest launch02 = LaunchMother.getUpdateLaunchRequest(
-                101L,
-                BigDecimal.valueOf(1000.0),
-                "2021-09-01",
-                PaymentTypeEnum.PIX.name(),
-                PaymentStatusEnum.PENDING.name(),
-                "");
-        UpdateLaunchRequest launch03 = LaunchMother.getUpdateLaunchRequest(
-                102L,
-                BigDecimal.valueOf(1000.0),
-                "2021-09-01",
-                PaymentTypeEnum.PIX.name(),
-                PaymentStatusEnum.PENDING.name(),
-                "");
-
-        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(travelerId,checkIn, checkOut, amountTotal, Arrays.asList(launch01, launch02));
-
-        HttpHeaders headers = new HttpHeaders();
-        HttpEntity<UpdateBookingRequest> httpEntity = new HttpEntity<UpdateBookingRequest>(request, headers);
-        ResponseEntity<DetailBookingResponse> result =
-                restTemplate.exchange(BOOKING_MAPPING +"/10", HttpMethod.PUT, httpEntity,
-                        DetailBookingResponse.class);
-
-        assertThat(result.getBody().getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
-        assertThat(result.getBody().getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
+//        Long travelerId = 1L;
+//        String checkIn = "2021-10-01 10:00";
+//        String checkOut = "2021-10-30 18:00";;
+//        BigDecimal amountTotal = BigDecimal.valueOf(2000.0);
+//        UpdateLaunchRequest launch01 = LaunchMother.getUpdateLaunchRequest(
+//                100L,
+//                BigDecimal.valueOf(1000.0),
+//                "2021-09-01",
+//                PaymentTypeEnum.PIX.name(),
+//                PaymentStatusEnum.PAID.name(),
+//                "2021-09-01");
+//        UpdateLaunchRequest launch02 = LaunchMother.getUpdateLaunchRequest(
+//                101L,
+//                BigDecimal.valueOf(1000.0),
+//                "2021-09-01",
+//                PaymentTypeEnum.PIX.name(),
+//                PaymentStatusEnum.PENDING.name(),
+//                "");
+//        UpdateLaunchRequest launch03 = LaunchMother.getUpdateLaunchRequest(
+//                102L,
+//                BigDecimal.valueOf(1000.0),
+//                "2021-09-01",
+//                PaymentTypeEnum.PIX.name(),
+//                PaymentStatusEnum.PENDING.name(),
+//                "");
+//
+//        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(travelerId,checkIn, checkOut, amountTotal, Arrays.asList(launch01, launch02));
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        HttpEntity<UpdateBookingRequest> httpEntity = new HttpEntity<UpdateBookingRequest>(request, headers);
+//        ResponseEntity<BookingDetailResponse> result =
+//                restTemplate.exchange(BOOKING_MAPPING +"/10", HttpMethod.PUT, httpEntity,
+//                        BookingDetailResponse.class);
+//
+//        assertThat(result.getBody().getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
+//        assertThat(result.getBody().getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
 
     }
 
     @Test
     void shouldReturnNextBookings(){
-        ResponseEntity<DetailBookingResponse[]> result = restTemplate
+        ResponseEntity<BookingDetailResponse[]> result = restTemplate
                 .getForEntity(
-                        NEXT_BOOKINGS, DetailBookingResponse[].class);
+                        NEXT_BOOKINGS, BookingDetailResponse[].class);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        DetailBookingResponse [] response = result.getBody();
+        BookingDetailResponse[] response = result.getBody();
 
-        assertThat(response.length).isEqualTo(3);
+        assertThat(response.length).isEqualTo(4);
 
     }
 

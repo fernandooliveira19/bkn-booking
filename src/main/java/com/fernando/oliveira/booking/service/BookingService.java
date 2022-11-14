@@ -23,5 +23,5 @@ public interface BookingService {
 
     Booking detailBooking(Long id);
 
-    List<BookingTravelerResponse> findBookingsByTraveler(Long travelerId);
+    List<Booking> findBookingsByTraveler(Long travelerId);
 }

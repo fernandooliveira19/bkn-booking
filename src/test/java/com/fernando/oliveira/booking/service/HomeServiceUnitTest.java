@@ -2,6 +2,7 @@ package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.response.ReservedDateResponse;
+import com.fernando.oliveira.booking.mother.BookingMother;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,10 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.fernando.oliveira.booking.mother.BookingMother.getBooking01Saved;
-import static com.fernando.oliveira.booking.mother.BookingMother.getSecondBookingSaved;
-import static org.assertj.core.api.BDDAssertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,8 +31,8 @@ public class HomeServiceUnitTest {
 
     @Test
     void givenNextBookingsThenReturnReservedDateResponse(){
-        Booking firstBooking = getBooking01Saved();
-        Booking secondBooking = getSecondBookingSaved();
+        Booking firstBooking = BookingMother.getBookingSaved01();
+        Booking secondBooking = BookingMother.getBookingSaved02();
 
         when(bookingService.findNextBookings()).thenReturn(Arrays.asList(firstBooking, secondBooking));
 
