@@ -106,15 +106,15 @@ public class TravelerServiceTest {
 	@Test
 	public void shouldReturnAllTravelersByNameOrEmail(){
 		Traveler traveler = getTravelerSaved02();
-		String name = "Joao Carlos";
-		String email = "joao_carlos@gmail.com";
+		String name = "Bianca Silva";
+		String email = "";
 		when(repository.findByNameOrEmail(Mockito.anyString(), Mockito.anyString()))
 				.thenReturn(Arrays.asList(traveler));
 
 		List<Traveler> result = travelerService.findTravelersByNameOrEmail(name, email);
 
-		then(traveler.getName()).isEqualTo( result.get(0).getName());
-		then(traveler.getEmail()).isEqualTo( result.get(0).getEmail());
+		then(traveler.getName()).isEqualTo( "Bianca Silva");
+		then(traveler.getEmail()).isEqualTo( "bianca_silva@gmail.com");
 
 	}
 
