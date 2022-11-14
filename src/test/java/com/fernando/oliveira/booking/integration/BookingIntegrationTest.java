@@ -8,6 +8,7 @@ import com.fernando.oliveira.booking.domain.response.BookingDetailResponse;
 import com.fernando.oliveira.booking.domain.response.ExceptionResponse;
 import com.fernando.oliveira.booking.mother.BookingMother;
 import com.fernando.oliveira.booking.mother.LaunchMother;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -343,44 +344,40 @@ public class BookingIntegrationTest {
 
     }
 
-//    @Test
+    @Test
+    @Disabled
     void shouldUpdateReservedBooking(){
-//        Long travelerId = 1L;
-//        String checkIn = "2021-10-01 10:00";
-//        String checkOut = "2021-10-30 18:00";;
-//        BigDecimal amountTotal = BigDecimal.valueOf(2000.0);
-//        UpdateLaunchRequest launch01 = LaunchMother.getUpdateLaunchRequest(
-//                100L,
-//                BigDecimal.valueOf(1000.0),
-//                "2021-09-01",
-//                PaymentTypeEnum.PIX.name(),
-//                PaymentStatusEnum.PAID.name(),
-//                "2021-09-01");
-//        UpdateLaunchRequest launch02 = LaunchMother.getUpdateLaunchRequest(
-//                101L,
-//                BigDecimal.valueOf(1000.0),
-//                "2021-09-01",
-//                PaymentTypeEnum.PIX.name(),
-//                PaymentStatusEnum.PENDING.name(),
-//                "");
-//        UpdateLaunchRequest launch03 = LaunchMother.getUpdateLaunchRequest(
-//                102L,
-//                BigDecimal.valueOf(1000.0),
-//                "2021-09-01",
-//                PaymentTypeEnum.PIX.name(),
-//                PaymentStatusEnum.PENDING.name(),
-//                "");
-//
-//        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(travelerId,checkIn, checkOut, amountTotal, Arrays.asList(launch01, launch02));
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        HttpEntity<UpdateBookingRequest> httpEntity = new HttpEntity<UpdateBookingRequest>(request, headers);
-//        ResponseEntity<BookingDetailResponse> result =
-//                restTemplate.exchange(BOOKING_MAPPING +"/10", HttpMethod.PUT, httpEntity,
-//                        BookingDetailResponse.class);
-//
-//        assertThat(result.getBody().getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
-//        assertThat(result.getBody().getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
+        Long travelerId = 6L;
+        String checkIn = "2021-03-16 10:00";
+        String checkOut = "2021-03-30 18:00";;
+        String observation = "updating booking";
+        BigDecimal amountTotal = BigDecimal.valueOf(3800.0);
+        UpdateLaunchRequest launch01 = LaunchMother.getUpdateLaunchRequest(
+                110L,
+                BigDecimal.valueOf(2000.0),
+                "2021-03-01",
+                PaymentTypeEnum.PIX.name(),
+                PaymentStatusEnum.PAID.name(),
+                "2021-03-02");
+        UpdateLaunchRequest launch02 = LaunchMother.getUpdateLaunchRequest(
+                111L,
+                BigDecimal.valueOf(1800.0),
+                "2021-03-05",
+                PaymentTypeEnum.PIX.name(),
+                PaymentStatusEnum.PAID.name(),
+                "2021-03-06");
+
+
+        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(travelerId,checkIn, checkOut, amountTotal,observation, Arrays.asList(launch01, launch02));
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UpdateBookingRequest> httpEntity = new HttpEntity<UpdateBookingRequest>(request, headers);
+        ResponseEntity<BookingDetailResponse> result =
+                restTemplate.exchange(BOOKING_MAPPING +"/60", HttpMethod.PUT, httpEntity,
+                        BookingDetailResponse.class);
+
+        assertThat(result.getBody().getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
+        assertThat(result.getBody().getPaymentStatus()).isEqualTo(PaymentStatusEnum.PAID);
 
     }
 

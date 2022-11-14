@@ -139,16 +139,53 @@ public class BookingMother {
     private static final Integer CHILDREN = 2;
 
 
-    public static Booking getFirstBooking(){
+    public static Booking getBookingRequest01(){
+
+        Launch launch01 = LaunchMother.getBooking01Launch01();
+        Launch launch02 = LaunchMother.getBooking01Launch02();
+        Launch launch03 = LaunchMother.getBooking01Launch03();
+
         return Booking.builder()
-                .checkIn(CHECK_IN_01)
-                .checkOut(CHECK_OUT_01)
-                .amountTotal(TOTAL_AMOUNT_01)
-                .adults(ADULTS)
-                .children(CHILDREN)
-                .traveler(getTraveler())
+                .checkIn(BOOKING_01_CHECK_IN)
+                .checkOut(BOOKING_01_CHECK_OUT)
+                .amountTotal(BOOKING_01_TOTAL_AMOUNT)
+                .adults(BOOKING_01_ADULTS)
+                .children(BOOKING_01_CHILDREN)
+                .travelerName(TravelerMother.TRAVELER_01_NAME)
+                .traveler(TravelerMother.getTravelerSaved01())
+                .paymentStatus(BOOKING_01_PAYMENT_STATUS)
+                .amountPaid(BOOKING_01_AMOUNT_PAID)
+                .amountPending(BOOKING_01_AMOUNT_PENDING)
+                .contractType(BOOKING_01_CONTRACT_TYPE)
+                .observation(BOOKING_01_OBSERVATION)
+                .bookingStatus(BOOKING_01_BOOKING_STATUS)
+                .launches(Arrays.asList(launch01, launch02, launch03))
                 .build();
     }
+    public static Booking getBookingRequest02(){
+        Launch launch01 = LaunchMother.getBooking02Launch01();
+        Launch launch02 = LaunchMother.getBooking02Launch02();
+        Launch launch03 = LaunchMother.getBooking02Launch03();
+
+        return Booking.builder()
+                .checkIn(BOOKING_02_CHECK_IN)
+                .checkOut(BOOKING_02_CHECK_OUT)
+                .amountTotal(BOOKING_02_TOTAL_AMOUNT)
+                .adults(BOOKING_02_ADULTS)
+                .children(BOOKING_02_CHILDREN)
+                .travelerName(TravelerMother.TRAVELER_02_NAME)
+                .traveler(TravelerMother.getTravelerSaved02())
+                .paymentStatus(BOOKING_02_PAYMENT_STATUS)
+                .amountPaid(BOOKING_02_AMOUNT_PAID)
+                .amountPending(BOOKING_02_AMOUNT_PENDING)
+                .contractType(BOOKING_02_CONTRACT_TYPE)
+                .observation(BOOKING_02_OBSERVATION)
+                .bookingStatus(BOOKING_02_BOOKING_STATUS)
+                .launches(Arrays.asList(launch01, launch02, launch03))
+                .build();
+    }
+
+
     public static Booking getBookingSaved01(){
         Launch launch01 = LaunchMother.getBooking01Launch01();
         Launch launch02 = LaunchMother.getBooking01Launch02();
