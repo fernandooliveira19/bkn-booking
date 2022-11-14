@@ -38,7 +38,7 @@ public class BookingServiceImpl implements BookingService {
 
         validateBooking(booking);
 
-        Booking bookingToSave = defineBookingDetails(booking);
+        Booking bookingToSave = prepareBookingToSave(booking);
         booking.setInsertDate(LocalDateTime.now());
 
         Booking bookingSaved = bookingRepository.save(bookingToSave);
@@ -48,6 +48,16 @@ public class BookingServiceImpl implements BookingService {
                 .forEach(e -> launchService.createLaunch(e, bookingSaved));
 
         return bookingSaved;
+    }
+
+    private Booking prepareBookingToSave(Booking booking){
+        defineTraveler(booking);
+        defineBookingStatus(booking);
+        definePaymentStatus(booking);
+        defineAmountPending(booking);
+        defineAmountPaid(booking);
+        return booking;
+
     }
 
     private void defineAmountPending(Booking booking) {
@@ -110,7 +120,7 @@ public class BookingServiceImpl implements BookingService {
         booking.setId(id);
         validateBooking(booking);
 
-        Booking bookingToUpdate = defineBookingDetails(booking);
+        Booking bookingToUpdate = prepareBookingToSave(booking);
 
         Booking bookingBase = findById(id);
         bookingToUpdate.setInsertDate(bookingBase.getInsertDate());
@@ -162,10 +172,7 @@ public class BookingServiceImpl implements BookingService {
 
     public Booking defineBookingDetails(Booking booking) {
         defineTraveler(booking);
-        defineBookingStatus(booking);
-        definePaymentStatus(booking);
-        defineAmountPending(booking);
-        defineAmountPaid(booking);
+
         return booking;
     }
 
