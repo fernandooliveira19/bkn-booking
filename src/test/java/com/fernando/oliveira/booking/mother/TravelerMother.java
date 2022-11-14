@@ -47,6 +47,11 @@ public class TravelerMother {
 	private static final Integer TRAVELER_05_PREFIX_PHONE= 55;
 	private static final String TRAVELER_05_NUMBER_PHONE = "98888-5555";
 
+	private static final String TRAVELER_06_NAME = "Fernando Oliveira";
+	private static final String TRAVELER_06_EMAIL = "fernando_oliveira@gmail.com";
+	private static final Integer TRAVELER_06_PREFIX_PHONE= 66;
+	private static final String TRAVELER_06_NUMBER_PHONE = "98888-6666";
+
 	public static CreateTravelerRequest getCreateTraveler01Request() {
 		CreateTravelerRequest request = new CreateTravelerRequest();
 		request.setName(TRAVELER_01_NAME);
@@ -161,7 +166,7 @@ public class TravelerMother {
 
 	public static List<Traveler> getTravelerSavedList() {
 
-		return Arrays.asList(getTravelerSaved01(), getTravelerSaved02(), getTravelerSaved03(), getTravelerSaved04(),getTravelerSaved05());
+		return Arrays.asList(getTravelerSaved01(), getTravelerSaved02(), getTravelerSaved03(), getTravelerSaved04(),getTravelerSaved05(),getTravelerSaved06());
 
 	}
 
@@ -235,6 +240,16 @@ public class TravelerMother {
 				.email(TRAVELER_05_EMAIL)
 				.prefixPhone(TRAVELER_05_PREFIX_PHONE)
 				.numberPhone(TRAVELER_05_NUMBER_PHONE)
+				.status(StatusEnum.ACTIVE.getCode())
+				.build();
+	}
+	public static Traveler getTravelerSaved06(){
+		return Traveler.builder()
+				.id(6L)
+				.name(TRAVELER_06_NAME)
+				.email(TRAVELER_06_EMAIL)
+				.prefixPhone(TRAVELER_06_PREFIX_PHONE)
+				.numberPhone(TRAVELER_06_NUMBER_PHONE)
 				.status(StatusEnum.ACTIVE.getCode())
 				.build();
 	}

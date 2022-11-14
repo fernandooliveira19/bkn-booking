@@ -82,13 +82,13 @@ public class TravelerServiceTest {
 
 		Traveler result = travelerService.findById(id);
 
-		assertEquals(traveler.getId(), result.getId());
-		assertEquals(traveler.getName(), result.getName());
-		assertEquals(traveler.getEmail(), result.getEmail());
-		assertEquals(traveler.getStatus(), result.getStatus());
-		assertEquals(traveler.getDocument(), result.getDocument());
-		assertEquals(traveler.getPrefixPhone(), result.getPrefixPhone());
-		assertEquals(traveler.getNumberPhone(), result.getNumberPhone());
+		then(traveler.getId()).isEqualTo(result.getId());
+		then(traveler.getName()).isEqualTo(result.getName());
+		then(traveler.getEmail()).isEqualTo( result.getEmail());
+		then(traveler.getStatus()).isEqualTo( result.getStatus());
+		then(traveler.getDocument()).isEqualTo( result.getDocument());
+		then(traveler.getPrefixPhone()).isEqualTo( result.getPrefixPhone());
+		then(traveler.getNumberPhone()).isEqualTo( result.getNumberPhone());
 
 	}
 
@@ -99,7 +99,7 @@ public class TravelerServiceTest {
 
 		List<Traveler> result = travelerService.findAll();
 
-		assertEquals(result.size(), 5);
+		then(result.size()).isEqualTo( 6);
 
 	}
 
@@ -113,8 +113,8 @@ public class TravelerServiceTest {
 
 		List<Traveler> result = travelerService.findTravelersByNameOrEmail(name, email);
 
-		assertEquals(traveler.getName(), result.get(0).getName());
-		assertEquals(traveler.getEmail(), result.get(0).getEmail());
+		then(traveler.getName()).isEqualTo( result.get(0).getName());
+		then(traveler.getEmail()).isEqualTo( result.get(0).getEmail());
 
 	}
 
@@ -132,13 +132,13 @@ public class TravelerServiceTest {
 		Traveler result = travelerService.updateTraveler(id,travelerToUpdate);
 
 		assertNotNull(result.getId());
-		assertEquals(travelerUpdated.getId(),result.getId());
-		assertEquals(travelerUpdated.getName(),result.getName() );
-		assertEquals(travelerUpdated.getEmail(), result.getEmail() );
+		then(travelerUpdated.getId()).isEqualTo(result.getId());
+		then(travelerUpdated.getName()).isEqualTo(result.getName() );
+		then(travelerUpdated.getEmail()).isEqualTo( result.getEmail() );
 
-		assertEquals(travelerUpdated.getStatus(), result.getStatus());
-		assertEquals(travelerUpdated.getPrefixPhone(), result.getPrefixPhone());
-		assertEquals(travelerUpdated.getNumberPhone(),result.getNumberPhone() );
+		then(travelerUpdated.getStatus()).isEqualTo( result.getStatus());
+		then(travelerUpdated.getPrefixPhone()).isEqualTo( result.getPrefixPhone());
+		then(travelerUpdated.getNumberPhone()).isEqualTo(result.getNumberPhone() );
 
 	}
 
@@ -154,7 +154,7 @@ public class TravelerServiceTest {
 			travelerService.findById(id);
 		});
 
-		assertEquals(exception.getMessage(), "Nenhum viajante encontrado pelo id: " + id);
+		then(exception.getMessage()).isEqualTo( "Nenhum viajante encontrado pelo id: " + id);
 
 
 	}
@@ -178,7 +178,7 @@ public class TravelerServiceTest {
 			travelerService.createTraveler(travelerToSave);
 		});
 
-		assertEquals(exception.getMessage(), "Já existe outro viajante cadastrado com mesmo nome ou email" );
+		then(exception.getMessage()).isEqualTo( "Já existe outro viajante cadastrado com mesmo nome ou email" );
 	}
 
 	@Test
@@ -197,7 +197,7 @@ public class TravelerServiceTest {
 			travelerService.updateTraveler(1L, travelerToUpdate);
 		});
 
-		assertEquals(exception.getMessage(), "Já existe outro viajante cadastrado com mesmo nome ou email" );
+		then(exception.getMessage()).isEqualTo("Já existe outro viajante cadastrado com mesmo nome ou email" );
 	}
 
 	@Test
