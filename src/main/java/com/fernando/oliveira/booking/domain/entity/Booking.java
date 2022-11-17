@@ -27,7 +27,7 @@ public class Booking {
     private Long id;
 
     @OneToMany(mappedBy = "booking")
-    private List<Launch> launchs;
+    private List<Launch> launches;
 
     @ManyToOne
     @JoinColumn(name="TRAVELER_ID", nullable=false)

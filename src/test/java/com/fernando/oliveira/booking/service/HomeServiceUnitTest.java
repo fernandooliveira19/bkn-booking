@@ -1,31 +1,19 @@
 package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
-import com.fernando.oliveira.booking.domain.entity.Launch;
-import com.fernando.oliveira.booking.domain.response.HomeResponse;
 import com.fernando.oliveira.booking.domain.response.ReservedDateResponse;
-import com.fernando.oliveira.booking.mother.BookingMother;
-import com.fernando.oliveira.booking.mother.LaunchMother;
-import com.fernando.oliveira.booking.mother.TravelerMother;
-import org.assertj.core.api.BDDAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
 import static com.fernando.oliveira.booking.mother.BookingMother.getFirstBookingSaved;
 import static com.fernando.oliveira.booking.mother.BookingMother.getSecondBookingSaved;
-import static org.assertj.core.api.BDDAssertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)

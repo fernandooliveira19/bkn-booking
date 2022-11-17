@@ -1,11 +1,9 @@
 package com.fernando.oliveira.booking.service;
 
-import com.fernando.oliveira.booking.domain.response.ReservedDateResponse;
-
-import java.util.List;
+import com.fernando.oliveira.booking.domain.dto.HomeDto;
 
 public interface HomeService {
 
-    List<ReservedDateResponse> reservedDatesFromNextBookings();
+    public HomeDto getHomeDetails();
 
 }

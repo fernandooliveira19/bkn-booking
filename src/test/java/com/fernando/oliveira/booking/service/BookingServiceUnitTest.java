@@ -29,7 +29,7 @@ import java.util.Optional;
 
 import static com.fernando.oliveira.booking.mother.BookingMother.*;
 import static com.fernando.oliveira.booking.mother.LaunchMother.getLaunchToSave;
-import static com.fernando.oliveira.booking.mother.LaunchMother.getLaunchsFromFirstBooking;
+import static com.fernando.oliveira.booking.mother.LaunchMother.getLaunchesFromFirstBooking;
 import static org.assertj.core.api.Assertions.fail;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.ArgumentMatchers.any;
@@ -61,17 +61,13 @@ public class BookingServiceUnitTest {
     @Test
     void givenValidRequestWhenCreateBookingThenCreateBookingReservedWithPending(){
 
-        Booking bookingToSave = getFirstBooking();
-        bookingToSave.setLaunchs(getLaunchsFromFirstBooking());
+        Booking bookingToSave = getBookingRequest02();
 
-        Booking bookingSaved = getFirstBookingSaved();
-        bookingSaved.setLaunchs(LaunchMother.getLaunchsFromFirstBooking());
-        bookingSaved.setBookingStatus(BookingStatusEnum.RESERVED);
-        bookingSaved.setPaymentStatus(PaymentStatusEnum.PENDING);
+        Booking bookingSaved = getBookingSaved02();
 
-        when(travelerService.findById(anyLong())).thenReturn(TravelerMother.getTravelerSaved01());
+
+        when(travelerService.findById(anyLong())).thenReturn(TravelerMother.getTravelerSaved02());
         when(bookingRepository.save(any(Booking.class))).thenReturn(bookingSaved);
-        when(launchService.createLaunch(any(Launch.class), any(Booking.class))).thenReturn(LaunchMother.getLaunchSaved(bookingSaved,BigDecimal.valueOf(200.0),PaymentTypeEnum.PIX,PaymentStatusEnum.PAID, LocalDate.of(2021, Month.OCTOBER, 10),LocalDate.of(2021, Month.OCTOBER, 10) ));
 
         Booking result = bookingService.createBooking(bookingToSave);
 
@@ -94,10 +90,10 @@ public class BookingServiceUnitTest {
         Launch thirdLaunch = getLaunchToSave(BigDecimal.valueOf(200.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PAID, LocalDate.of(2021, 12,10), LocalDate.of(2021,10,10) );
 
         Booking bookingToSave = getBookingToSave(checkIn, checkOut, totalAmount,travelerId, adults, children, Arrays.asList(firstLaunch, secondLaunch, thirdLaunch), TravelerMother.getTravelerSaved01());
-        Booking bookingSaved = getFirstBookingSaved();
+        Booking bookingSaved = getBookingSaved01();
         bookingSaved.setBookingStatus(BookingStatusEnum.RESERVED);
         bookingSaved.setPaymentStatus(PaymentStatusEnum.PAID);
-        bookingSaved.setLaunchs(Arrays.asList(firstLaunch, secondLaunch, thirdLaunch));
+        bookingSaved.setLaunches(Arrays.asList(firstLaunch, secondLaunch, thirdLaunch));
 
         when(travelerService.findById(anyLong())).thenReturn(TravelerMother.getTravelerToSaved01());
         when(bookingRepository.save(any(Booking.class))).thenReturn(bookingSaved);
@@ -164,49 +160,22 @@ public class BookingServiceUnitTest {
 
     @Test
     void givenValidRequestWhenUpdateBookingThenReturnBookingUpdated(){
-        LocalDateTime checkIn = LocalDateTime.of(2021, Month.OCTOBER,15,12,30);
-        LocalDateTime checkOut = LocalDateTime.of(2021, Month.OCTOBER,20,18,30);
-        Long travelerId = 1L;
-        BigDecimal totalAmount = BigDecimal.valueOf(1500.0);
-        Integer adults = 2;
-        Integer children = 3;
-
-        Launch firstLaunch = LaunchMother.getFirstLaunchFromFirstBooking();
-        Launch secondLaunch = LaunchMother.getSecondLaunchFromFirstBooking();
-        Launch thirdLaunch = LaunchMother.getThirdLaunchFromFirstBooking();
-        Long bookingId = 1L;
-
-        Booking booking = BookingMother.getBookingToSave(
-                checkIn, checkOut, totalAmount,travelerId, adults, children, Arrays.asList(firstLaunch, secondLaunch, thirdLaunch),TravelerMother.getTravelerSaved01());
-        booking.setId(bookingId);
-        Booking bookingToUpdate = BookingMother.getFirstBooking();
-        firstLaunch.setBooking(bookingToUpdate);
-        bookingToUpdate.setLaunchs(Arrays.asList(firstLaunch, secondLaunch, thirdLaunch));
-
-        Booking bookingUpdated = getFirstBookingSaved();
-        firstLaunch.setId(10L);
-        secondLaunch.setId(20L);
-        thirdLaunch.setId(30L);
-        bookingUpdated.setTraveler(booking.getTraveler());
-        bookingUpdated.setLaunchs(Arrays.asList(firstLaunch, secondLaunch,thirdLaunch));
-        bookingUpdated.setBookingStatus(BookingStatusEnum.RESERVED);
-        bookingUpdated.setPaymentStatus(PaymentStatusEnum.PENDING);
-        bookingUpdated.setAmountPending(BigDecimal.valueOf(500.0));
-        bookingUpdated.setAmountPaid(BigDecimal.valueOf(1000.0));
+        LocalDateTime checkIn = LocalDateTime.of(2020,Month.DECEMBER,16, 10,0,0);
+        Booking bookingToUpdate = getBookingRequest01();
+        bookingToUpdate.setCheckIn(checkIn);
+        Booking bookingUpdated = getBookingSaved01();
 
         when(bookingRepository.findBookingsByDate(any(LocalDateTime.class),any(LocalDateTime.class))).thenReturn(Arrays.asList());
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(bookingToUpdate));
         when(bookingRepository.save(any(Booking.class))).thenReturn(bookingUpdated);
-        when(travelerService.findById(anyLong())).thenReturn(booking.getTraveler());
+        when(travelerService.findById(anyLong())).thenReturn(TravelerMother.getTravelerSaved01());
 
-        Booking result = bookingService.updateBooking(booking, bookingId);
+        Booking result = bookingService.updateBooking(bookingToUpdate, 1L);
 
-        then(result.getCheckIn()).isEqualTo(checkIn);
-        then(result.getCheckOut()).isEqualTo(checkOut);
-        then(result.getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
-        then(result.getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
-        then(result.getAmountTotal()).isEqualTo(BigDecimal.valueOf(1500.0));
-        then(result.getAmountPending()).isEqualTo(BigDecimal.valueOf(500.0));
+        then(result.getBookingStatus()).isEqualTo(BookingStatusEnum.FINISHED);
+        then(result.getPaymentStatus()).isEqualTo(PaymentStatusEnum.PAID);
+        then(result.getAmountTotal()).isEqualTo(BigDecimal.valueOf(1000.0));
+        then(result.getAmountPending()).isEqualTo(BigDecimal.valueOf(0.0));
         then(result.getAmountPaid()).isEqualTo(BigDecimal.valueOf(1000.0));
 
     }
@@ -225,7 +194,8 @@ public class BookingServiceUnitTest {
 
     @Test
     void givenBookingWithoutLaunchWhenCreateBookingThenReturnExceptionMessage(){
-        Booking booking = BookingMother.getFirstBooking();
+        Booking booking = BookingMother.getBookingRequest01();
+        booking.setLaunches(Arrays.asList());
         try {
             bookingService.createBooking(booking);
             fail("Reserva deve possuir lançamentos",BookingException.class );
@@ -235,7 +205,8 @@ public class BookingServiceUnitTest {
     }
     @Test
     void givenBookingWithoutLaunchWhenUpdateBookingThenReturnExceptionMessage(){
-        Booking booking = BookingMother.getFirstBooking();
+        Booking booking = BookingMother.getBookingRequest01();
+        booking.setLaunches(Arrays.asList());
         try {
             bookingService.updateBooking(booking, 1L);
             fail("Reserva deve possuir lançamentos",BookingException.class );
@@ -246,12 +217,9 @@ public class BookingServiceUnitTest {
 
     @Test
     void givenLaunchWithLessAmountWhenCreateBookingThenReturnExceptionMessage(){
-        Booking booking = BookingMother.getFirstBooking();
-        Launch firstLaunch = getLaunchToSave(BigDecimal.valueOf(1000.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PAID, LocalDate.of(2021, 10,10), LocalDate.of(2021,10,10) );
-        Launch secondLaunch = getLaunchToSave(BigDecimal.valueOf(300.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PENDING, LocalDate.of(2021, 11,10), null );
-        Launch thirdLaunch = getLaunchToSave(BigDecimal.valueOf(100.0), PaymentTypeEnum.PIX, PaymentStatusEnum.PENDING, LocalDate.of(2021, 12,10), null );
+        Booking booking = BookingMother.getBookingRequest02();
+        booking.getLaunches().get(2).setAmount(BigDecimal.valueOf(900.0));
 
-        booking.setLaunchs(Arrays.asList(firstLaunch, secondLaunch, thirdLaunch));
         try {
             bookingService.createBooking(booking);
             fail("Soma dos lançamentos estão diferentes do valor total da reserva",BookingException.class );
@@ -262,35 +230,29 @@ public class BookingServiceUnitTest {
     }
 
     @Test
-    void givenWhenCallNextBookingsThenReturnNextBookings(){
-        Booking firstBooking = getFirstBookingSaved();
-        Booking secondBooking = getSecondBookingSaved();
+    void shouldReturnNextBookings(){
 
-        when(bookingRepository.findNextBookings()).thenReturn(Arrays.asList(firstBooking, secondBooking));
-        when(travelerService.findById(1L)).thenReturn(TravelerMother.getTravelerSaved01());
+        when(bookingRepository.findNextBookings()).thenReturn(Arrays.asList(getBookingSaved02(),getBookingSaved03(),getBookingSaved04()));
+
         when(travelerService.findById(2L)).thenReturn(TravelerMother.getTravelerSaved02());
+        when(travelerService.findById(3L)).thenReturn(TravelerMother.getTravelerSaved03());
+        when(travelerService.findById(4L)).thenReturn(TravelerMother.getTravelerSaved04());
 
         List<Booking> result = bookingService.findNextBookings();
 
-        then(result.size()).isEqualTo(2);
+        then(result.size()).isEqualTo(3);
 
-        then(result.get(0).getId()).isEqualTo(10L);
-        then(result.get(0).getAmountTotal()).isEqualTo(BigDecimal.valueOf(1500.0));
-        then(result.get(0).getAmountPaid()).isEqualTo(BigDecimal.valueOf(1000.0));
-        then(result.get(0).getAmountPending()).isEqualTo(BigDecimal.valueOf(500.0));
-        then(result.get(0).getCheckIn()).isEqualTo(LocalDateTime.of(2021,10,15,12,30,0));
-        then(result.get(0).getCheckOut()).isEqualTo(LocalDateTime.of(2021,10,20,18,30,0));
+        then(result.get(0).getId()).isEqualTo(20L);
+        then(result.get(0).getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
         then(result.get(0).getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
-        then(result.get(0).getTravelerName()).isEqualTo("Ana Maria");
 
-        then(result.get(1).getId()).isEqualTo(20L);
-        then(result.get(1).getAmountTotal()).isEqualTo(BigDecimal.valueOf(1500.0));
-        then(result.get(1).getAmountPaid()).isEqualTo(BigDecimal.valueOf(1300.0));
-        then(result.get(1).getAmountPending()).isEqualTo(BigDecimal.valueOf(200.0));
-        then(result.get(1).getCheckIn()).isEqualTo(LocalDateTime.of(2021,10,21,12,30,0));
-        then(result.get(1).getCheckOut()).isEqualTo(LocalDateTime.of(2021,10,25,18,30,0));
+        then(result.get(1).getId()).isEqualTo(30L);
+        then(result.get(1).getBookingStatus()).isEqualTo(BookingStatusEnum.PRE_RESERVED);
         then(result.get(1).getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
-        then(result.get(1).getTravelerName()).isEqualTo("Bianca Silva");
+
+        then(result.get(2).getId()).isEqualTo(40L);
+        then(result.get(2).getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
+        then(result.get(2).getPaymentStatus()).isEqualTo(PaymentStatusEnum.TO_RECEIVE);
 
     }
 
@@ -326,6 +288,20 @@ public class BookingServiceUnitTest {
 //        then(result.getBookingStatus()).isEqualTo(BookingStatusEnum.CANCELED);
 //        then(result.getLastUpdate()).isNotNull();
 //        then(result.getObservation()).isEqualTo(observation);
+
+    }
+
+    @Test
+    public void givenTravelerIdWhenFindBookingsByTravelerThenReturnBookingList(){
+        List<Booking> bookings = Arrays.asList(getBookingSaved02());
+
+        when(bookingRepository.findByTraveler(anyLong())).thenReturn(bookings);
+
+        Long travelerId = 2L;
+
+        List<Booking> result = bookingService.findBookingsByTraveler(travelerId);
+
+        then(result.size()).isEqualTo(1);
 
     }
 

@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 import java.util.List;
 
 @Getter
@@ -20,5 +19,5 @@ public class UpdateBookingRequest extends BookingRequest {
     @NotBlank(message = "Situação do pagamento da reserva é obrigatória")
     private String paymentStatus;
 
-    private List<UpdateLaunchRequest> launchs;
+    private List<UpdateLaunchRequest> launches;
 }
