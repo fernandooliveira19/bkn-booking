@@ -2,11 +2,8 @@ package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.StatusEnum;
-import com.fernando.oliveira.booking.domain.mapper.TravelerMapper;
-import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
-import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
-import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
 import com.fernando.oliveira.booking.exception.TravelerException;
+import com.fernando.oliveira.booking.mother.TravelerMother;
 import com.fernando.oliveira.booking.repository.TravelerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +17,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.fernando.oliveira.booking.mother.TravelerMother.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.BDDAssertions.then;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,44 +31,41 @@ public class TravelerServiceTest {
 	@Mock
 	TravelerRepository repository;
 
-	@Mock
-	TravelerMapper travelerMapper;
-	
-
 	@Test
 	public void shouldCreateTravelerAndReturnTravelerDetails() {
 
-		CreateTravelerRequest request = getCreateTraveler01Request();
-		TravelerDetailResponse response = getDetailTraveler01Response();
-		Traveler travelerToSave = getTravelerToSaved01();
+		Traveler travelerToSave = TravelerMother.getTravelerToSaved01();
 		Traveler travelerSaved = getTravelerSaved01();
 
-		when(travelerMapper.requestToCreateTraveler(request)).thenReturn(travelerToSave);
 		when(repository.save(travelerToSave)).thenReturn(travelerSaved);
-		when(travelerMapper.travelerToTravelerDetailResponse(travelerSaved)).thenReturn(response);
 
-		TravelerDetailResponse result = travelerService.createTraveler(request);
+		Traveler result = travelerService.createTraveler(travelerToSave);
 
-		assertNotNull(result.getId());
-		assertEquals(travelerSaved.getId(),result.getId());
-		assertEquals(travelerToSave.getName(),result.getName() );
-		assertEquals(travelerToSave.getEmail(), result.getEmail() );
-
-		assertEquals(StatusEnum.ACTIVE.getCode(), result.getStatus());
-		assertEquals(travelerToSave.getPrefixPhone(), result.getPrefixPhone());
-		assertEquals(travelerToSave.getNumberPhone(),result.getNumberPhone() );
+		then(result.getId()).isNotNull();
+		then(travelerSaved.getId()).isEqualTo(result.getId());
+		then(travelerToSave.getName()).isEqualTo(result.getName() );
+		then(travelerToSave.getEmail()).isEqualTo(result.getEmail() );
+		then(StatusEnum.ACTIVE.getCode()).isEqualTo(result.getStatus());
+		then(travelerToSave.getPrefixPhone()).isEqualTo(result.getPrefixPhone());
+		then(travelerToSave.getNumberPhone()).isEqualTo(result.getNumberPhone()) ;
 		
 	}
 
 	@Test
 	public void shouldReturnTravelerListByNameOrEmail(){
 
-		String name = "Joao da Silva";
-		String email = "joao.silva@teste.com";
+		String name = "Bianca Silva";
+		String email = "bianca.silva@gmail.com";
 
-		when(repository.findByNameOrEmail(name, email)).thenReturn(getTravelerList());
+		when(repository.findByNameOrEmail(name, email)).thenReturn(Arrays.asList(getTravelerSaved02()));
 		List<Traveler> result = travelerService.findTravelersByNameOrEmail(name, email);
-		assertFalse(result.isEmpty());
+
+		then(result.get(0).getId()).isEqualTo(2);
+		then(result.get(0).getName()).isEqualTo("Bianca Silva");
+		then(result.get(0).getEmail()).isEqualTo("bianca_silva@gmail.com");
+		then(result.get(0).getDocument()).isEqualTo("18421484869");
+		then(result.get(0).getPrefixPhone()).isEqualTo(22);
+		then(result.get(0).getNumberPhone()).isEqualTo("98888-2222");
 
 	}
 
@@ -82,41 +78,39 @@ public class TravelerServiceTest {
 
 		Traveler result = travelerService.findById(id);
 
-		assertEquals(traveler.getId(), result.getId());
-		assertEquals(traveler.getName(), result.getName());
-		assertEquals(traveler.getEmail(), result.getEmail());
-		assertEquals(traveler.getStatus(), result.getStatus());
-		assertEquals(traveler.getDocument(), result.getDocument());
-		assertEquals(traveler.getPrefixPhone(), result.getPrefixPhone());
-		assertEquals(traveler.getNumberPhone(), result.getNumberPhone());
+		then(traveler.getId()).isEqualTo(result.getId());
+		then(traveler.getName()).isEqualTo(result.getName());
+		then(traveler.getEmail()).isEqualTo( result.getEmail());
+		then(traveler.getStatus()).isEqualTo( result.getStatus());
+		then(traveler.getDocument()).isEqualTo( result.getDocument());
+		then(traveler.getPrefixPhone()).isEqualTo( result.getPrefixPhone());
+		then(traveler.getNumberPhone()).isEqualTo( result.getNumberPhone());
 
 	}
 
 	@Test
 	public void shouldReturnAllTravelers(){
 
-		TravelerDetailResponse response = getDetailTraveler01Response();
-		when(repository.findAll()).thenReturn(getTravelerList());
-		when(travelerMapper.travelerToTravelerDetailResponse(Mockito.any(Traveler.class))).thenReturn(response);
+		when(repository.findAll()).thenReturn(getTravelerSavedList());
 
-		List<TravelerDetailResponse> result = travelerService.findAll();
+		List<Traveler> result = travelerService.findAll();
 
-		assertEquals(result.size(), 3);
+		then(result.size()).isEqualTo( 6);
 
 	}
 
 	@Test
 	public void shouldReturnAllTravelersByNameOrEmail(){
 		Traveler traveler = getTravelerSaved02();
-		String name = "Joao Carlos";
-		String email = "joao_carlos@gmail.com";
+		String name = "Bianca Silva";
+		String email = "";
 		when(repository.findByNameOrEmail(Mockito.anyString(), Mockito.anyString()))
 				.thenReturn(Arrays.asList(traveler));
 
 		List<Traveler> result = travelerService.findTravelersByNameOrEmail(name, email);
 
-		assertEquals(traveler.getName(), result.get(0).getName());
-		assertEquals(traveler.getEmail(), result.get(0).getEmail());
+		then(traveler.getName()).isEqualTo( "Bianca Silva");
+		then(traveler.getEmail()).isEqualTo( "bianca_silva@gmail.com");
 
 	}
 
@@ -125,26 +119,22 @@ public class TravelerServiceTest {
 
 		Long id = 1L;
 		Traveler travelerToUpdate = getTravelerToSaved01();
-		UpdateTravelerRequest request = getUpdateTraveler01Request();
 
 		Traveler travelerUpdated = getTravelerSaved01();
-		TravelerDetailResponse response = getDetailTraveler01Response();
-
 
 		when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(travelerToUpdate));
 		when(repository.save(Mockito.any(Traveler.class))).thenReturn(travelerUpdated);
-		when(travelerMapper.travelerToTravelerDetailResponse(Mockito.any(Traveler.class))).thenReturn(response);
 
-		TravelerDetailResponse result = travelerService.updateTraveler(id,request);
+		Traveler result = travelerService.updateTraveler(id,travelerToUpdate);
 
 		assertNotNull(result.getId());
-		assertEquals(travelerUpdated.getId(),result.getId());
-		assertEquals(travelerUpdated.getName(),result.getName() );
-		assertEquals(travelerUpdated.getEmail(), result.getEmail() );
+		then(travelerUpdated.getId()).isEqualTo(result.getId());
+		then(travelerUpdated.getName()).isEqualTo(result.getName() );
+		then(travelerUpdated.getEmail()).isEqualTo( result.getEmail() );
 
-		assertEquals(travelerUpdated.getStatus(), result.getStatus());
-		assertEquals(travelerUpdated.getPrefixPhone(), result.getPrefixPhone());
-		assertEquals(travelerUpdated.getNumberPhone(),result.getNumberPhone() );
+		then(travelerUpdated.getStatus()).isEqualTo( result.getStatus());
+		then(travelerUpdated.getPrefixPhone()).isEqualTo( result.getPrefixPhone());
+		then(travelerUpdated.getNumberPhone()).isEqualTo(result.getNumberPhone() );
 
 	}
 
@@ -160,7 +150,7 @@ public class TravelerServiceTest {
 			travelerService.findById(id);
 		});
 
-		assertEquals(exception.getMessage(), "Nenhum viajante encontrado pelo id: " + id);
+		then(exception.getMessage()).isEqualTo( "Nenhum viajante encontrado pelo id: " + id);
 
 
 	}
@@ -168,32 +158,30 @@ public class TravelerServiceTest {
 	@Test
 	public void shouldReturnExceptionWhenCreateTravelerAlreadyExistsWithSameName() {
 
-		CreateTravelerRequest request = getCreateTraveler01Request();
-		request.setName("Joao Carlos");
-		TravelerDetailResponse response = getDetailTraveler01Response();
+		String name = "Carlos Garcia";
+		String email = "teste.email@teste.com";
+		Integer prefixPhone = 77;
+		String numberPhone = "98888-7777";
+		String document = "77874564656";
 
-		Traveler travelerToSave = getTravelerToSaved01();
-		travelerToSave.setName("Joao Carlos");
-		Traveler travelerSaved = getTravelerSaved02();
+		Traveler travelerToSave = getNewTraveler(name, email,prefixPhone,numberPhone,document);
+
 		when(repository.findByNameOrEmail(Mockito.anyString(), Mockito.anyString()))
-				.thenReturn(Arrays.asList(travelerSaved));
+				.thenReturn(getTravelerSavedList());
 
-		when(travelerMapper.requestToCreateTraveler(request)).thenReturn(travelerToSave);
 
 		Exception exception = assertThrows(TravelerException.class, () ->{
-			travelerService.createTraveler(request);
+			travelerService.createTraveler(travelerToSave);
 		});
 
-		assertEquals(exception.getMessage(), "Já existe outro viajante cadastrado com mesmo nome ou email" );
+		then(exception.getMessage()).isEqualTo( "Já existe outro viajante cadastrado com mesmo nome ou email" );
 	}
 
 	@Test
 	public void shouldReturnExceptionWhenUpdateTravelerAlreadyExistsWithSameName() {
 
-		UpdateTravelerRequest request = getUpdateTraveler01Request();
-		request.setName("Maria da Silva");
 		Traveler travelerToUpdate = getTravelerSaved01();
-		travelerToUpdate.setName("Maria da Silva");
+		travelerToUpdate.setName("Carlos Garcia");
 
 		Traveler travelerSaved = getTravelerSaved03();
 		when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(travelerToUpdate));
@@ -202,18 +190,18 @@ public class TravelerServiceTest {
 				.thenReturn(Arrays.asList(travelerSaved));
 
 		Exception exception = assertThrows(TravelerException.class, () ->{
-			travelerService.updateTraveler(request.getId(), request);
+			travelerService.updateTraveler(1L, travelerToUpdate);
 		});
 
-		assertEquals(exception.getMessage(), "Já existe outro viajante cadastrado com mesmo nome ou email" );
+		then(exception.getMessage()).isEqualTo("Já existe outro viajante cadastrado com mesmo nome ou email" );
 	}
 
 	@Test
 	public void givenNameWhenFindByNameThenReturnListOfTravelers(){
-		List<Traveler> travelers = getTravelerList();
+		List<Traveler> travelers = getTravelerSavedList();
 		when(repository.findByNameContainingIgnoreCaseOrderByNameAsc(Mockito.anyString())).thenReturn(travelers);
 		String name = "travelerName";
-		List<TravelerDetailResponse> result = travelerService.findByNameContainingOrderByNameAsc(name);
+		List<Traveler> result = travelerService.findByNameContainingOrderByNameAsc(name);
 
 		assertNotNull(result);
 	}
