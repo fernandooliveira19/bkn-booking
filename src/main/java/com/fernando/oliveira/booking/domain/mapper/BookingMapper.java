@@ -29,7 +29,7 @@ public interface BookingMapper {
     Booking createRequestToEntity(CreateBookingRequest request);
 
     @Mapping(source = "traveler.id", target = "travelerId")
-    DetailBookingResponse bookingToDetailBookingResponse(Booking booking);
+    BookingDetailResponse bookingToDetailBookingResponse(Booking booking);
 
     @Mapping(source = "travelerId", target = "traveler.id")
     @Mapping(source = "checkIn", target = "checkIn", qualifiedByName = "formatLocalDateTime")

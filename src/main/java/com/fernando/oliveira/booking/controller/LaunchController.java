@@ -1,5 +1,7 @@
 package com.fernando.oliveira.booking.controller;
 
+import com.fernando.oliveira.booking.domain.entity.Launch;
+import com.fernando.oliveira.booking.domain.mapper.LaunchMapper;
 import com.fernando.oliveira.booking.domain.response.LaunchDetailResponse;
 import com.fernando.oliveira.booking.service.LaunchService;
 import io.swagger.annotations.Api;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Api(tags="Launches")
 @RestController
@@ -20,6 +23,9 @@ public class LaunchController {
 
     @Autowired
     private LaunchService launchService;
+
+    @Autowired
+    private LaunchMapper launchMapper;
 
     @ApiOperation(value = "Realiza exclusao de lançamento por id")
     @ApiResponses(value = {
@@ -44,10 +50,13 @@ public class LaunchController {
             @ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
     @GetMapping(value = "/next")
     public ResponseEntity<List<LaunchDetailResponse>> findNextLaunches(){
-
+        List<Launch> launchList = launchService.findNextLaunches();
+        List<LaunchDetailResponse> responses = launchList.stream()
+                .map(e -> launchMapper.launchToDetailLaunchResponse(e))
+                .collect(Collectors.toList());
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(launchService.findNextLaunches());
+                .body(responses);
 
     }
 }

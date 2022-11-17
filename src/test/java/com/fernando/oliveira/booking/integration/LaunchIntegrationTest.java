@@ -17,8 +17,10 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -53,15 +55,41 @@ public class LaunchIntegrationTest {
 
         LaunchDetailResponse [] response = result.getBody();
 
-        assertThat(response.length).isEqualTo(1);
-        assertThat(response[0].getId()).isEqualTo(102);
-        assertThat(response[0].getAmount().doubleValue()).isEqualTo(200.00d);
-        assertThat(response[0].getScheduleDate()).isEqualTo(LocalDate.of(2021,10,30));
-        assertThat(response[0].getPaymentType()).isEqualTo(PaymentTypeEnum.LOCAL);
+        assertThat(response.length).isEqualTo(4);
+
+        assertThat(response[0].getId()).isEqualTo(105);
+        assertThat(response[0].getAmount()).isEqualByComparingTo(BigDecimal.valueOf(1000.0));
+        assertThat(response[0].getScheduleDate()).isEqualTo(LocalDate.of(2021, Month.JANUARY,8));
+        assertThat(response[0].getPaymentType()).isEqualTo(PaymentTypeEnum.PIX);
         assertThat(response[0].getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
-        assertThat(response[0].getCheckIn()).isEqualTo(LocalDateTime.of(2021,10,1, 10,00));
-        assertThat(response[0].getTravelerName()).isEqualTo("Ana Maria");
+        assertThat(response[0].getCheckIn()).isEqualTo(LocalDateTime.of(2021,Month.JANUARY,1, 10,00));
+        assertThat(response[0].getTravelerName()).isEqualTo("Bianca Silva");
+
+        assertThat(response[1].getId()).isEqualTo(106);
+        assertThat(response[1].getAmount()).isEqualByComparingTo(BigDecimal.valueOf(1200.0));
+        assertThat(response[1].getScheduleDate()).isEqualTo(LocalDate.of(2021, Month.JANUARY,12));
+        assertThat(response[1].getPaymentType()).isEqualTo(PaymentTypeEnum.PIX);
+        assertThat(response[1].getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
+        assertThat(response[1].getCheckIn()).isEqualTo(LocalDateTime.of(2021,Month.JANUARY,16, 10,00));
+        assertThat(response[1].getTravelerName()).isEqualTo("Carlos Garcia");
+
+        assertThat(response[2].getId()).isEqualTo(107);
+        assertThat(response[2].getAmount()).isEqualByComparingTo(BigDecimal.valueOf(800.0));
+        assertThat(response[2].getScheduleDate()).isEqualTo(LocalDate.of(2021, Month.JANUARY,16));
+        assertThat(response[2].getPaymentType()).isEqualTo(PaymentTypeEnum.PIX);
+        assertThat(response[2].getPaymentStatus()).isEqualTo(PaymentStatusEnum.PENDING);
+        assertThat(response[2].getCheckIn()).isEqualTo(LocalDateTime.of(2021,Month.JANUARY,16, 10,00));
+        assertThat(response[2].getTravelerName()).isEqualTo("Carlos Garcia");
+
+        assertThat(response[3].getId()).isEqualTo(108);
+        assertThat(response[3].getAmount()).isEqualByComparingTo(BigDecimal.valueOf(2500.0));
+        assertThat(response[3].getScheduleDate()).isEqualTo(LocalDate.of(2021, Month.FEBRUARY,1));
+        assertThat(response[3].getPaymentType()).isEqualTo(PaymentTypeEnum.SITE);
+        assertThat(response[3].getPaymentStatus()).isEqualTo(PaymentStatusEnum.TO_RECEIVE);
+        assertThat(response[3].getCheckIn()).isEqualTo(LocalDateTime.of(2021,Month.FEBRUARY,1, 10,00));
+        assertThat(response[3].getTravelerName()).isEqualTo("David Souza");
 
     }
+
 
 }
