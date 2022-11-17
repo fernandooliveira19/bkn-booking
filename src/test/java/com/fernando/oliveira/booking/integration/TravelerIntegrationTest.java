@@ -1,16 +1,10 @@
 package com.fernando.oliveira.booking.integration;
 
-import com.fernando.oliveira.booking.domain.entity.Booking;
-import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
-import com.fernando.oliveira.booking.domain.enums.ContractTypeEnum;
 import com.fernando.oliveira.booking.domain.enums.StatusEnum;
 import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
-import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
 import com.fernando.oliveira.booking.domain.response.ExceptionResponse;
 import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
-import com.fernando.oliveira.booking.mother.BookingMother;
-import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +17,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-
 import static com.fernando.oliveira.booking.mother.TravelerMother.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @ExtendWith(SpringExtension.class)
