@@ -9,15 +9,15 @@ import com.fernando.oliveira.booking.domain.enums.StatusEnum;
 import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
 import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 import java.util.List;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TravelerMother {
-	
-	private TravelerMother() {
-		
-	}
+
 
 	public static final Long TRAVELER_01_ID = 1L;
 	public static final String TRAVELER_01_NAME = "Ana Maria";
@@ -47,6 +47,11 @@ public class TravelerMother {
 	private static final Integer TRAVELER_05_PREFIX_PHONE= 55;
 	private static final String TRAVELER_05_NUMBER_PHONE = "98888-5555";
 
+	private static final String TRAVELER_06_NAME = "Fernando Oliveira";
+	private static final String TRAVELER_06_EMAIL = "fernando_oliveira@gmail.com";
+	private static final Integer TRAVELER_06_PREFIX_PHONE= 66;
+	private static final String TRAVELER_06_NUMBER_PHONE = "98888-6666";
+
 	public static CreateTravelerRequest getCreateTraveler01Request() {
 		CreateTravelerRequest request = new CreateTravelerRequest();
 		request.setName(TRAVELER_01_NAME);
@@ -73,6 +78,15 @@ public class TravelerMother {
 		request.setNumberPhone(TRAVELER_05_NUMBER_PHONE);
 		return request;
 	}
+	public static CreateTravelerRequest getNewTravelerRequest(String name, String email, Integer prefixPhone, String numberPhone, String document) {
+		CreateTravelerRequest request = new CreateTravelerRequest();
+		request.setName(name);
+		request.setEmail(email);
+		request.setPrefixPhone(prefixPhone);
+		request.setNumberPhone(numberPhone);
+		request.setDocument(document);
+		return request;
+	}
 
 	public static TravelerDetailResponse getDetailTraveler01Response() {
 
@@ -81,6 +95,7 @@ public class TravelerMother {
 		response.setEmail(TRAVELER_01_EMAIL);
 		response.setPrefixPhone(TRAVELER_01_PREFIX_PHONE);
 		response.setNumberPhone(TRAVELER_01_NUMBER_PHONE);
+		response.setDocument(TRAVELER_01_DOCUMENT);
 		response.setId(1L);
 		response.setStatus(StatusEnum.ACTIVE.getCode());
 		return response;
@@ -94,6 +109,7 @@ public class TravelerMother {
 		response.setEmail(TRAVELER_02_EMAIL);
 		response.setPrefixPhone(TRAVELER_02_PREFIX_PHONE);
 		response.setNumberPhone(TRAVELER_02_NUMBER_PHONE);
+		response.setDocument(TRAVELER_02_DOCUMENT);
 		response.setId(2L);
 		response.setStatus(StatusEnum.ACTIVE.getCode());
 
@@ -114,6 +130,32 @@ public class TravelerMother {
 		return response;
 
 	}
+	public static TravelerDetailResponse getDetailTraveler04Response() {
+
+		TravelerDetailResponse response = new TravelerDetailResponse();
+		response.setName(TRAVELER_04_NAME);
+		response.setEmail(TRAVELER_04_EMAIL);
+		response.setPrefixPhone(TRAVELER_04_PREFIX_PHONE);
+		response.setNumberPhone(TRAVELER_04_NUMBER_PHONE);
+		response.setId(4L);
+		response.setStatus(StatusEnum.ACTIVE.getCode());
+
+		return response;
+
+	}
+	public static TravelerDetailResponse getDetailTraveler05Response() {
+
+		TravelerDetailResponse response = new TravelerDetailResponse();
+		response.setName(TRAVELER_05_NAME);
+		response.setEmail(TRAVELER_05_EMAIL);
+		response.setPrefixPhone(TRAVELER_05_PREFIX_PHONE);
+		response.setNumberPhone(TRAVELER_05_NUMBER_PHONE);
+		response.setId(5L);
+		response.setStatus(StatusEnum.ACTIVE.getCode());
+
+		return response;
+
+	}
 
     public static String getCreateRequestJsonValue(CreateTravelerRequest request) throws JsonProcessingException {
 	    ObjectMapper mapper = new ObjectMapper();
@@ -122,15 +164,15 @@ public class TravelerMother {
         return writer.writeValueAsString(request);
     }
 
-	public static List<Traveler> getTravelerList() {
+	public static List<Traveler> getTravelerSavedList() {
 
-		return Arrays.asList(getTravelerSaved01(), getTravelerSaved02(), getTravelerSaved03());
+		return Arrays.asList(getTravelerSaved01(), getTravelerSaved02(), getTravelerSaved03(), getTravelerSaved04(),getTravelerSaved05(),getTravelerSaved06());
 
 	}
 
 	public static List<TravelerDetailResponse> getTravelerDetailList() {
 
-		return Arrays.asList(getDetailTraveler01Response(), getDetailTraveler02Response(), getDetailTraveler03Response());
+		return Arrays.asList(getDetailTraveler01Response(), getDetailTraveler02Response(), getDetailTraveler03Response(), getDetailTraveler04Response());
 
 	}
 
@@ -180,6 +222,38 @@ public class TravelerMother {
 				.build();
 	}
 
+	public static Traveler getTravelerSaved04(){
+		return Traveler.builder()
+				.id(4L)
+				.name(TRAVELER_04_NAME)
+				.email(TRAVELER_04_EMAIL)
+				.prefixPhone(TRAVELER_04_PREFIX_PHONE)
+				.numberPhone(TRAVELER_04_NUMBER_PHONE)
+				.status(StatusEnum.ACTIVE.getCode())
+				.build();
+	}
+
+	public static Traveler getTravelerSaved05(){
+		return Traveler.builder()
+				.id(5L)
+				.name(TRAVELER_05_NAME)
+				.email(TRAVELER_05_EMAIL)
+				.prefixPhone(TRAVELER_05_PREFIX_PHONE)
+				.numberPhone(TRAVELER_05_NUMBER_PHONE)
+				.status(StatusEnum.ACTIVE.getCode())
+				.build();
+	}
+	public static Traveler getTravelerSaved06(){
+		return Traveler.builder()
+				.id(6L)
+				.name(TRAVELER_06_NAME)
+				.email(TRAVELER_06_EMAIL)
+				.prefixPhone(TRAVELER_06_PREFIX_PHONE)
+				.numberPhone(TRAVELER_06_NUMBER_PHONE)
+				.status(StatusEnum.ACTIVE.getCode())
+				.build();
+	}
+
 	public static List<TravelerDetailResponse> getAllListTravelerDetailResponse(){
 		return Arrays.asList(getDetailTraveler01Response(), getDetailTraveler02Response(), getDetailTraveler03Response());
 	}
@@ -193,5 +267,15 @@ public class TravelerMother {
 		request.setId(1L);
 		request.setStatus(StatusEnum.INACTIVE.getCode());
 		return request;
+	}
+
+	public static Traveler getNewTraveler(String name, String email, Integer prefixPhone, String numberPhone, String document) {
+		Traveler traveler = new Traveler();
+		traveler.setName(name);
+		traveler.setEmail(email);
+		traveler.setPrefixPhone(prefixPhone);
+		traveler.setNumberPhone(numberPhone);
+		traveler.setDocument(document);
+		return traveler;
 	}
 }
