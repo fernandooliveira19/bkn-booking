@@ -1,5 +1,9 @@
 package com.fernando.oliveira.booking.controller;
 
+import com.fernando.oliveira.booking.domain.entity.Booking;
+import com.fernando.oliveira.booking.domain.entity.Traveler;
+import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
+import com.fernando.oliveira.booking.domain.mapper.TravelerMapper;
 import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
 import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Api(tags="Travelers")
 @RestController
@@ -29,6 +34,12 @@ public class TravelerController {
 	@Autowired
 	private BookingService bookingService;
 
+	@Autowired
+	private TravelerMapper travelerMapper;
+
+	@Autowired
+	private BookingMapper bookingMapper;
+
 	@ApiOperation(value = "Realiza cadastro de viajante")
 	@ApiResponses(value = {
 			@ApiResponse(code = 201, message = "Viajante cadastrado com sucesso"),
@@ -38,9 +49,16 @@ public class TravelerController {
 	@PostMapping
 	public ResponseEntity<TravelerDetailResponse> createTraveler(@RequestBody @Valid CreateTravelerRequest request) {
 
+		Traveler traveler = travelerMapper.requestToCreateTraveler(request);
+
+		Traveler travelerCreated = travelerService.createTraveler(traveler);
+
+		TravelerDetailResponse response = travelerMapper
+				.travelerToTravelerDetailResponse(travelerCreated);
+
 		return ResponseEntity
 				.status(HttpStatus.CREATED)
-				.body(travelerService.createTraveler(request));
+				.body(response);
 
 	}
 
@@ -52,9 +70,11 @@ public class TravelerController {
 	@GetMapping("/{id}")
 	public ResponseEntity<TravelerDetailResponse> findById(@PathVariable("id") Long id) {
 
+		Traveler traveler = travelerService.getTravelerDetail(id);
+		TravelerDetailResponse response = travelerMapper.travelerToTravelerDetailResponse(traveler);
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body(travelerService.getTravelerDetail(id));
+				.body(response);
 
 	}
 
@@ -65,10 +85,14 @@ public class TravelerController {
 			@ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
 	@GetMapping
 	public ResponseEntity<List<TravelerDetailResponse>> findAll() {
-
+		List<Traveler> travelerList = travelerService.findAll();
+		List<TravelerDetailResponse> responses = travelerList
+				.stream()
+				.map(e -> travelerMapper.travelerToTravelerDetailResponse(e))
+				.collect(Collectors.toList());
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body(travelerService.findAll());
+				.body(responses);
 
 	}
 
@@ -82,9 +106,12 @@ public class TravelerController {
 	@PutMapping
 	public ResponseEntity<TravelerDetailResponse> update(@Valid  @RequestBody UpdateTravelerRequest request) {
 
+		Traveler travelerToUpdate = travelerMapper.requestToUpdateTraveler(request);
+		Traveler travelerUpdated = travelerService.updateTraveler(request.getId(), travelerToUpdate);
+		TravelerDetailResponse response = travelerMapper.travelerToTravelerDetailResponse(travelerUpdated);
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body(travelerService.updateTraveler(request.getId(), request));
+				.body(response);
 	}
 
 	@ApiOperation(value = "Realiza pesquisa de viajantes pelo nome")
@@ -96,9 +123,15 @@ public class TravelerController {
 	@GetMapping("/find")
 	public ResponseEntity<List<TravelerDetailResponse>> findByName(@RequestParam String name) {
 
+		List<Traveler> travelerList = travelerService.findByNameContainingOrderByNameAsc(name);
+		List<TravelerDetailResponse> responses = travelerList
+				.stream()
+				.map(e -> travelerMapper.travelerToTravelerDetailResponse(e))
+				.collect(Collectors.toList());
+
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body(travelerService.findByNameContainingOrderByNameAsc(name));
+				.body(responses);
 	}
 
 	@ApiOperation(value = "Realiza inativação de viajante pelo identificador")
@@ -123,9 +156,15 @@ public class TravelerController {
 	@GetMapping("/actives/")
 	public ResponseEntity<List<TravelerDetailResponse>> findAllActive() {
 
+		List<Traveler> travelerList = travelerService.findActiveTravelers();
+		List<TravelerDetailResponse> responses = travelerList
+				.stream()
+				.map(e -> travelerMapper.travelerToTravelerDetailResponse(e))
+				.collect(Collectors.toList());
+
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body(travelerService.findActiveTravelers());
+				.body(responses);
 
 	}
 
@@ -137,9 +176,13 @@ public class TravelerController {
 	@GetMapping("/{id}/bookings")
 	public ResponseEntity<List<BookingTravelerResponse>> findBookingsByTravelerId(@PathVariable("id") Long id) {
 
+		List<Booking> bookingList = bookingService.findBookingsByTraveler(id);
+		List<BookingTravelerResponse> responses = bookingList.stream()
+				.map(e -> bookingMapper.bookingToBookingTravelerResponse(e))
+				.collect(Collectors.toList());
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body(bookingService.findBookingsByTraveler(id));
+				.body(responses);
 
 	}
 }
