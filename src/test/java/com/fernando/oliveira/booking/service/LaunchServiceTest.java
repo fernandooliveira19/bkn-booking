@@ -2,6 +2,7 @@ package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
+import com.fernando.oliveira.booking.mother.LaunchMother;
 import com.fernando.oliveira.booking.repository.LaunchRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,8 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum.*;
-
-import static com.fernando.oliveira.booking.mother.LaunchMother.getBooking01Launch01;
+import static com.fernando.oliveira.booking.mother.LaunchMother.*;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.Mockito.when;
 
