@@ -6,6 +6,8 @@ import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
 import com.fernando.oliveira.booking.domain.request.CreateLaunchRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateLaunchRequest;
 import com.fernando.oliveira.booking.domain.response.LaunchDetailResponse;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,12 +15,8 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
-
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LaunchMother {
-
-    private LaunchMother(){
-        
-    }
 
     private static final Long BOOKING_01_LAUNCH_01_ID= 100L;
     private static final BigDecimal BOOKING_01_LAUNCH_01_AMOUNT = BigDecimal.valueOf(500.0);
