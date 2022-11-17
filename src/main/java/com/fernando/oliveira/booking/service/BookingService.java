@@ -1,11 +1,8 @@
 package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
-import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
-import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.domain.request.SearchBookingRequest;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BookingService {
@@ -22,6 +19,5 @@ public interface BookingService {
 
     Booking detailBooking(Long id);
 
-
-
+    List<Booking> findBookingsByTraveler(Long travelerId);
 }
