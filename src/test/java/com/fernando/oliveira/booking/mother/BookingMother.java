@@ -6,8 +6,6 @@ import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.ContractTypeEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
-import com.fernando.oliveira.booking.domain.request.*;
-import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
 import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
 import com.fernando.oliveira.booking.domain.request.CreateLaunchRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateBookingRequest;
@@ -211,7 +209,7 @@ public class BookingMother {
                 .bookingStatus(BookingStatusEnum.RESERVED)
                 .contractType(ContractTypeEnum.DIRECT)
                 .observation("First booking saved")
-                .launchs(Arrays.asList(launch01, launch02, launch03))
+                .launches(Arrays.asList(launch01, launch02, launch03))
                 .paymentStatus(BOOKING_01_PAYMENT_STATUS)
                 .amountPaid(BOOKING_01_AMOUNT_PAID)
                 .amountPending(BOOKING_01_AMOUNT_PENDING)
