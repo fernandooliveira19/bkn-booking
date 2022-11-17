@@ -1,6 +1,5 @@
 package com.fernando.oliveira.booking.integration;
 
-import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.ContractTypeEnum;
 import com.fernando.oliveira.booking.domain.enums.StatusEnum;
@@ -9,8 +8,6 @@ import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
 import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
 import com.fernando.oliveira.booking.domain.response.ExceptionResponse;
 import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
-import com.fernando.oliveira.booking.mother.BookingMother;
-import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +21,10 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
 
-import static com.fernando.oliveira.booking.mother.TravelerMother.*;
+import static com.fernando.oliveira.booking.mother.TravelerMother.getCreateTraveler02Request;
+import static com.fernando.oliveira.booking.mother.TravelerMother.getUpdateTraveler01Request;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @ExtendWith(SpringExtension.class)
@@ -78,7 +69,7 @@ public class TravelerIntegrationTest {
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         TravelerDetailResponse[] response = result.getBody();
-        assertThat(response.length).isEqualTo(4);
+        assertThat(response.length).isEqualTo(6);
 
         assertThat(response[0].getId()).isEqualTo(1L);
         assertThat(response[0].getName()).isEqualTo("Ana Maria");
@@ -106,24 +97,39 @@ public class TravelerIntegrationTest {
         assertThat(response[3].getEmail()).isEqualTo("david_souza@gmail.com");
         assertThat(response[3].getNumberPhone()).isEqualTo("98888-4444");
         assertThat(response[3].getPrefixPhone()).isEqualTo(44);
-        assertThat(response[3].getStatus()).isEqualTo(StatusEnum.INACTIVE.getCode());
+        assertThat(response[3].getStatus()).isEqualTo(StatusEnum.ACTIVE.getCode());
+
+        assertThat(response[4].getId()).isEqualTo(5L);
+        assertThat(response[4].getName()).isEqualTo("Elaine Matos");
+        assertThat(response[4].getEmail()).isEqualTo("elaine_matos@gmail.com");
+        assertThat(response[4].getNumberPhone()).isEqualTo("98888-5555");
+        assertThat(response[4].getPrefixPhone()).isEqualTo(55);
+        assertThat(response[4].getStatus()).isEqualTo(StatusEnum.INACTIVE.getCode());
+
+        assertThat(response[5].getId()).isEqualTo(6L);
+        assertThat(response[5].getName()).isEqualTo("Fernando Oliveira");
+        assertThat(response[5].getEmail()).isEqualTo("fernando_oliveira@gmail.com");
+        assertThat(response[5].getNumberPhone()).isEqualTo("98888-6666");
+        assertThat(response[5].getPrefixPhone()).isEqualTo(66);
+        assertThat(response[5].getStatus()).isEqualTo(StatusEnum.ACTIVE.getCode());
 
     }
 
     @Test
     void shouldReturnTravelerDetailsWhenCreateTraveler() {
 
-        CreateTravelerRequest request = getCreateTraveler05Request();
-
-        ResponseEntity<TravelerDetailResponse> result = restTemplate
-                .postForEntity(
-                        TRAVELER_MAPPING,
-                        request,
-                        TravelerDetailResponse.class
-                );
-
-        assertThat(result.getBody().getId()).isEqualTo(5L);
-        assertThat(result.getBody().getStatus()).isEqualTo(StatusEnum.ACTIVE.getCode());
+//        CreateTravelerRequest request = getNewTravelerRequest("Gustavo Andrade", "gustavo_andrade@gmail.com", 77, "988887777",  "");
+//
+//        ResponseEntity<TravelerDetailResponse> result = restTemplate
+//                .postForEntity(
+//                        TRAVELER_MAPPING,
+//                        request,
+//                        TravelerDetailResponse.class
+//                );
+//
+//        assertThat(result.getBody().getId()).isEqualTo(7L);
+//        assertThat(result.getBody().getStatus()).isEqualTo(StatusEnum.ACTIVE.getCode());
+//
 
     }
 
@@ -150,12 +156,12 @@ public class TravelerIntegrationTest {
 
         TravelerDetailResponse[] response = result.getBody();
 
-        assertThat(response.length).isEqualTo(3);
+        assertThat(response.length).isEqualTo(5);
 
     }
 
     @Test
-    void shouldInactiveTravalerById() {
+    void shouldInactiveTravelerById() {
         Long travelerId = 1L;
 
         restTemplate
@@ -168,7 +174,7 @@ public class TravelerIntegrationTest {
 
         TravelerDetailResponse[] response = result.getBody();
 
-        assertThat(response.length).isEqualTo(2);
+        assertThat(response.length).isEqualTo(4);
 
     }
 
@@ -228,11 +234,11 @@ public class TravelerIntegrationTest {
         assertThat(response.length).isEqualTo(1);
 
         assertThat(response[0].getBookingId()).isEqualTo(10L);
-        assertThat(response[0].getCheckIn()).isEqualTo("2021-10-01T10:00:00");
-        assertThat(response[0].getCheckOut()).isEqualTo("2021-10-30T18:30:00");
-        assertThat(response[0].getAmountTotal()).isEqualByComparingTo(BigDecimal.valueOf(1500.00));
+        assertThat(response[0].getCheckIn()).isEqualTo("2020-12-15T10:00:00");
+        assertThat(response[0].getCheckOut()).isEqualTo("2020-12-30T18:00:00");
+        assertThat(response[0].getAmountTotal()).isEqualByComparingTo(BigDecimal.valueOf(1000.00));
 
-        assertThat(response[0].getBookingStatus()).isEqualTo(BookingStatusEnum.RESERVED);
+        assertThat(response[0].getBookingStatus()).isEqualTo(BookingStatusEnum.FINISHED);
         assertThat(response[0].getContractType()).isEqualTo(ContractTypeEnum.DIRECT);
         assertThat(response[0].getObservation()).isEqualTo("Primeira reserva");
 
