@@ -16,4 +16,6 @@ public interface TravelerRepository extends JpaRepository<Traveler, Long> {
 
     @Query("select t from traveler t where t.status = 'A' order by t.name")
     List<Traveler> findActiveTravelers();
+
+    List<Traveler> findByName(String email);
 }

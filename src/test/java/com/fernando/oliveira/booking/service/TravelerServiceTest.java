@@ -2,6 +2,8 @@ package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.StatusEnum;
+import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
+import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
 import com.fernando.oliveira.booking.exception.TravelerException;
 import com.fernando.oliveira.booking.mother.TravelerMother;
 import com.fernando.oliveira.booking.repository.TravelerRepository;
@@ -18,8 +20,8 @@ import java.util.Optional;
 
 import static com.fernando.oliveira.booking.mother.TravelerMother.*;
 import static org.assertj.core.api.BDDAssertions.then;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -109,8 +111,8 @@ public class TravelerServiceTest {
 
 		List<Traveler> result = travelerService.findTravelersByNameOrEmail(name, email);
 
-		then(traveler.getName()).isEqualTo( "Bianca Silva");
-		then(traveler.getEmail()).isEqualTo( "bianca_silva@gmail.com");
+		then(result.get(0).getName()).isEqualTo( "Bianca Silva");
+		then(result.get(0).getEmail()).isEqualTo( "bianca_silva@gmail.com");
 
 	}
 
@@ -123,11 +125,11 @@ public class TravelerServiceTest {
 		Traveler travelerUpdated = getTravelerSaved01();
 
 		when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(travelerToUpdate));
-		when(repository.save(Mockito.any(Traveler.class))).thenReturn(travelerUpdated);
+		when(repository.save(any(Traveler.class))).thenReturn(travelerUpdated);
 
 		Traveler result = travelerService.updateTraveler(id,travelerToUpdate);
 
-		assertNotNull(result.getId());
+		then(result).isNotNull();
 		then(travelerUpdated.getId()).isEqualTo(result.getId());
 		then(travelerUpdated.getName()).isEqualTo(result.getName() );
 		then(travelerUpdated.getEmail()).isEqualTo( result.getEmail() );
@@ -203,7 +205,72 @@ public class TravelerServiceTest {
 		String name = "travelerName";
 		List<Traveler> result = travelerService.findByNameContainingOrderByNameAsc(name);
 
-		assertNotNull(result);
+		then(result).isNotNull();
+	}
+
+	@Test
+	public void givenNewTravelerWithEmptyEmailWhenCreateTravelerThenSaveTraveler(){
+
+		CreateTravelerRequest request = TravelerMother.getNewTravelerRequest("Hugo Carvalho", "", 88, "98888-7677", "");
+		Traveler travelerToSave = TravelerMother.createTravelerRequestToTraveler(request);
+
+		when(repository.findByName(anyString())).thenReturn(Arrays.asList());
+		when(repository.save(any(Traveler.class))).thenReturn(TravelerMother.getNewTraveler(request.getName(), request.getEmail(), request.getPrefixPhone(), request.getNumberPhone(), request.getDocument()));
+
+		Traveler result = travelerService.createTraveler(travelerToSave);
+
+		then(result).isNotNull();
+
+
+	}
+
+	@Test
+	public void givenNewTravelerWithNullEmailWhenCreateTravelerThenSaveTraveler(){
+
+		CreateTravelerRequest request = TravelerMother.getNewTravelerRequest("Hugo Carvalho", null, 88, "98888-7677", "");
+		Traveler travelerToSave = TravelerMother.createTravelerRequestToTraveler(request);
+
+		when(repository.findByName(anyString())).thenReturn(Arrays.asList());
+		when(repository.save(any(Traveler.class))).thenReturn(TravelerMother.getNewTraveler(request.getName(), request.getEmail(), request.getPrefixPhone(), request.getNumberPhone(), request.getDocument()));
+
+		Traveler result = travelerService.createTraveler(travelerToSave);
+
+		then(result).isNotNull();
+
+	}
+
+	@Test
+	public void givenNewTravelerWithEmptyEmailWhenUpdateTravelerThenSaveTraveler(){
+		Long id = 1L;
+		UpdateTravelerRequest request = TravelerMother.getUpdateTravelerRequest(id,"Ana Maria", null, 11, "98888-1111", "50042806739");
+		Traveler travelerToUpdate = TravelerMother.updateTravelerRequestToTraveler(request);
+
+		when(repository.findById(anyLong())).thenReturn(Optional.of(TravelerMother.getTravelerSaved01()));
+		when(repository.findByName(anyString())).thenReturn(Arrays.asList(TravelerMother.getTravelerSaved01()));
+		when(repository.save(any(Traveler.class))).thenReturn(TravelerMother.getTravelerSaved01());
+
+		Traveler result = travelerService.updateTraveler(id, travelerToUpdate);
+
+		then(result.getId()).isEqualTo(1);
+
+
+
+	}
+
+	@Test
+	public void givenNewTravelerWithNullEmailWhenUpdateTravelerThenSaveTraveler(){
+
+		Long id = 1L;
+		UpdateTravelerRequest request = TravelerMother.getUpdateTravelerRequest(id,"Ana Maria", null, 11, "98888-1111", "50042806739");
+		Traveler travelerToUpdate = TravelerMother.updateTravelerRequestToTraveler(request);
+		when(repository.findById(anyLong())).thenReturn(Optional.of(TravelerMother.getTravelerSaved01()));
+		when(repository.findByName(anyString())).thenReturn(Arrays.asList(TravelerMother.getTravelerSaved01()));
+		when(repository.save(any(Traveler.class))).thenReturn(TravelerMother.getTravelerSaved01());
+
+		Traveler result = travelerService.updateTraveler(id, travelerToUpdate);
+
+		then(result.getId()).isEqualTo(1);
+
 	}
 
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.fernando.oliveira.booking.domain.enums.StatusEnum.ACTIVE;
@@ -34,7 +35,15 @@ public class TravelerServiceImpl implements TravelerService {
     }
 
     private void validate(Traveler traveler) {
-        List<Traveler> travelers = findTravelersByNameOrEmail(traveler.getName(), traveler.getEmail());
+
+
+        List<Traveler> travelers = new ArrayList<>();
+
+        if(StringUtils.isBlank(traveler.getEmail())){
+            travelers = findByName(traveler.getName());
+        }else {
+            travelers = findTravelersByNameOrEmail(traveler.getName(), traveler.getEmail());
+        }
 
         if (!travelers.isEmpty()) {
 
@@ -124,6 +133,10 @@ public class TravelerServiceImpl implements TravelerService {
         }
 
         traveler.setNumberPhone(formatPhoneNumber(traveler.getNumberPhone()));
+    }
+
+    public List<Traveler> findByName(String name){
+        return repository.findByName(name);
     }
 
 }
