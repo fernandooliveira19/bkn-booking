@@ -1,14 +1,13 @@
 package com.fernando.oliveira.booking.service;
 
-import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
-import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
-import com.fernando.oliveira.booking.domain.spec.BookingSpec;
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
+import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
 import com.fernando.oliveira.booking.domain.request.SearchBookingRequest;
+import com.fernando.oliveira.booking.domain.spec.BookingSpec;
 import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.repository.BookingRepository;
 import org.apache.commons.lang.StringUtils;
@@ -98,25 +97,18 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<Booking> search(SearchBookingRequest request) {
 
-
         if (request.getBookingStatus() == null
                 && request.getPaymentStatus() == null
                 && request.getContractType() == null) {
-
             return findNextBookings();
-
         } else {
             BookingSpec bookingSpec = new BookingSpec(request);
-
             List<Booking> result = bookingRepository.findAll(bookingSpec);
-
             return result.stream()
                     .map((e) -> defineBookingDetails((Booking) e))
                     .collect(Collectors.toList());
-
         }
     }
-
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
@@ -126,7 +118,6 @@ public class BookingServiceImpl implements BookingService {
         validateBooking(booking);
 
         Booking bookingToUpdate = prepareBookingToSave(booking);
-
         Booking bookingBase = findById(id);
         bookingToUpdate.setInsertDate(bookingBase.getInsertDate());
         bookingToUpdate.setLastUpdate(LocalDateTime.now());
@@ -145,12 +136,8 @@ public class BookingServiceImpl implements BookingService {
             } else {
                 launchService.createLaunch(launch, bookingUpdated);
             }
-
-
         }
-
         return bookingUpdated;
-
     }
 
     public Booking findById(Long id) {
@@ -163,21 +150,16 @@ public class BookingServiceImpl implements BookingService {
     }
 
     public Booking detailBooking(Long id) {
-        Booking booking = findById(id);
-
-        return defineBookingDetails(booking);
+        return defineBookingDetails(findById(id));
     }
 
     @Override
     public List<Booking> findBookingsByTraveler(Long travelerId) {
         return bookingRepository.findByTraveler(travelerId);
-
     }
-
 
     public Booking defineBookingDetails(Booking booking) {
         defineTraveler(booking);
-
         return booking;
     }
 
@@ -225,7 +207,6 @@ public class BookingServiceImpl implements BookingService {
         }
         if (BookingStatusEnum.CANCELED.equals(booking.getBookingStatus())) {
             validateCancelBooking(booking);
-
         }
 
         List<Booking> otherBookings = bookingRepository.findBookingsByDate(booking.getCheckIn(), booking.getCheckOut());
@@ -240,7 +221,6 @@ public class BookingServiceImpl implements BookingService {
                     throw new BookingException("Já existe outra reserva para o mesmo periodo");
                 }
             }
-
         }
 
         if (booking.getLaunches() == null || booking.getLaunches().isEmpty()) {
@@ -252,8 +232,6 @@ public class BookingServiceImpl implements BookingService {
         }
 
     }
-
-
 
     private void validateCancelBooking(Booking booking) {
         if (StringUtils.isBlank(booking.getObservation())) {
@@ -275,7 +253,7 @@ public class BookingServiceImpl implements BookingService {
         }
         booking.getLaunches().stream().forEach(e -> {
             if (e.getPaymentStatus().equals(PaymentStatusEnum.PENDING)) {
-                throw new BookingException("Não é possível finalizar a reserva. Verificar lancçamentos pendentes");
+                throw new BookingException("Não é possível finalizar a reserva. Verificar lançamentos pendentes");
             }
         });
     }
@@ -283,10 +261,8 @@ public class BookingServiceImpl implements BookingService {
     public BigDecimal getTotalAmountByLaunches(List<Launch> launches) {
 
         return launches.stream()
-
                 .map(Launch::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-
     }
 
     private void defineTraveler(Booking booking) {
