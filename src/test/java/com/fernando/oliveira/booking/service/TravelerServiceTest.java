@@ -7,6 +7,7 @@ import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
 import com.fernando.oliveira.booking.exception.TravelerException;
 import com.fernando.oliveira.booking.mother.TravelerMother;
 import com.fernando.oliveira.booking.repository.TravelerRepository;
+import com.fernando.oliveira.booking.utils.MessageUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,7 +32,10 @@ public class TravelerServiceTest {
 	private TravelerServiceImpl travelerService;
 
 	@Mock
-	TravelerRepository repository;
+	private TravelerRepository repository;
+
+	@Mock
+	private MessageUtils messageUtils;
 
 	@Test
 	public void shouldCreateTravelerAndReturnTravelerDetails() {
@@ -147,6 +151,7 @@ public class TravelerServiceTest {
 		Long id = 123L;
 
 		when(repository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+		when(messageUtils.getMessage(any(),any())).thenReturn("Nenhum viajante encontrado pelo id: 123");
 
 		Exception exception = assertThrows(TravelerException.class, () ->{
 			travelerService.findById(id);
@@ -170,6 +175,7 @@ public class TravelerServiceTest {
 
 		when(repository.findByNameOrEmail(Mockito.anyString(), Mockito.anyString()))
 				.thenReturn(getTravelerSavedList());
+		when(messageUtils.getMessage(any())).thenReturn("Já existe outro viajante cadastrado com mesmo nome ou email");
 
 
 		Exception exception = assertThrows(TravelerException.class, () ->{
@@ -190,6 +196,7 @@ public class TravelerServiceTest {
 
 		when(repository.findByNameOrEmail(Mockito.anyString(), Mockito.anyString()))
 				.thenReturn(Arrays.asList(travelerSaved));
+		when(messageUtils.getMessage(any())).thenReturn("Já existe outro viajante cadastrado com mesmo nome ou email");
 
 		Exception exception = assertThrows(TravelerException.class, () ->{
 			travelerService.updateTraveler(1L, travelerToUpdate);

@@ -1,9 +1,11 @@
 package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Traveler;
+import com.fernando.oliveira.booking.domain.enums.ExceptionMessageEnum;
 import com.fernando.oliveira.booking.domain.enums.StatusEnum;
 import com.fernando.oliveira.booking.exception.TravelerException;
 import com.fernando.oliveira.booking.repository.TravelerRepository;
+import com.fernando.oliveira.booking.utils.MessageUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,9 @@ public class TravelerServiceImpl implements TravelerService {
 
     @Autowired
     private TravelerRepository repository;
+
+    @Autowired
+    private MessageUtils messageUtils;
 
 
     public Traveler createTraveler(Traveler traveler) {
@@ -48,7 +53,7 @@ public class TravelerServiceImpl implements TravelerService {
         if (!travelers.isEmpty()) {
 
             if (traveler.getId() == null) {
-                throw new TravelerException("Já existe outro viajante cadastrado com mesmo nome ou email");
+                throw new TravelerException(messageUtils.getMessage(ExceptionMessageEnum.TRAVELER_ALREADY_EXISTS));
             } else {
                 validateUpdateTraveler(traveler, travelers);
             }
@@ -60,7 +65,7 @@ public class TravelerServiceImpl implements TravelerService {
 
         for (Traveler t : travelers) {
             if (!t.getId().equals(traveler.getId())) {
-                throw new TravelerException("Já existe outro viajante cadastrado com mesmo nome ou email");
+                throw new TravelerException(messageUtils.getMessage(ExceptionMessageEnum.TRAVELER_ALREADY_EXISTS));
             }
         }
 
@@ -76,7 +81,7 @@ public class TravelerServiceImpl implements TravelerService {
     @Override
     public Traveler findById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new TravelerException("Nenhum viajante encontrado pelo id: " + id));
+                .orElseThrow(() -> new TravelerException(messageUtils.getMessage(ExceptionMessageEnum.TRAVELER_NOT_FOUND.getMessageKey(), new Object[]{id})));
     }
 
     @Override

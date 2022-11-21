@@ -13,8 +13,9 @@ public enum ExceptionMessageEnum {
     BOOKING_OBSERVATION_REQUIRED("booking.observation.required"),
     BOOKING_CANCEL_LAUNCHES_PAID_ERROR("booking.cancel.launches.paid.error"),
     BOOKING_FINISH_BEFORE_CHECKOUT_ERROR("booking.finish.before.checkout.error"),
-    BOOKING_FINISH_LAUNCHES_PENDING_ERROR("booking.finish.launches.pending.error");
-
+    BOOKING_FINISH_LAUNCHES_PENDING_ERROR("booking.finish.launches.pending.error"),
+    TRAVELER_NOT_FOUND("traveler.not.found"),
+    TRAVELER_ALREADY_EXISTS("traveler.already.exists");
     private  final String messageKey;
 
     ExceptionMessageEnum(String messageKey){
