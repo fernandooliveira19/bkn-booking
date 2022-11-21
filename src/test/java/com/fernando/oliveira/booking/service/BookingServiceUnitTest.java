@@ -4,17 +4,16 @@ import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
+import com.fernando.oliveira.booking.domain.enums.ExceptionMessageEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
-import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
-import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
 import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.mother.BookingMother;
-import com.fernando.oliveira.booking.mother.LaunchMother;
 import com.fernando.oliveira.booking.mother.TravelerMother;
 import com.fernando.oliveira.booking.repository.BookingRepository;
 import com.fernando.oliveira.booking.repository.LaunchRepository;
 import com.fernando.oliveira.booking.repository.TravelerRepository;
+import com.fernando.oliveira.booking.utils.MessageUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,11 +30,9 @@ import java.util.Optional;
 
 import static com.fernando.oliveira.booking.mother.BookingMother.*;
 import static com.fernando.oliveira.booking.mother.LaunchMother.getLaunchToSave;
-import static com.fernando.oliveira.booking.mother.LaunchMother.getLaunchesFromFirstBooking;
 import static org.assertj.core.api.Assertions.fail;
 import static org.assertj.core.api.BDDAssertions.then;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 
@@ -59,6 +56,9 @@ public class BookingServiceUnitTest {
 
     @Mock
     private TravelerRepository travelerRepository;
+
+    @Mock
+    private MessageUtils messageUtils;
 
     @Test
     void givenValidRequestWhenCreateBookingThenCreateBookingReservedWithPending(){
@@ -185,6 +185,8 @@ public class BookingServiceUnitTest {
     @Test
     void givenNonExistentIdWhenConsultBookingThenReturnExceptionMessage(){
         Long bookingId = 123L;
+
+        when(messageUtils.getMessage(anyString(), any())).thenReturn("Não foi encontrado reserva pelo id: "+ bookingId);
         try{
             bookingService.findById(bookingId);
             fail("Não foi encontrado reserva pelo id: "+ bookingId, BookingException.class);
@@ -198,6 +200,7 @@ public class BookingServiceUnitTest {
     void givenBookingWithoutLaunchWhenCreateBookingThenReturnExceptionMessage(){
         Booking booking = BookingMother.getBookingRequest01();
         booking.setLaunches(Arrays.asList());
+        when(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_MUST_HAVE_LAUNCHES)).thenReturn("Reserva deve possuir lançamentos");
         try {
             bookingService.createBooking(booking);
             fail("Reserva deve possuir lançamentos",BookingException.class );
@@ -209,6 +212,7 @@ public class BookingServiceUnitTest {
     void givenBookingWithoutLaunchWhenUpdateBookingThenReturnExceptionMessage(){
         Booking booking = BookingMother.getBookingRequest01();
         booking.setLaunches(Arrays.asList());
+        when(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_MUST_HAVE_LAUNCHES)).thenReturn("Reserva deve possuir lançamentos");
         try {
             bookingService.updateBooking(booking, 1L);
             fail("Reserva deve possuir lançamentos",BookingException.class );
@@ -221,7 +225,7 @@ public class BookingServiceUnitTest {
     void givenLaunchWithLessAmountWhenCreateBookingThenReturnExceptionMessage(){
         Booking booking = BookingMother.getBookingRequest02();
         booking.getLaunches().get(2).setAmount(BigDecimal.valueOf(900.0));
-
+        when(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_SUM_LAUNCHES_AMOUNT_ERROR)).thenReturn("Soma dos lançamentos estão diferentes do valor total da reserva");
         try {
             bookingService.createBooking(booking);
             fail("Soma dos lançamentos estão diferentes do valor total da reserva",BookingException.class );

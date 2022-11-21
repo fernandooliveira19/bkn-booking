@@ -4,12 +4,14 @@ import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
+import com.fernando.oliveira.booking.domain.enums.ExceptionMessageEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
 import com.fernando.oliveira.booking.domain.request.SearchBookingRequest;
 import com.fernando.oliveira.booking.domain.spec.BookingSpec;
 import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.repository.BookingRepository;
+import com.fernando.oliveira.booking.utils.MessageUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Autowired
     private BookingMapper bookingMapper;
+
+    @Autowired
+    private MessageUtils messageUtils;
 
     @Override
     public Booking createBooking(Booking booking) {
@@ -145,7 +150,7 @@ public class BookingServiceImpl implements BookingService {
         Optional<Booking> result = bookingRepository.findById(id);
 
         return result
-                .orElseThrow(() -> new BookingException("Não foi encontrado reserva pelo id: " + id));
+                .orElseThrow(() -> new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_NOT_FOUND.getMessageKey(), new Object[] {id})));
 
     }
 
@@ -214,46 +219,48 @@ public class BookingServiceImpl implements BookingService {
         if (!otherBookings.isEmpty()) {
 
             if (booking.getId() == null) {
-                throw new BookingException("Já existe outra reserva para o mesmo periodo");
+                throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_ALREADY_EXISTS));
             }
             for (Booking bkn : otherBookings) {
                 if (!bkn.getId().equals(booking.getId())) {
-                    throw new BookingException("Já existe outra reserva para o mesmo periodo");
+                    throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_ALREADY_EXISTS));
                 }
             }
         }
 
         if (booking.getLaunches() == null || booking.getLaunches().isEmpty()) {
-            throw new BookingException("Reserva deve possuir lançamentos");
+            throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_MUST_HAVE_LAUNCHES));
         }
 
         if (!booking.getAmountTotal().equals(getTotalAmountByLaunches(booking.getLaunches()))) {
-            throw new BookingException("Soma dos lançamentos estão diferentes do valor total da reserva");
+            throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_SUM_LAUNCHES_AMOUNT_ERROR));
         }
 
     }
 
     private void validateCancelBooking(Booking booking) {
         if (StringUtils.isBlank(booking.getObservation())) {
-            throw new BookingException("É obrigatório preencher uma observação sobre a reserva");
+            throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_OBSERVATION_REQUIRED));
         }
         booking.getLaunches().stream().forEach(e -> {
             if (e.getPaymentStatus().equals(PaymentStatusEnum.PAID)) {
-                throw new BookingException("Não é possível cancelar a reserva. Verificar lançamentos pagos");
+                throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_CANCEL_LAUNCHES_PAID_ERROR));
             }
         });
     }
 
     private void validateFinishBooking(Booking booking) {
         if (booking.getCheckOut().isAfter(LocalDateTime.now())) {
-            throw new BookingException("Não é permitido finalizar a reserva antes do check-out");
+            throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_FINISH_BEFORE_CHECKOUT_ERROR));
         }
         if (StringUtils.isBlank(booking.getObservation())) {
-            throw new BookingException("É obrigatório preencher uma observação sobre a reserva");
+
+            throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_OBSERVATION_REQUIRED));
         }
         booking.getLaunches().stream().forEach(e -> {
             if (e.getPaymentStatus().equals(PaymentStatusEnum.PENDING)) {
-                throw new BookingException("Não é possível finalizar a reserva. Verificar lançamentos pendentes");
+
+                throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_FINISH_LAUNCHES_PENDING_ERROR));
             }
         });
     }

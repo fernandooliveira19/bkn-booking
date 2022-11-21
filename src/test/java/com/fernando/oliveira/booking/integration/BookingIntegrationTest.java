@@ -238,7 +238,7 @@ public class BookingIntegrationTest {
                         BOOKING_MAPPING, request, ExceptionResponse.class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
-        assertThat(result.getBody().getMessage()).isEqualTo("Já existe outra reserva para o mesmo periodo");
+        assertThat(result.getBody().getMessage()).isEqualTo("Existe outra reserva para o mesmo periodo");
 
 
     }
@@ -272,7 +272,7 @@ public class BookingIntegrationTest {
                         BOOKING_MAPPING, request, ExceptionResponse.class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
-        assertThat(result.getBody().getMessage()).isEqualTo("Já existe outra reserva para o mesmo periodo");
+        assertThat(result.getBody().getMessage()).isEqualTo("Existe outra reserva para o mesmo periodo");
 
 
 
@@ -307,7 +307,7 @@ public class BookingIntegrationTest {
                         BOOKING_MAPPING, request, ExceptionResponse.class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
-        assertThat(result.getBody().getMessage()).isEqualTo("Já existe outra reserva para o mesmo periodo");
+        assertThat(result.getBody().getMessage()).isEqualTo("Existe outra reserva para o mesmo periodo");
 
     }
 
@@ -340,7 +340,7 @@ public class BookingIntegrationTest {
                         BOOKING_MAPPING, request, ExceptionResponse.class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
-        assertThat(result.getBody().getMessage()).isEqualTo("Já existe outra reserva para o mesmo periodo");
+        assertThat(result.getBody().getMessage()).isEqualTo("Existe outra reserva para o mesmo periodo");
 
     }
 
