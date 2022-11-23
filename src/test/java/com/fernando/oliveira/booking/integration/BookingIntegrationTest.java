@@ -51,7 +51,8 @@ public class BookingIntegrationTest {
 
     private static final String NEXT_BOOKINGS = BOOKING_MAPPING + "/next";
 
-    private static final String FINISH_BOOKINGS = BOOKING_MAPPING + "/finish";
+    private static final String SEARCH_BOOKINGS = BOOKING_MAPPING + "/search";
+
 
 
     @Test
@@ -391,6 +392,87 @@ public class BookingIntegrationTest {
         BookingDetailResponse[] response = result.getBody();
 
         assertThat(response.length).isEqualTo(4);
+
+    }
+
+    @Test
+    void givenEmptyParamsWhenSearchBookingThenReturnNextBookings(){
+
+        ResponseEntity<BookingDetailResponse[]> result = restTemplate
+                .getForEntity(
+                        SEARCH_BOOKINGS, BookingDetailResponse[].class);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        BookingDetailResponse[] response = result.getBody();
+
+        assertThat(response.length).isEqualTo(4);
+
+    }
+
+    @Test
+    void givenBookingStatusParamsWhenSearchBookingThenReturnReservedBookings(){
+
+        String params = "?bookingStatus=RESERVED";
+
+        ResponseEntity<BookingDetailResponse[]> result = restTemplate
+                .getForEntity(
+                        SEARCH_BOOKINGS + params, BookingDetailResponse[].class);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        BookingDetailResponse[] response = result.getBody();
+
+        assertThat(response.length).isEqualTo(3);
+
+    }
+
+    @Test
+    void givenPaymentStatusParamsWhenSearchBookingThenReturnReservedBookings(){
+
+        String params = "?paymentStatus=PAID";
+
+        ResponseEntity<BookingDetailResponse[]> result = restTemplate
+                .getForEntity(
+                        SEARCH_BOOKINGS + params, BookingDetailResponse[].class);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        BookingDetailResponse[] response = result.getBody();
+
+        assertThat(response.length).isEqualTo(2);
+
+    }
+    @Test
+    void givenContractTypeParamsWhenSearchBookingThenReturnReservedBookings(){
+
+        String params = "?contractType=DIRECT";
+
+        ResponseEntity<BookingDetailResponse[]> result = restTemplate
+                .getForEntity(
+                        SEARCH_BOOKINGS + params, BookingDetailResponse[].class);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        BookingDetailResponse[] response = result.getBody();
+
+        assertThat(response.length).isEqualTo(5);
+
+    }
+    @Test
+    void givenAllParamsWhenSearchBookingThenReturnReservedBookings(){
+
+        String params = "?paymentStatus=PAID&bookingStatus=RESERVED&contractType=DIRECT";
+
+        ResponseEntity<BookingDetailResponse[]> result = restTemplate
+                .getForEntity(
+                        SEARCH_BOOKINGS + params, BookingDetailResponse[].class);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        BookingDetailResponse[] response = result.getBody();
+
+        assertThat(response.length).isEqualTo(1);
 
     }
 
