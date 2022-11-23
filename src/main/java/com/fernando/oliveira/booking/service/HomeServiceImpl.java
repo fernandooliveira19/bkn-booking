@@ -100,14 +100,14 @@ public class HomeServiceImpl implements HomeService{
         BigDecimal directToReceiveAmount = nextLaunches
                 .stream()
                 .filter(e -> e.getPaymentStatus().equals(PaymentStatusEnum.PENDING))
-                .filter(e -> e.getScheduleDate().isAfter(LocalDate.now()))
+                .filter(e -> e.getScheduleDate().isAfter(LocalDate.now()) || e.getScheduleDate().isEqual(LocalDate.now()))
                 .map(Launch::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         Integer directToReceiveQuantity = Math.toIntExact(nextLaunches
                 .stream()
                 .filter(e -> e.getPaymentStatus().equals(PaymentStatusEnum.PENDING))
-                .filter(e -> e.getScheduleDate().isAfter(LocalDate.now()))
+                .filter(e -> e.getScheduleDate().isAfter(LocalDate.now()) || e.getScheduleDate().isEqual(LocalDate.now()))
                 .count());
 
         Integer siteQuantity = Math.toIntExact(nextLaunches
