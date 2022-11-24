@@ -353,6 +353,8 @@ public class BookingIntegrationTest {
         String checkOut = "2021-03-30 18:00";;
         String observation = "updating booking";
         BigDecimal amountTotal = BigDecimal.valueOf(3800.0);
+
+        BookingStatusEnum bookingStatus = BookingStatusEnum.RESERVED;
         UpdateLaunchRequest launch01 = LaunchMother.getUpdateLaunchRequest(
                 110L,
                 BigDecimal.valueOf(2000.0),
@@ -369,7 +371,7 @@ public class BookingIntegrationTest {
                 "2021-03-06");
 
 
-        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(travelerId,checkIn, checkOut, amountTotal,observation, Arrays.asList(launch01, launch02));
+        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(travelerId,checkIn, checkOut, amountTotal,observation, bookingStatus,  Arrays.asList(launch01, launch02));
 
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<UpdateBookingRequest> httpEntity = new HttpEntity<UpdateBookingRequest>(request, headers);

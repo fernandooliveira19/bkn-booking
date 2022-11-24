@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -446,7 +447,7 @@ public class BookingMother {
         return request;
     }
 
-    public static UpdateBookingRequest getUpdateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal amountTotal, String observation, List<UpdateLaunchRequest> launches) {
+    public static UpdateBookingRequest getUpdateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal amountTotal, String observation, BookingStatusEnum bookingStatusEnum, List<UpdateLaunchRequest> launches) {
         UpdateBookingRequest request = new UpdateBookingRequest();
         request.setCheckIn(checkIn);
         request.setCheckOut(checkOut);
@@ -454,6 +455,7 @@ public class BookingMother {
         request.setTravelerId(travelerId);
         request.setObservation(observation);
         request.setLaunches(launches);
+        request.setBookingStatus(bookingStatusEnum.name());
 
         return request;
     }
@@ -498,4 +500,15 @@ public class BookingMother {
                 .build();
     }
 
+    public static Booking getBookingToUpdate(UpdateBookingRequest request) {
+        return Booking.builder()
+                .bookingStatus(BookingStatusEnum.valueOf(request.getBookingStatus()))
+                .observation(request.getObservation())
+                .amountTotal(request.getAmountTotal())
+                .launches(LaunchMother.getUpdateLaunches(request.getLaunches()))
+                .checkIn(LocalDateTime.parse(request.getCheckIn(), DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .checkOut(LocalDateTime.parse(request.getCheckOut(), DateTimeFormatter.ISO_LOCAL_DATE_TIME ))
+
+                .build();
+    }
 }

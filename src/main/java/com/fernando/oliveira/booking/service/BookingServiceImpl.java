@@ -126,6 +126,7 @@ public class BookingServiceImpl implements BookingService {
         Booking bookingBase = findById(id);
         bookingToUpdate.setInsertDate(bookingBase.getInsertDate());
         bookingToUpdate.setLastUpdate(LocalDateTime.now());
+        bookingToUpdate.setObservation(booking.getObservation());
 
         Booking bookingUpdated = bookingRepository.save(bookingToUpdate);
 

@@ -12,8 +12,10 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LaunchMother {
@@ -325,6 +327,26 @@ public class LaunchMother {
                 .paymentType(launch.getPaymentType())
                 .scheduleDate(launch.getScheduleDate())
                 .paymentDate(launch.getPaymentDate())
+                .build();
+    }
+
+    public static List<Launch> getUpdateLaunches(List<UpdateLaunchRequest> launches) {
+
+        return launches
+                .stream()
+                .map( e -> convertUpdateLaunchRequestToLaunch(e)).collect(Collectors.toList());
+    }
+
+    private static Launch convertUpdateLaunchRequestToLaunch(UpdateLaunchRequest request){
+        return Launch.builder()
+                .id(request.getId())
+                .amount(request.getAmount())
+                .scheduleDate( LocalDate.parse(request.getScheduleDate(), DateTimeFormatter.ISO_DATE))
+                .paymentType(PaymentTypeEnum.valueOf(request.getPaymentType()))
+                .paymentStatus(PaymentStatusEnum.valueOf(request.getPaymentStatus()))
+                .paymentDate(request.getPaymentDate() != null ?
+                        LocalDate.parse(request.getPaymentDate(), DateTimeFormatter.ISO_DATE)
+                        : null)
                 .build();
     }
 }

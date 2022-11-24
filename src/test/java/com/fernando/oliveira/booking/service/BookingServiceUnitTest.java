@@ -7,8 +7,11 @@ import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.ExceptionMessageEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
+import com.fernando.oliveira.booking.domain.request.UpdateBookingRequest;
+import com.fernando.oliveira.booking.domain.request.UpdateLaunchRequest;
 import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.mother.BookingMother;
+import com.fernando.oliveira.booking.mother.LaunchMother;
 import com.fernando.oliveira.booking.mother.TravelerMother;
 import com.fernando.oliveira.booking.repository.BookingRepository;
 import com.fernando.oliveira.booking.repository.LaunchRepository;
@@ -21,9 +24,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
+import java.time.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -52,13 +53,15 @@ public class BookingServiceUnitTest {
     private LaunchRepository launchRepository;
 
     @Mock
-    private TravelerServiceImpl travelerService;
+    private TravelerService travelerService;
 
     @Mock
     private TravelerRepository travelerRepository;
 
     @Mock
     private MessageUtils messageUtils;
+
+    static Clock clock;
 
     @Test
     void givenValidRequestWhenCreateBookingThenCreateBookingReservedWithPending(){
@@ -264,37 +267,177 @@ public class BookingServiceUnitTest {
 
     @Test
     void givenBookingWhenUpdateToFinishThenReturnBookingFinished(){
+        String observation = "finished successfully";
+
+        UpdateLaunchRequest launch01 = LaunchMother.getUpdateLaunchRequest(110L,
+                BigDecimal.valueOf(2000.0),
+                "2021-03-15",
+                "PIX",
+                "PAID",
+                "2021-03-15");
+        UpdateLaunchRequest launch02 = LaunchMother.getUpdateLaunchRequest(110L,
+                BigDecimal.valueOf(2000.0),
+                "2021-03-15",
+                "PIX",
+                "PAID",
+                "2021-03-15");
+
+        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(6L, "2021-03-15T10:00:00", "2021-03-30T18:00:00", BigDecimal.valueOf(4000.0), observation, BookingStatusEnum.FINISHED,  Arrays.asList(launch01, launch02));
+        Booking bookingToCancel = BookingMother.getBookingToUpdate(request);
+        bookingToCancel.setTraveler(TravelerMother.getTravelerSaved06());
+
+
+        Booking bookingSaved = BookingMother.getBookingSaved06();
+        bookingSaved.setBookingStatus(BookingStatusEnum.FINISHED);
+        bookingSaved.setObservation(observation);
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(bookingSaved));
+        when(travelerService.findById(anyLong())).thenReturn(TravelerMother.getTravelerSaved06());
+        when(bookingRepository.save(any(Booking.class))).thenReturn(bookingSaved);
+
+        Booking result = bookingService.updateBooking(bookingToCancel, 60L);
+
+        then(result.getBookingStatus()).isEqualTo(BookingStatusEnum.FINISHED);
+
+        then(result.getObservation()).isEqualTo(observation);
+
+    }
+
+    @Test
+    void givenBookingWhenUpdateToFinishBeforeCheckOutThenReturnExceptionMessage(){
 //        String observation = "finished successfully";
-//        Booking bookingSaved = BookingMother.getFirstBookingSaved();
-//        Long bookingId = 10L;
 //
-//        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(bookingSaved));
-//        when(bookingRepository.save(any(Booking.class))).thenReturn(bookingSaved);
+//        UpdateLaunchRequest launch01 = LaunchMother.getUpdateLaunchRequest(110L,
+//                BigDecimal.valueOf(2000.0),
+//                "2021-03-15",
+//                "PIX",
+//                "PAID",
+//                "2021-03-15");
+//        UpdateLaunchRequest launch02 = LaunchMother.getUpdateLaunchRequest(110L,
+//                BigDecimal.valueOf(2000.0),
+//                "2021-03-15",
+//                "PIX",
+//                "PAID",
+//                "2021-03-15");
 //
-//        Booking result = bookingService.finishBooking(observation, bookingId);
+//        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(6L, "2021-03-15T10:00:00", "2021-03-30T18:00:00", BigDecimal.valueOf(4000.0), observation, BookingStatusEnum.FINISHED,  Arrays.asList(launch01, launch02));
+//        Booking bookingToCancel = BookingMother.getBookingToUpdate(request);
+//        bookingToCancel.setTraveler(TravelerMother.getTravelerSaved06());
 //
-//        then(result.getBookingStatus()).isEqualTo(BookingStatusEnum.FINISHED);
-//        then(result.getLastUpdate()).isNotNull();
-//        then(result.getObservation()).isEqualTo(observation);
+//
+//        Booking bookingSaved = BookingMother.getBookingSaved06();
+//        bookingSaved.setBookingStatus(BookingStatusEnum.FINISHED);
+//        bookingSaved.setObservation(observation);
+//
+//        clock = Clock.fixed(
+//                Instant.parse("2020-12-01T10:05:23.653Z"),
+//                ZoneId.of("Europe/Prague"));
+//
+//
+//        when(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_FINISH_BEFORE_CHECKOUT_ERROR)).thenReturn("Não é permitido finalizar a reserva antes do check-out");
+//        try {
+//            bookingService.updateBooking(bookingToCancel, 60L);
+//            fail("Não é permitido finalizar a reserva antes do check-out",BookingException.class );
+//        }catch (BookingException e){
+//            then(e.getMessage()).isEqualTo("Não é permitido finalizar a reserva antes do check-out");
+//        }
 
     }
 
     @Test
     void givenBookingWhenUpdateToCancelThenReturnBookingCanceled(){
-//        String observation = "canceled successfully";
-//
-//        Booking bookingSaved = BookingMother.getFirstBookingSaved();
-//        Long bookingId = 10L;
-//
-//        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(bookingSaved));
-//        when(bookingRepository.save(any(Booking.class))).thenReturn(bookingSaved);
-//
-//        Booking result = bookingService.cancelBooking(observation, bookingId);
-//
-//        then(result.getBookingStatus()).isEqualTo(BookingStatusEnum.CANCELED);
-//        then(result.getLastUpdate()).isNotNull();
-//        then(result.getObservation()).isEqualTo(observation);
+        String observation = "canceled successfully";
 
+        UpdateLaunchRequest launch01 = LaunchMother.getUpdateLaunchRequest(110L,
+                BigDecimal.valueOf(2000.0),
+                "2021-03-15",
+                "PIX",
+                "PENDING",
+                null);
+        UpdateLaunchRequest launch02 = LaunchMother.getUpdateLaunchRequest(110L,
+                BigDecimal.valueOf(2000.0),
+                "2021-03-15",
+                "PIX",
+                "PENDING",
+                null);
+
+        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(6L, "2021-03-15T10:00:00", "2021-03-30T18:00:00", BigDecimal.valueOf(4000.0), observation, BookingStatusEnum.CANCELED,  Arrays.asList(launch01, launch02));
+        Booking bookingToCancel = BookingMother.getBookingToUpdate(request);
+        bookingToCancel.setTraveler(TravelerMother.getTravelerSaved06());
+
+
+        Booking bookingSaved = BookingMother.getBookingSaved06();
+        bookingSaved.setBookingStatus(BookingStatusEnum.CANCELED);
+        bookingSaved.setObservation(observation);
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(bookingSaved));
+        when(travelerService.findById(anyLong())).thenReturn(TravelerMother.getTravelerSaved06());
+        when(bookingRepository.save(any(Booking.class))).thenReturn(bookingSaved);
+
+        Booking result = bookingService.updateBooking(bookingToCancel, 60L);
+
+        then(result.getBookingStatus()).isEqualTo(BookingStatusEnum.CANCELED);
+
+        then(result.getObservation()).isEqualTo(observation);
+
+    }
+
+    @Test
+    void givenEmptyObservationWhenUpdateToCancelThenReturnExceptionMessage(){
+        String observation = "";
+
+        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(6L, "2021-03-15T10:00:00", "2021-03-30T18:00:00", BigDecimal.valueOf(4000.0), observation, BookingStatusEnum.CANCELED,  Arrays.asList());
+        Booking bookingToCancel = BookingMother.getBookingToUpdate(request);
+
+        when(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_OBSERVATION_REQUIRED)).thenReturn("É obrigatório preencher uma observação sobre a reserva");
+        try {
+            bookingService.updateBooking(bookingToCancel, 60L);
+            fail("É obrigatório preencher uma observação sobre a reserva",BookingException.class );
+        }catch (BookingException e){
+            then(e.getMessage()).isEqualTo("É obrigatório preencher uma observação sobre a reserva");
+        }
+    }
+
+    @Test
+    void givenNullObservationWhenUpdateToCancelThenReturnExceptionMessage(){
+
+        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(6L, "2021-03-15T10:00:00", "2021-03-30T18:00:00", BigDecimal.valueOf(4000.0), null, BookingStatusEnum.CANCELED,  Arrays.asList());
+        Booking bookingToCancel = BookingMother.getBookingToUpdate(request);
+
+        when(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_OBSERVATION_REQUIRED)).thenReturn("É obrigatório preencher uma observação sobre a reserva");
+        try {
+            bookingService.updateBooking(bookingToCancel, 60L);
+            fail("É obrigatório preencher uma observação sobre a reserva",BookingException.class );
+        }catch (BookingException e){
+            then(e.getMessage()).isEqualTo("É obrigatório preencher uma observação sobre a reserva");
+        }
+    }
+
+    @Test
+    void givenLaunchPaidWhenUpdateToCancelThenReturnExceptionMessage(){
+        String observation = "canceled successfully";
+        UpdateLaunchRequest launch01 = LaunchMother.getUpdateLaunchRequest(110L,
+                BigDecimal.valueOf(2000.0),
+                "2021-03-15",
+                "PIX",
+                "PENDING",
+                null);
+        UpdateLaunchRequest launch02 = LaunchMother.getUpdateLaunchRequest(111L,
+                BigDecimal.valueOf(2000.0),
+                "2021-03-15",
+                "PIX",
+                "PAID",
+                "2021-03-15");
+
+        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(6L, "2021-03-15T10:00:00", "2021-03-30T18:00:00", BigDecimal.valueOf(4000.0), observation, BookingStatusEnum.CANCELED,  Arrays.asList(launch01, launch02));
+        Booking bookingToCancel = BookingMother.getBookingToUpdate(request);
+        bookingToCancel.setTraveler(TravelerMother.getTravelerSaved06());
+
+        when(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_CANCEL_LAUNCHES_PAID_ERROR)).thenReturn("Não é possível cancelar a reserva. Verificar lançamentos pagos");
+        try {
+            bookingService.updateBooking(bookingToCancel, 60L);
+            fail("Não é possível cancelar a reserva. Verificar lançamentos pagos",BookingException.class );
+        }catch (BookingException e){
+            then(e.getMessage()).isEqualTo("Não é possível cancelar a reserva. Verificar lançamentos pagos");
+        }
     }
 
     @Test
