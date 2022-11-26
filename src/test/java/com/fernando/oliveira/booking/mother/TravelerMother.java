@@ -48,7 +48,7 @@ public class TravelerMother {
 	private static final Integer TRAVELER_05_PREFIX_PHONE= 55;
 	private static final String TRAVELER_05_NUMBER_PHONE = "98888-5555";
 
-	private static final String TRAVELER_06_NAME = "Fernando Oliveira";
+	public static final String TRAVELER_06_NAME = "Fernando Oliveira";
 	private static final String TRAVELER_06_EMAIL = "fernando_oliveira@gmail.com";
 	private static final Integer TRAVELER_06_PREFIX_PHONE= 66;
 	private static final String TRAVELER_06_NUMBER_PHONE = "98888-6666";
