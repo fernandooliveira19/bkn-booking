@@ -100,20 +100,24 @@ public class PdfUtils {
 
     public static String getDescriptionPayment(Booking booking) {
         StringBuilder descriptionPayment = new StringBuilder();
+
+
+        if (ContractTypeEnum.SITE.equals(booking.getContractType())){
+
+            descriptionPayment
+                    .append("O locatário efetuou o pagamento no valor de ")
+                    .append(FormatterUtils.formatCurrencyValue(booking.getAmountTotal()))
+                    .append(" através do site vrbo.com (antigo aluguetemporada.com.br)");
+            return descriptionPayment.toString();
+
+        }
         if(booking.getPaymentStatus().equals(PaymentStatusEnum.PAID)) {
-            if (booking.getContractType().equals(ContractTypeEnum.SITE)) {
 
-                descriptionPayment
-                        .append("O locatário efetuou o pagamento no valor de ")
-                        .append(FormatterUtils.formatCurrencyValue(booking.getAmountTotal()))
-                        .append(" através do site vrbo.com (antigo aluguetemporada.com.br)");
-
-            } else {
                 descriptionPayment
                         .append("O locatário efetuou o pagamento no valor de ")
                         .append(FormatterUtils.formatCurrencyValue(booking.getAmountTotal()));
 
-            }
+
         }else if(booking.getPaymentStatus().equals(PaymentStatusEnum.PENDING)){
             Launch lastLaunch = getLastPendingLaunch(booking);
 
