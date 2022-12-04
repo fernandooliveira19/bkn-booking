@@ -153,13 +153,13 @@ public class HomeServiceImpl implements HomeService{
 
         return HomeBookingDto.builder()
                 .bookingTotal(nextBookings.size())
-                .bookingReserved(bookingStatus.get(BookingStatusEnum.RESERVED).intValue())
-                .bookingPreReserved(bookingStatus.get(BookingStatusEnum.PRE_RESERVED).intValue())
-                .bookingPaid(paymentStatus.get(PaymentStatusEnum.PAID).intValue())
-                .bookingPending(paymentStatus.get(PaymentStatusEnum.PENDING).intValue())
-                .bookingToReceive(paymentStatus.get(PaymentStatusEnum.TO_RECEIVE).intValue())
-                .bookingDirect(contractType.get(ContractTypeEnum.DIRECT).intValue())
-                .bookingSite(contractType.get(ContractTypeEnum.SITE).intValue())
+                .bookingReserved(bookingStatus.get(BookingStatusEnum.RESERVED) !=null ? bookingStatus.get(BookingStatusEnum.RESERVED).intValue():0)
+                .bookingPreReserved(bookingStatus.get(BookingStatusEnum.PRE_RESERVED) != null ? bookingStatus.get(BookingStatusEnum.PRE_RESERVED).intValue():0)
+                .bookingPaid(paymentStatus.get(PaymentStatusEnum.PAID) != null ? paymentStatus.get(PaymentStatusEnum.PAID).intValue(): 0)
+                .bookingPending(paymentStatus.get(PaymentStatusEnum.PENDING) != null ? paymentStatus.get(PaymentStatusEnum.PENDING).intValue():0)
+                .bookingToReceive(paymentStatus.get(PaymentStatusEnum.TO_RECEIVE) != null ? paymentStatus.get(PaymentStatusEnum.TO_RECEIVE).intValue():0)
+                .bookingDirect(contractType.get(ContractTypeEnum.DIRECT) != null ? contractType.get(ContractTypeEnum.DIRECT).intValue() :0)
+                .bookingSite(contractType.get(ContractTypeEnum.SITE) != null ? contractType.get(ContractTypeEnum.SITE).intValue():0)
                 .build();
 
     }
