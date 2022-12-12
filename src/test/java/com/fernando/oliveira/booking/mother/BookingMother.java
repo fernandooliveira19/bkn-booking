@@ -6,8 +6,10 @@ import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.ContractTypeEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
-import com.fernando.oliveira.booking.domain.request.*;
-
+import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
+import com.fernando.oliveira.booking.domain.request.CreateLaunchRequest;
+import com.fernando.oliveira.booking.domain.request.UpdateBookingRequest;
+import com.fernando.oliveira.booking.domain.request.UpdateLaunchRequest;
 import com.fernando.oliveira.booking.domain.response.BookingDetailResponse;
 import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
 import com.fernando.oliveira.booking.domain.response.LaunchDetailResponse;
@@ -17,6 +19,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -201,6 +204,13 @@ public class BookingMother {
                 .children(BOOKING_01_CHILDREN)
                 .travelerName(TravelerMother.TRAVELER_01_NAME)
                 .traveler(TravelerMother.getTravelerSaved01())
+                .paymentStatus(PaymentStatusEnum.PENDING)
+                .amountPaid(AMOUNT_PAID_01)
+                .amountPending(AMOUNT_PENDING_01)
+                .bookingStatus(BookingStatusEnum.RESERVED)
+                .contractType(ContractTypeEnum.DIRECT)
+                .observation("First booking saved")
+                .launches(Arrays.asList(launch01, launch02, launch03))
                 .paymentStatus(BOOKING_01_PAYMENT_STATUS)
                 .amountPaid(BOOKING_01_AMOUNT_PAID)
                 .amountPending(BOOKING_01_AMOUNT_PENDING)
@@ -320,8 +330,8 @@ public class BookingMother {
                 .amountTotal(BOOKING_06_TOTAL_AMOUNT)
                 .adults(BOOKING_06_ADULTS)
                 .children(BOOKING_06_CHILDREN)
-                .travelerName(TravelerMother.TRAVELER_01_NAME)
-                .traveler(TravelerMother.getTravelerSaved01())
+                .travelerName(TravelerMother.TRAVELER_06_NAME)
+                .traveler(TravelerMother.getTravelerSaved06())
                 .paymentStatus(BOOKING_06_PAYMENT_STATUS)
                 .amountPaid(BOOKING_06_AMOUNT_PAID)
                 .amountPending(BOOKING_06_AMOUNT_PENDING)
@@ -437,7 +447,7 @@ public class BookingMother {
         return request;
     }
 
-    public static UpdateBookingRequest getUpdateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal amountTotal, String observation, List<UpdateLaunchRequest> launches) {
+    public static UpdateBookingRequest getUpdateBookingRequest(Long travelerId, String checkIn, String checkOut, BigDecimal amountTotal, String observation, BookingStatusEnum bookingStatusEnum, List<UpdateLaunchRequest> launches) {
         UpdateBookingRequest request = new UpdateBookingRequest();
         request.setCheckIn(checkIn);
         request.setCheckOut(checkOut);
@@ -445,6 +455,7 @@ public class BookingMother {
         request.setTravelerId(travelerId);
         request.setObservation(observation);
         request.setLaunches(launches);
+        request.setBookingStatus(bookingStatusEnum.name());
 
         return request;
     }
@@ -489,4 +500,15 @@ public class BookingMother {
                 .build();
     }
 
+    public static Booking getBookingToUpdate(UpdateBookingRequest request) {
+        return Booking.builder()
+                .bookingStatus(BookingStatusEnum.valueOf(request.getBookingStatus()))
+                .observation(request.getObservation())
+                .amountTotal(request.getAmountTotal())
+                .launches(LaunchMother.getUpdateLaunches(request.getLaunches()))
+                .checkIn(LocalDateTime.parse(request.getCheckIn(), DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .checkOut(LocalDateTime.parse(request.getCheckOut(), DateTimeFormatter.ISO_LOCAL_DATE_TIME ))
+
+                .build();
+    }
 }

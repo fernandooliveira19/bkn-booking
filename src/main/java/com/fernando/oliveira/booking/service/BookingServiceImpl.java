@@ -4,11 +4,14 @@ import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
+import com.fernando.oliveira.booking.domain.enums.ExceptionMessageEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
+import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
 import com.fernando.oliveira.booking.domain.request.SearchBookingRequest;
 import com.fernando.oliveira.booking.domain.spec.BookingSpec;
 import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.repository.BookingRepository;
+import com.fernando.oliveira.booking.utils.MessageUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +35,12 @@ public class BookingServiceImpl implements BookingService {
 
     @Autowired
     private TravelerService travelerService;
+
+    @Autowired
+    private BookingMapper bookingMapper;
+
+    @Autowired
+    private MessageUtils messageUtils;
 
     @Override
     public Booking createBooking(Booking booking) {
@@ -93,25 +102,18 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<Booking> search(SearchBookingRequest request) {
 
-
         if (request.getBookingStatus() == null
                 && request.getPaymentStatus() == null
                 && request.getContractType() == null) {
-
             return findNextBookings();
-
         } else {
             BookingSpec bookingSpec = new BookingSpec(request);
-
             List<Booking> result = bookingRepository.findAll(bookingSpec);
-
             return result.stream()
                     .map((e) -> defineBookingDetails((Booking) e))
                     .collect(Collectors.toList());
-
         }
     }
-
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
@@ -121,10 +123,10 @@ public class BookingServiceImpl implements BookingService {
         validateBooking(booking);
 
         Booking bookingToUpdate = prepareBookingToSave(booking);
-
         Booking bookingBase = findById(id);
         bookingToUpdate.setInsertDate(bookingBase.getInsertDate());
         bookingToUpdate.setLastUpdate(LocalDateTime.now());
+        bookingToUpdate.setObservation(booking.getObservation());
 
         Booking bookingUpdated = bookingRepository.save(bookingToUpdate);
 
@@ -140,12 +142,8 @@ public class BookingServiceImpl implements BookingService {
             } else {
                 launchService.createLaunch(launch, bookingUpdated);
             }
-
-
         }
-
         return bookingUpdated;
-
     }
 
     public Booking findById(Long id) {
@@ -153,26 +151,21 @@ public class BookingServiceImpl implements BookingService {
         Optional<Booking> result = bookingRepository.findById(id);
 
         return result
-                .orElseThrow(() -> new BookingException("Não foi encontrado reserva pelo id: " + id));
+                .orElseThrow(() -> new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_NOT_FOUND.getMessageKey(), new Object[] {id})));
 
     }
 
     public Booking detailBooking(Long id) {
-        Booking booking = findById(id);
-
-        return defineBookingDetails(booking);
+        return defineBookingDetails(findById(id));
     }
 
     @Override
     public List<Booking> findBookingsByTraveler(Long travelerId) {
         return bookingRepository.findByTraveler(travelerId);
-
     }
-
 
     public Booking defineBookingDetails(Booking booking) {
         defineTraveler(booking);
-
         return booking;
     }
 
@@ -220,7 +213,6 @@ public class BookingServiceImpl implements BookingService {
         }
         if (BookingStatusEnum.CANCELED.equals(booking.getBookingStatus())) {
             validateCancelBooking(booking);
-
         }
 
         List<Booking> otherBookings = bookingRepository.findBookingsByDate(booking.getCheckIn(), booking.getCheckOut());
@@ -228,49 +220,48 @@ public class BookingServiceImpl implements BookingService {
         if (!otherBookings.isEmpty()) {
 
             if (booking.getId() == null) {
-                throw new BookingException("Já existe outra reserva para o mesmo periodo");
+                throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_ALREADY_EXISTS));
             }
             for (Booking bkn : otherBookings) {
                 if (!bkn.getId().equals(booking.getId())) {
-                    throw new BookingException("Já existe outra reserva para o mesmo periodo");
+                    throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_ALREADY_EXISTS));
                 }
             }
-
         }
 
         if (booking.getLaunches() == null || booking.getLaunches().isEmpty()) {
-            throw new BookingException("Reserva deve possuir lançamentos");
+            throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_MUST_HAVE_LAUNCHES));
         }
 
         if (!booking.getAmountTotal().equals(getTotalAmountByLaunches(booking.getLaunches()))) {
-            throw new BookingException("Soma dos lançamentos estão diferentes do valor total da reserva");
+            throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_SUM_LAUNCHES_AMOUNT_ERROR));
         }
 
     }
 
-
-
     private void validateCancelBooking(Booking booking) {
         if (StringUtils.isBlank(booking.getObservation())) {
-            throw new BookingException("É obrigatório preencher uma observação sobre a reserva");
+            throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_OBSERVATION_REQUIRED));
         }
         booking.getLaunches().stream().forEach(e -> {
             if (e.getPaymentStatus().equals(PaymentStatusEnum.PAID)) {
-                throw new BookingException("Não é possível cancelar a reserva. Verificar lançamentos pagos");
+                throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_CANCEL_LAUNCHES_PAID_ERROR));
             }
         });
     }
 
     private void validateFinishBooking(Booking booking) {
         if (booking.getCheckOut().isAfter(LocalDateTime.now())) {
-            throw new BookingException("Não é permitido finalizar a reserva antes do check-out");
+            throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_FINISH_BEFORE_CHECKOUT_ERROR));
         }
         if (StringUtils.isBlank(booking.getObservation())) {
-            throw new BookingException("É obrigatório preencher uma observação sobre a reserva");
+
+            throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_OBSERVATION_REQUIRED));
         }
         booking.getLaunches().stream().forEach(e -> {
             if (e.getPaymentStatus().equals(PaymentStatusEnum.PENDING)) {
-                throw new BookingException("Não é possível finalizar a reserva. Verificar lancçamentos pendentes");
+
+                throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_FINISH_LAUNCHES_PENDING_ERROR));
             }
         });
     }
@@ -278,10 +269,8 @@ public class BookingServiceImpl implements BookingService {
     public BigDecimal getTotalAmountByLaunches(List<Launch> launches) {
 
         return launches.stream()
-
                 .map(Launch::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-
     }
 
     private void defineTraveler(Booking booking) {

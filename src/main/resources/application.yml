@@ -12,6 +12,11 @@ spring:
     url: jdbc:postgresql://localhost:5432/bkn-booking
     username: postgres
     password: PGFamo2369
+  mandatory-file-encoding: UTF-8
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
 
 server:
   port: ${PORT:0}

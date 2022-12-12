@@ -51,7 +51,8 @@ public class BookingIntegrationTest {
 
     private static final String NEXT_BOOKINGS = BOOKING_MAPPING + "/next";
 
-    private static final String FINISH_BOOKINGS = BOOKING_MAPPING + "/finish";
+    private static final String SEARCH_BOOKINGS = BOOKING_MAPPING + "/search";
+
 
 
     @Test
@@ -238,7 +239,7 @@ public class BookingIntegrationTest {
                         BOOKING_MAPPING, request, ExceptionResponse.class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
-        assertThat(result.getBody().getMessage()).isEqualTo("Já existe outra reserva para o mesmo periodo");
+        assertThat(result.getBody().getMessage()).isEqualTo("Existe outra reserva para o mesmo periodo");
 
 
     }
@@ -272,7 +273,7 @@ public class BookingIntegrationTest {
                         BOOKING_MAPPING, request, ExceptionResponse.class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
-        assertThat(result.getBody().getMessage()).isEqualTo("Já existe outra reserva para o mesmo periodo");
+        assertThat(result.getBody().getMessage()).isEqualTo("Existe outra reserva para o mesmo periodo");
 
 
 
@@ -307,7 +308,7 @@ public class BookingIntegrationTest {
                         BOOKING_MAPPING, request, ExceptionResponse.class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
-        assertThat(result.getBody().getMessage()).isEqualTo("Já existe outra reserva para o mesmo periodo");
+        assertThat(result.getBody().getMessage()).isEqualTo("Existe outra reserva para o mesmo periodo");
 
     }
 
@@ -340,7 +341,7 @@ public class BookingIntegrationTest {
                         BOOKING_MAPPING, request, ExceptionResponse.class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
-        assertThat(result.getBody().getMessage()).isEqualTo("Já existe outra reserva para o mesmo periodo");
+        assertThat(result.getBody().getMessage()).isEqualTo("Existe outra reserva para o mesmo periodo");
 
     }
 
@@ -352,6 +353,8 @@ public class BookingIntegrationTest {
         String checkOut = "2021-03-30 18:00";;
         String observation = "updating booking";
         BigDecimal amountTotal = BigDecimal.valueOf(3800.0);
+
+        BookingStatusEnum bookingStatus = BookingStatusEnum.RESERVED;
         UpdateLaunchRequest launch01 = LaunchMother.getUpdateLaunchRequest(
                 110L,
                 BigDecimal.valueOf(2000.0),
@@ -368,7 +371,7 @@ public class BookingIntegrationTest {
                 "2021-03-06");
 
 
-        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(travelerId,checkIn, checkOut, amountTotal,observation, Arrays.asList(launch01, launch02));
+        UpdateBookingRequest request = BookingMother.getUpdateBookingRequest(travelerId,checkIn, checkOut, amountTotal,observation, bookingStatus,  Arrays.asList(launch01, launch02));
 
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<UpdateBookingRequest> httpEntity = new HttpEntity<UpdateBookingRequest>(request, headers);
@@ -391,6 +394,87 @@ public class BookingIntegrationTest {
         BookingDetailResponse[] response = result.getBody();
 
         assertThat(response.length).isEqualTo(4);
+
+    }
+
+    @Test
+    void givenEmptyParamsWhenSearchBookingThenReturnNextBookings(){
+
+        ResponseEntity<BookingDetailResponse[]> result = restTemplate
+                .getForEntity(
+                        SEARCH_BOOKINGS, BookingDetailResponse[].class);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        BookingDetailResponse[] response = result.getBody();
+
+        assertThat(response.length).isEqualTo(4);
+
+    }
+
+    @Test
+    void givenBookingStatusParamsWhenSearchBookingThenReturnReservedBookings(){
+
+        String params = "?bookingStatus=RESERVED";
+
+        ResponseEntity<BookingDetailResponse[]> result = restTemplate
+                .getForEntity(
+                        SEARCH_BOOKINGS + params, BookingDetailResponse[].class);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        BookingDetailResponse[] response = result.getBody();
+
+        assertThat(response.length).isEqualTo(3);
+
+    }
+
+    @Test
+    void givenPaymentStatusParamsWhenSearchBookingThenReturnReservedBookings(){
+
+        String params = "?paymentStatus=PAID";
+
+        ResponseEntity<BookingDetailResponse[]> result = restTemplate
+                .getForEntity(
+                        SEARCH_BOOKINGS + params, BookingDetailResponse[].class);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        BookingDetailResponse[] response = result.getBody();
+
+        assertThat(response.length).isEqualTo(2);
+
+    }
+    @Test
+    void givenContractTypeParamsWhenSearchBookingThenReturnReservedBookings(){
+
+        String params = "?contractType=DIRECT";
+
+        ResponseEntity<BookingDetailResponse[]> result = restTemplate
+                .getForEntity(
+                        SEARCH_BOOKINGS + params, BookingDetailResponse[].class);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        BookingDetailResponse[] response = result.getBody();
+
+        assertThat(response.length).isEqualTo(5);
+
+    }
+    @Test
+    void givenAllParamsWhenSearchBookingThenReturnReservedBookings(){
+
+        String params = "?paymentStatus=PAID&bookingStatus=RESERVED&contractType=DIRECT";
+
+        ResponseEntity<BookingDetailResponse[]> result = restTemplate
+                .getForEntity(
+                        SEARCH_BOOKINGS + params, BookingDetailResponse[].class);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        BookingDetailResponse[] response = result.getBody();
+
+        assertThat(response.length).isEqualTo(1);
 
     }
 

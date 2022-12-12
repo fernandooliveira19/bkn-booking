@@ -26,6 +26,7 @@ public class TravelerMother {
 	private static final Integer TRAVELER_01_PREFIX_PHONE= 11;
 	private static final String TRAVELER_01_NUMBER_PHONE = "98888-1111";
 
+	public static final Long TRAVELER_02_ID = 2L;
 	public static final String TRAVELER_02_NAME = "Bianca Silva";
 	private static final String TRAVELER_02_EMAIL = "bianca_silva@gmail.com";
 	private static final String TRAVELER_02_DOCUMENT = "18421484869";
@@ -47,7 +48,7 @@ public class TravelerMother {
 	private static final Integer TRAVELER_05_PREFIX_PHONE= 55;
 	private static final String TRAVELER_05_NUMBER_PHONE = "98888-5555";
 
-	private static final String TRAVELER_06_NAME = "Fernando Oliveira";
+	public static final String TRAVELER_06_NAME = "Fernando Oliveira";
 	private static final String TRAVELER_06_EMAIL = "fernando_oliveira@gmail.com";
 	private static final Integer TRAVELER_06_PREFIX_PHONE= 66;
 	private static final String TRAVELER_06_NUMBER_PHONE = "98888-6666";
@@ -170,14 +171,6 @@ public class TravelerMother {
 
 	}
 
-	public static List<TravelerDetailResponse> getTravelerDetailList() {
-
-		return Arrays.asList(getDetailTraveler01Response(), getDetailTraveler02Response(), getDetailTraveler03Response(), getDetailTraveler04Response());
-
-	}
-
-
-
 	public static Traveler getTravelerToSaved01(){
 		return Traveler.builder()
 				.name(TRAVELER_01_NAME)
@@ -190,7 +183,7 @@ public class TravelerMother {
 
 	public static Traveler getTravelerSaved01(){
 		return Traveler.builder()
-				.id(1L)
+				.id(TRAVELER_01_ID)
 				.name(TRAVELER_01_NAME)
 				.email(TRAVELER_01_EMAIL)
 				.prefixPhone(TRAVELER_01_PREFIX_PHONE)
@@ -201,7 +194,7 @@ public class TravelerMother {
 	}
 	public static Traveler getTravelerSaved02(){
 		return Traveler.builder()
-				.id(2L)
+				.id(TRAVELER_02_ID)
 				.name(TRAVELER_02_NAME)
 				.email(TRAVELER_02_EMAIL)
 				.prefixPhone(TRAVELER_02_PREFIX_PHONE)
@@ -277,5 +270,36 @@ public class TravelerMother {
 		traveler.setNumberPhone(numberPhone);
 		traveler.setDocument(document);
 		return traveler;
+	}
+
+	public static Traveler createTravelerRequestToTraveler(CreateTravelerRequest request) {
+		return Traveler.builder()
+				.name(request.getName())
+				.email(request.getEmail())
+				.prefixPhone(request.getPrefixPhone())
+				.numberPhone(request.getNumberPhone())
+				.document(request.getDocument())
+				.build();
+	}
+
+	public static UpdateTravelerRequest getUpdateTravelerRequest(Long id, String name, String email, Integer prefixPhone, String numberPhone, String document) {
+		UpdateTravelerRequest request = new UpdateTravelerRequest();
+		request.setId(id);
+		request.setName(name);
+		request.setEmail(email);
+		request.setPrefixPhone(prefixPhone);
+		request.setNumberPhone(numberPhone);
+		request.setDocument(document);
+		return request;
+	}
+
+	public static Traveler updateTravelerRequestToTraveler(UpdateTravelerRequest request) {
+		return Traveler.builder()
+				.name(request.getName())
+				.email(request.getEmail())
+				.prefixPhone(request.getPrefixPhone())
+				.numberPhone(request.getNumberPhone())
+				.document(request.getDocument())
+				.build();
 	}
 }

@@ -2,6 +2,7 @@ package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
+import com.fernando.oliveira.booking.mother.LaunchMother;
 import com.fernando.oliveira.booking.repository.LaunchRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +35,7 @@ public class LaunchServiceTest {
     @Test
     void shouldReturnLaunchById(){
 
-        Launch launch = getBooking01Launch01();
+        Launch launch = LaunchMother.getBooking01Launch01();
         when(launchRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(launch));
         Long launchId = 100L;
         Launch result = launchService.findById(launchId);
@@ -81,4 +82,5 @@ public class LaunchServiceTest {
         then(result.getId()).isNotNull();
 
     }
+
 }

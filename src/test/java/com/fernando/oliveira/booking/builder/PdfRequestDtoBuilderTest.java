@@ -2,23 +2,12 @@ package com.fernando.oliveira.booking.builder;
 
 import com.fernando.oliveira.booking.domain.dto.PdfRequestDto;
 import com.fernando.oliveira.booking.domain.entity.Booking;
-import com.fernando.oliveira.booking.domain.entity.Launch;
-import com.fernando.oliveira.booking.domain.enums.ContractTypeEnum;
-import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
-import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
 import com.fernando.oliveira.booking.mother.BookingMother;
-import com.fernando.oliveira.booking.mother.LaunchMother;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

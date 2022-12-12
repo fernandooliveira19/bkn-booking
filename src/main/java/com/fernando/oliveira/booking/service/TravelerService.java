@@ -25,5 +25,7 @@ public interface TravelerService {
 
 	List<Traveler> findActiveTravelers();
 
+	List<Traveler> findByName(String name);
+
 
 }

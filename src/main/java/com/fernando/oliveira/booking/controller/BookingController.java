@@ -1,5 +1,6 @@
 package com.fernando.oliveira.booking.controller;
 
+import com.fernando.oliveira.booking.builder.BookingBuilder;
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.ContractTypeEnum;
@@ -12,7 +13,6 @@ import com.fernando.oliveira.booking.domain.response.BookingDetailResponse;
 import com.fernando.oliveira.booking.service.AuthorizationAccessService;
 import com.fernando.oliveira.booking.service.BookingService;
 import com.fernando.oliveira.booking.service.ContractService;
-import com.fernando.oliveira.booking.utils.FormatterUtils;
 import com.fernando.oliveira.booking.utils.PdfUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,6 +47,9 @@ public class BookingController {
     @Autowired
     private AuthorizationAccessService authorizationAccessService;
 
+    @Autowired
+    private BookingBuilder bookingBuilder;
+
 
     @ApiOperation(value = "Realiza cadastro de reserva")
     @ApiResponses(value = {
@@ -71,10 +74,7 @@ public class BookingController {
     @GetMapping
     public ResponseEntity<List<BookingDetailResponse>> findAll(){
 
-        List<Booking> bookings = bookingService.findAll();
-        List<BookingDetailResponse> response = bookings.stream()
-                .map(e -> bookingMapper.bookingToDetailBookingResponse(e))
-                .collect(Collectors.toList());
+        List<BookingDetailResponse> response = getBookingDetailResponses(bookingService.findAll());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     @ApiOperation(value = "Realiza atualização de reserva")
@@ -84,9 +84,7 @@ public class BookingController {
             @ApiResponse(code = 403, message = "Você não possui permissão para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Ocorreu algum erro inesperado. Tente novamente mais tarde")})
     @PutMapping(value = "/{id}")
-    public ResponseEntity<BookingDetailResponse> update(@RequestBody @Valid UpdateBookingRequest request,
-                                                        @PathVariable("id") Long id){
-
+    public ResponseEntity<BookingDetailResponse> update(@RequestBody @Valid UpdateBookingRequest request, @PathVariable("id") Long id){
         Booking bookingToUpdate = bookingMapper.updateRequestToEntity(request);
         Booking bookingUpdated = bookingService.updateBooking(bookingToUpdate, id);
         BookingDetailResponse response = bookingMapper.bookingToDetailBookingResponse(bookingUpdated);
@@ -116,10 +114,8 @@ public class BookingController {
     @GetMapping("/next")
     public ResponseEntity<List<BookingDetailResponse>> findNext(){
 
-        List<Booking> bookings = bookingService.findNextBookings();
-        List<BookingDetailResponse> response = bookings.stream()
-                .map(e -> bookingMapper.bookingToDetailBookingResponse(e))
-                .collect(Collectors.toList());
+        List<BookingDetailResponse> response = getBookingDetailResponses(bookingService.findNextBookings());
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -174,22 +170,19 @@ public class BookingController {
             @RequestParam(value = "bookingStatus", required = false) BookingStatusEnum bookingStatus,
             @RequestParam(value = "contractType", required = false) ContractTypeEnum contractType){
 
+        SearchBookingRequest request = bookingBuilder
+                .searchBookingRequestBuilder(date,paymentStatus,bookingStatus,contractType);
 
+        List<BookingDetailResponse> response = getBookingDetailResponses(bookingService.search(request));
 
-        SearchBookingRequest request = SearchBookingRequest.builder()
-                .date(FormatterUtils.getLocalDateFormat(date))
-                .bookingStatus(bookingStatus)
-                .paymentStatus(paymentStatus)
-                .contractType(contractType)
-                .build();
-
-        List<Booking> bookings = bookingService.search(request);
-
-        List<BookingDetailResponse> response = bookings.stream()
-                .map(e -> bookingMapper.bookingToDetailBookingResponse(e))
-                .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(response);
 
+    }
+
+    private List<BookingDetailResponse> getBookingDetailResponses(List<Booking> bookings) {
+        return bookings.stream()
+                    .map(e -> bookingMapper.bookingToDetailBookingResponse(e))
+                    .collect(Collectors.toList());
     }
 
 }

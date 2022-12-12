@@ -2,6 +2,7 @@ package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
+import com.fernando.oliveira.booking.domain.mapper.LaunchMapper;
 import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.repository.LaunchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class LaunchServiceImpl implements LaunchService{
 
     @Autowired
     private LaunchRepository launchRepository;
+
+    @Autowired
+    private LaunchMapper launchMapper;
 
     @Override
     public Launch createLaunch(Launch launch, Booking booking) {

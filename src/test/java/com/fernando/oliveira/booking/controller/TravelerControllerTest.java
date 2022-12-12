@@ -58,7 +58,7 @@ public class TravelerControllerTest {
 
 	@MockBean
 	private BookingMapper bookingMapper;
-	
+
 	@Test
 	public void shouldCreateTravelerAndReturnTravelerDetails() throws Exception {
 		

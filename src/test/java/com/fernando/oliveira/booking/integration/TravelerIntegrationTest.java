@@ -10,7 +10,6 @@ import com.fernando.oliveira.booking.domain.response.ExceptionResponse;
 import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +22,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 
-import static com.fernando.oliveira.booking.mother.TravelerMother.*;
+import static com.fernando.oliveira.booking.mother.TravelerMother.getCreateTraveler02Request;
+import static com.fernando.oliveira.booking.mother.TravelerMother.getUpdateTraveler01Request;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
