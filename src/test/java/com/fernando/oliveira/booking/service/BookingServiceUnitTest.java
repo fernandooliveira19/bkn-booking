@@ -3,10 +3,7 @@ package com.fernando.oliveira.booking.service;
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.entity.Traveler;
-import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
-import com.fernando.oliveira.booking.domain.enums.ExceptionMessageEnum;
-import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
-import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
+import com.fernando.oliveira.booking.domain.enums.*;
 import com.fernando.oliveira.booking.domain.request.UpdateBookingRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateLaunchRequest;
 import com.fernando.oliveira.booking.exception.BookingException;
@@ -115,17 +112,20 @@ public class BookingServiceUnitTest {
     }
 
     @Test
-    void givenValidRequestWhenCreateBookingThenCreateBookingReservedBySite(){
+    void givenValidRequestWhenCreateBookingThenCreateBookingReservedByWebsite(){
         LocalDateTime checkIn = LocalDateTime.of(2021, Month.OCTOBER,8,10,0);
         LocalDateTime checkOut = LocalDateTime.of(2021, Month.DECEMBER,16,18,0);
         Long travelerId = 4L;
         BigDecimal totalAmount = BigDecimal.valueOf(4000.0);
+        BigDecimal websiteServiceFee = BigDecimal.valueOf(300.0);
         Integer adults = 2;
         Integer children = 3;
 
-        Launch firstLaunch = getLaunchToSave(BigDecimal.valueOf(4000.0), PaymentTypeEnum.SITE, PaymentStatusEnum.TO_RECEIVE, LocalDate.of(2021, 10,10), LocalDate.of(2021,10,10) );
+        Launch firstLaunch = getLaunchToSave(BigDecimal.valueOf(3700.0), PaymentTypeEnum.SITE, PaymentStatusEnum.TO_RECEIVE, LocalDate.of(2021, 10,10), LocalDate.of(2021,10,10) );
 
         Booking bookingToSave = getBookingToSave(checkIn, checkOut, totalAmount,travelerId, adults, children, Arrays.asList(firstLaunch), TravelerMother.getTravelerSaved04());
+        bookingToSave.setWebsiteServiceFee(websiteServiceFee);
+        bookingToSave.setContractType(ContractTypeEnum.SITE);
 
         Booking bookingSaved = getBookingSaved04();
 

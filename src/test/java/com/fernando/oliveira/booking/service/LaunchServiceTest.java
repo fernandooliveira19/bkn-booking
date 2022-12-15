@@ -83,4 +83,29 @@ public class LaunchServiceTest {
 
     }
 
+    @Test
+    void givenBookingsWhenFindNextBookingsThenReturnLaunchesToReceive(){
+
+        when(launchRepository.findNextLaunches()).thenReturn(Arrays.asList(getBooking02Launch03(), getBooking03Launch01(), getBooking03Launch02(), getBooking04Launch01()));
+
+        List<Launch> result = launchService.findNextLaunches();
+        then(result.size()).isEqualTo(4);
+
+        then(result.get(0).getPaymentStatus()).isEqualTo(PENDING);
+        then(result.get(0).getId()).isEqualTo(105L);
+        then(result.get(0).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(1000.0));
+
+        then(result.get(1).getPaymentStatus()).isEqualTo(PENDING);
+        then(result.get(1).getId()).isEqualTo(106L);
+        then(result.get(1).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(1200.0));
+
+        then(result.get(2).getPaymentStatus()).isEqualTo(PENDING);
+        then(result.get(2).getId()).isEqualTo(107L);
+        then(result.get(2).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(800.0));
+
+        then(result.get(3).getPaymentStatus()).isEqualTo(TO_RECEIVE);
+        then(result.get(3).getId()).isEqualTo(108L);
+        then(result.get(3).getAmount()).isEqualByComparingTo(BigDecimal.valueOf(2200.0));
+    }
+
 }

@@ -57,7 +57,7 @@ public class HomeServiceUnitTest {
 
         HomeDto result = homeService.getHomeDetails();
 
-        then(result.getHomeLaunch().getAmountTotal()).isEqualTo(BigDecimal.valueOf(5500.0));
+        then(result.getHomeLaunch().getAmountTotal()).isEqualTo(BigDecimal.valueOf(5200.0));
 
         then(result.getHomeLaunch().getDirectOverdueAmount()).isEqualTo(BigDecimal.valueOf(3000.0));
         then(result.getHomeLaunch().getDirectOverdueQuantity()).isEqualTo(3);
@@ -68,7 +68,7 @@ public class HomeServiceUnitTest {
 
 
         then(result.getHomeLaunch().getSiteQuantity()).isEqualTo(1);
-        then(result.getHomeLaunch().getSiteAmount()).isEqualTo(BigDecimal.valueOf(2500.0));
+        then(result.getHomeLaunch().getSiteAmount()).isEqualTo(BigDecimal.valueOf(2200.0));
 
         then(result.getHomeBooking().getBookingReserved()).isEqualTo(3);
         then(result.getHomeBooking().getBookingPreReserved()).isEqualTo(1);

@@ -4,11 +4,12 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.annotation.processing.Generated;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Getter
 @Setter
@@ -45,6 +46,9 @@ public class BookingRequest implements Serializable {
 
     @ApiModelProperty(name="observation", value="Observação", example="Teve um desconto relativo a quantidade de dias")
     private String observation;
+
+    @ApiModelProperty(name="websiteServiceFee", value="Valor taxa de serviço website", example="300,00")
+    private BigDecimal websiteServiceFee;
 
 
 }

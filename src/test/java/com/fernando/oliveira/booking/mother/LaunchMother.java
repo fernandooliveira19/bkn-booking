@@ -80,7 +80,7 @@ public class LaunchMother {
     private static final LocalDate BOOKING_03_LAUNCH_02_PAYMENT_DATE = null;
 
     private static final Long BOOKING_04_LAUNCH_01_ID= 108L;
-    private static final BigDecimal BOOKING_04_LAUNCH_01_AMOUNT = BigDecimal.valueOf(2500.0);
+    private static final BigDecimal BOOKING_04_LAUNCH_01_AMOUNT = BigDecimal.valueOf(2200.0);
     private static final LocalDate BOOKING_04_LAUNCH_01_SCHEDULE_DATE = LocalDate.of(2021, Month.JANUARY, 25);
     private static final PaymentTypeEnum BOOKING_04_LAUNCH_01_PAYMENT_TYPE = PaymentTypeEnum.SITE;
     private static final PaymentStatusEnum BOOKING_04_LAUNCH_01_PAYMENT_STATUS = PaymentStatusEnum.TO_RECEIVE;

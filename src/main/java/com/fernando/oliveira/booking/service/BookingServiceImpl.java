@@ -4,6 +4,7 @@ import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
+import com.fernando.oliveira.booking.domain.enums.ContractTypeEnum;
 import com.fernando.oliveira.booking.domain.enums.ExceptionMessageEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
@@ -233,7 +234,13 @@ public class BookingServiceImpl implements BookingService {
             throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_MUST_HAVE_LAUNCHES));
         }
 
-        if (!booking.getAmountTotal().equals(getTotalAmountByLaunches(booking.getLaunches()))) {
+        BigDecimal amountTotal = booking.getAmountTotal();
+
+        if(ContractTypeEnum.SITE.equals(booking.getContractType())){
+            amountTotal = amountTotal.subtract(booking.getWebsiteServiceFee());
+        }
+
+        if (!amountTotal.equals(getTotalAmountByLaunches(booking.getLaunches()))) {
             throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_SUM_LAUNCHES_AMOUNT_ERROR));
         }
 
