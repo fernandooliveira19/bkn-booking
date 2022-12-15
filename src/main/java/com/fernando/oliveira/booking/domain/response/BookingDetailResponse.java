@@ -52,4 +52,6 @@ public class BookingDetailResponse {
 
     private List<LaunchDetailResponse> launches;
 
+    private BigDecimal websiteServiceFee;
+
 }
