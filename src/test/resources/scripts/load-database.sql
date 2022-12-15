@@ -23,8 +23,8 @@ INSERT INTO public.booking(id, traveler_id,check_in, check_out, amount, adults, 
 VALUES(30, 3, '2021-01-16 10:00', '2021-01-30 18:00', 2000.00, 3, 2, 'PRE_RESERVED', 'PENDING', '2021-01-05 12:40', '2021-01-06 12:40', null, 2000.0, 'Terceira reserva', 'DIRECT', 0.0);
 
 
-INSERT INTO public.booking(id, traveler_id,check_in, check_out, amount, adults, children, booking_status,payment_status, insert_date, last_update, rating, amount_pending, observation, contract_type, amount_paid)
-VALUES(40, 4, '2021-02-01 10:00', '2021-02-15 18:00', 2500.00, 6, 1, 'RESERVED', 'TO_RECEIVE', '2021-01-25 12:40', '2021-01-26 12:40', null, 0.0, 'Quarta reserva', 'SITE', 2500.0);
+INSERT INTO public.booking(id, traveler_id,check_in, check_out, amount, adults, children, booking_status,payment_status, insert_date, last_update, rating, amount_pending, observation, contract_type, amount_paid, website_service_fee)
+VALUES(40, 4, '2021-02-01 10:00', '2021-02-15 18:00', 2500.00, 6, 1, 'RESERVED', 'TO_RECEIVE', '2021-01-25 12:40', '2021-01-26 12:40', null, 0.0, 'Quarta reserva', 'SITE', 2500.0, 300.0);
 
 
 INSERT INTO public.booking(id, traveler_id,check_in, check_out, amount, adults, children, booking_status,payment_status, insert_date, last_update, rating, amount_pending, observation, contract_type, amount_paid)

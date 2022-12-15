@@ -83,6 +83,9 @@ public class Booking {
 
     @Column(name="OBSERVATION")
     private String observation;
+
+    @Column(name="WEBSITE_SERVICE_FEE")
+    private BigDecimal websiteServiceFee;
     
     @Transient
     private String travelerName;
