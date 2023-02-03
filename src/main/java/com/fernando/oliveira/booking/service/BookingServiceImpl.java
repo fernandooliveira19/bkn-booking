@@ -175,8 +175,13 @@ public class BookingServiceImpl implements BookingService {
         long rentDays = booking.getCheckIn().until(booking.getCheckOut(), ChronoUnit.DAYS);
 
         booking.setRentDays(rentDays);
-        booking.setAverageValue(booking.getAmountTotal().divide(BigDecimal.valueOf(rentDays), 2, RoundingMode.HALF_UP));
 
+        if(rentDays <= Long.valueOf(0)){
+            booking.setRentDays(Long.valueOf(1));
+            booking.setAverageValue(booking.getAmountTotal());
+        }else {
+            booking.setAverageValue(booking.getAmountTotal().divide(BigDecimal.valueOf(rentDays), 2, RoundingMode.HALF_UP));
+        }
         return booking;
     }
 
