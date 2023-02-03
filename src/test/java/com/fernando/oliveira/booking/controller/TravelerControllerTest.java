@@ -137,7 +137,9 @@ public class TravelerControllerTest {
 				.andExpect(jsonPath("$[0].bookingStatus").value("FINISHED"))
 				.andExpect(jsonPath("$[0].amountTotal").value(1000.0))
 				.andExpect(jsonPath("$[0].contractType").value("DIRECT"))
-				.andExpect(jsonPath("$[0].observation").value("First booking"));
+				.andExpect(jsonPath("$[0].observation").value("First booking"))
+				.andExpect(jsonPath("$[0].rentDays").value("15"))
+				.andExpect(jsonPath("$[0].averageValue").value(66.66));
 
 	}
 

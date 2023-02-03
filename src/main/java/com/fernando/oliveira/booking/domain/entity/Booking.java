@@ -89,4 +89,10 @@ public class Booking {
     
     @Transient
     private String travelerName;
+
+    @Transient
+    private Long rentDays;
+
+    @Transient
+    private BigDecimal averageValue;
 }

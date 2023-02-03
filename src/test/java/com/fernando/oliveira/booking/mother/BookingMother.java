@@ -218,6 +218,8 @@ public class BookingMother {
                 .observation(BOOKING_01_OBSERVATION)
                 .bookingStatus(BOOKING_01_BOOKING_STATUS)
                 .launches(Arrays.asList(launch01, launch02, launch03))
+                .rentDays(15L)
+                .averageValue(BigDecimal.valueOf(66.66))
                 .build();
     }
 
@@ -497,6 +499,8 @@ public class BookingMother {
                 .contractType(booking.getContractType())
                 .observation(booking.getObservation())
                 .bookingStatus(booking.getBookingStatus())
+                .averageValue(booking.getAverageValue())
+                .rentDays(booking.getRentDays())
                 .build();
     }
 

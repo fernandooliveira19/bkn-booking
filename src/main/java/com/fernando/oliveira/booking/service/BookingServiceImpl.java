@@ -20,7 +20,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -162,7 +164,20 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<Booking> findBookingsByTraveler(Long travelerId) {
-        return bookingRepository.findByTraveler(travelerId);
+
+        return bookingRepository.findByTraveler(travelerId).stream()
+                .map((e) -> calculateRangeAndAverageRentals(e))
+                .collect(Collectors.toList());
+    }
+
+    private Booking calculateRangeAndAverageRentals(Booking booking){
+
+        long rentDays = booking.getCheckIn().until(booking.getCheckOut(), ChronoUnit.DAYS);
+
+        booking.setRentDays(rentDays);
+        booking.setAverageValue(booking.getAmountTotal().divide(BigDecimal.valueOf(rentDays), 2, RoundingMode.HALF_UP));
+
+        return booking;
     }
 
     public Booking defineBookingDetails(Booking booking) {

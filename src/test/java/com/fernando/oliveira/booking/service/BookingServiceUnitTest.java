@@ -445,6 +445,8 @@ public class BookingServiceUnitTest {
         List<Booking> result = bookingService.findBookingsByTraveler(travelerId);
 
         then(result.size()).isEqualTo(1);
+        then(result.get(0).getRentDays()).isEqualTo(14);
+        then(result.get(0).getAverageValue()).isEqualByComparingTo(BigDecimal.valueOf(107.14));
 
     }
 
@@ -592,4 +594,6 @@ public class BookingServiceUnitTest {
 
         then(result).isNotNull();
     }
+
+
 }

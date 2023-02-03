@@ -222,7 +222,7 @@ public class TravelerIntegrationTest {
     }
 
     @Test
-    public void shouldReturnAllBookingByTraveler() throws Exception {
+    public void shouldReturnAllBookingByTraveler() {
         Long id = 1L;
         ResponseEntity<BookingTravelerResponse[]> result = restTemplate
                 .getForEntity(
@@ -241,6 +241,10 @@ public class TravelerIntegrationTest {
         assertThat(response[0].getBookingStatus()).isEqualTo(BookingStatusEnum.FINISHED);
         assertThat(response[0].getContractType()).isEqualTo(ContractTypeEnum.DIRECT);
         assertThat(response[0].getObservation()).isEqualTo("Primeira reserva");
+
+        assertThat(response[0].getRentDays()).isEqualTo(15L);
+        assertThat(response[0].getAverageValue()).isEqualByComparingTo(BigDecimal.valueOf(66.67));
+
 
     }
 

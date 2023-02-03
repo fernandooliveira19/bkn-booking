@@ -27,4 +27,8 @@ public class BookingTravelerResponse {
     private ContractTypeEnum contractType;
 
     private String observation;
+
+    private Long rentDays;
+
+    private BigDecimal averageValue;
 }
