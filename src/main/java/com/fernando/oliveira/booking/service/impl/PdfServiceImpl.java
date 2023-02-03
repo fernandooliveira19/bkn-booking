@@ -1,5 +1,6 @@
-package com.fernando.oliveira.booking.service;
+package com.fernando.oliveira.booking.service.impl;
 
+import com.fernando.oliveira.booking.service.PdfService;
 import com.itextpdf.text.*;
 import lombok.extern.slf4j.Slf4j;
 

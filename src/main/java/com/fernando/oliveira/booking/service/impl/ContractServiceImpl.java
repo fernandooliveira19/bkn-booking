@@ -1,9 +1,11 @@
-package com.fernando.oliveira.booking.service;
+package com.fernando.oliveira.booking.service.impl;
 
 import com.fernando.oliveira.booking.builder.PdfRequestDtoBuilder;
 import com.fernando.oliveira.booking.domain.dto.PdfRequestDto;
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
+import com.fernando.oliveira.booking.service.BookingService;
+import com.fernando.oliveira.booking.service.ContractService;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;

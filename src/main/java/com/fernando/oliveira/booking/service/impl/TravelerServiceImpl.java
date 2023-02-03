@@ -1,10 +1,11 @@
-package com.fernando.oliveira.booking.service;
+package com.fernando.oliveira.booking.service.impl;
 
 import com.fernando.oliveira.booking.domain.entity.Traveler;
 import com.fernando.oliveira.booking.domain.enums.ExceptionMessageEnum;
 import com.fernando.oliveira.booking.domain.enums.StatusEnum;
 import com.fernando.oliveira.booking.exception.TravelerException;
 import com.fernando.oliveira.booking.repository.TravelerRepository;
+import com.fernando.oliveira.booking.service.TravelerService;
 import com.fernando.oliveira.booking.utils.MessageUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

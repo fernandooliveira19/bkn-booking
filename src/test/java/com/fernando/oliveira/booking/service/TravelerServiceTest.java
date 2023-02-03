@@ -7,6 +7,7 @@ import com.fernando.oliveira.booking.domain.request.UpdateTravelerRequest;
 import com.fernando.oliveira.booking.exception.TravelerException;
 import com.fernando.oliveira.booking.mother.TravelerMother;
 import com.fernando.oliveira.booking.repository.TravelerRepository;
+import com.fernando.oliveira.booking.service.impl.TravelerServiceImpl;
 import com.fernando.oliveira.booking.utils.MessageUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

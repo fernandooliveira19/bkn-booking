@@ -6,7 +6,7 @@ import com.fernando.oliveira.booking.domain.mapper.HomeMapper;
 import com.fernando.oliveira.booking.domain.response.HomeResponse;
 import com.fernando.oliveira.booking.domain.response.ReservedDateResponse;
 import com.fernando.oliveira.booking.mother.HomeMother;
-import com.fernando.oliveira.booking.service.HomeServiceImpl;
+import com.fernando.oliveira.booking.service.impl.HomeServiceImpl;
 import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

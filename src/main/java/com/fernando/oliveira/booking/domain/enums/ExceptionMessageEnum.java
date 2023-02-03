@@ -15,7 +15,8 @@ public enum ExceptionMessageEnum {
     BOOKING_FINISH_BEFORE_CHECKOUT_ERROR("booking.finish.before.checkout.error"),
     BOOKING_FINISH_LAUNCHES_PENDING_ERROR("booking.finish.launches.pending.error"),
     TRAVELER_NOT_FOUND("traveler.not.found"),
-    TRAVELER_ALREADY_EXISTS("traveler.already.exists");
+    TRAVELER_ALREADY_EXISTS("traveler.already.exists"),
+    TOOLS_CHECK_IN_AFTER_CHECK_OUT_ERROR("tools.check-in.after.check-out.error");
     private  final String messageKey;
 
     ExceptionMessageEnum(String messageKey){

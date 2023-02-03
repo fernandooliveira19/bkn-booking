@@ -1,8 +1,10 @@
-package com.fernando.oliveira.booking.service;
+package com.fernando.oliveira.booking.service.impl;
 
 import com.fernando.oliveira.booking.builder.PdfRequestDtoBuilder;
 import com.fernando.oliveira.booking.domain.dto.PdfRequestDto;
 import com.fernando.oliveira.booking.domain.entity.Booking;
+import com.fernando.oliveira.booking.service.AuthorizationAccessService;
+import com.fernando.oliveira.booking.service.BookingService;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -16,7 +18,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 @Service
-public class AuthorizationAccessServiceImpl extends PdfServiceImpl implements AuthorizationAccessService{
+public class AuthorizationAccessServiceImpl extends PdfServiceImpl implements AuthorizationAccessService {
 
     @Autowired
     private BookingService bookingService;

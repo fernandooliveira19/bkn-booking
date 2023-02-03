@@ -5,6 +5,7 @@ import com.fernando.oliveira.booking.domain.request.CreateBookingRequest;
 import com.fernando.oliveira.booking.domain.request.UpdateBookingRequest;
 import com.fernando.oliveira.booking.domain.response.BookingDetailResponse;
 import com.fernando.oliveira.booking.domain.response.BookingTravelerResponse;
+import com.fernando.oliveira.booking.utils.FormatterUtils;
 import org.apache.commons.lang.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,7 +15,6 @@ import org.mapstruct.ReportingPolicy;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
     uses = {LaunchMapper.class})
@@ -42,7 +42,7 @@ public interface BookingMapper {
         if(StringUtils.isBlank(date)) {
             return null;
         }
-        return LocalDateTime.parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        return FormatterUtils.getIsoLocalDateTime(date);
     }
 
     @Named("convertStringToBigDecimal")

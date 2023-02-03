@@ -2,7 +2,6 @@ package com.fernando.oliveira.booking.utils;
 
 import com.fernando.oliveira.booking.exception.TravelerInvalidException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Component;
 
 import javax.swing.text.MaskFormatter;
@@ -13,7 +12,6 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
@@ -109,5 +107,9 @@ public class FormatterUtils {
 
         return localDate;
 
+    }
+
+    public static LocalDateTime getIsoLocalDateTime(String date) {
+        return LocalDateTime.parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 }

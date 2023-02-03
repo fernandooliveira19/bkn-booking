@@ -1,4 +1,4 @@
-package com.fernando.oliveira.booking.service;
+package com.fernando.oliveira.booking.service.impl;
 
 import com.fernando.oliveira.booking.domain.dto.HomeBookingDto;
 import com.fernando.oliveira.booking.domain.dto.HomeDto;
@@ -9,6 +9,9 @@ import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.ContractTypeEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
 import com.fernando.oliveira.booking.domain.response.ReservedDateResponse;
+import com.fernando.oliveira.booking.service.BookingService;
+import com.fernando.oliveira.booking.service.HomeService;
+import com.fernando.oliveira.booking.service.LaunchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +24,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class HomeServiceImpl implements HomeService{
+public class HomeServiceImpl implements HomeService {
 
     @Autowired
     private BookingService bookingService;
