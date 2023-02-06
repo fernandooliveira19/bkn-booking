@@ -1,4 +1,4 @@
-package com.fernando.oliveira.booking.service;
+package com.fernando.oliveira.booking.service.impl;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
@@ -12,6 +12,10 @@ import com.fernando.oliveira.booking.domain.request.SearchBookingRequest;
 import com.fernando.oliveira.booking.domain.spec.BookingSpec;
 import com.fernando.oliveira.booking.exception.BookingException;
 import com.fernando.oliveira.booking.repository.BookingRepository;
+import com.fernando.oliveira.booking.service.BookingService;
+import com.fernando.oliveira.booking.service.LaunchService;
+import com.fernando.oliveira.booking.service.ToolsService;
+import com.fernando.oliveira.booking.service.TravelerService;
 import com.fernando.oliveira.booking.utils.MessageUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +24,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,6 +46,10 @@ public class BookingServiceImpl implements BookingService {
 
     @Autowired
     private MessageUtils messageUtils;
+
+
+    @Autowired
+    private ToolsService toolsService;
 
     @Override
     public Booking createBooking(Booking booking) {
@@ -172,16 +178,11 @@ public class BookingServiceImpl implements BookingService {
 
     private Booking calculateRangeAndAverageRentals(Booking booking){
 
-        long rentDays = booking.getCheckIn().until(booking.getCheckOut(), ChronoUnit.DAYS);
+        Long rentDays = toolsService.rentDays(booking.getCheckIn(), booking.getCheckOut());
 
         booking.setRentDays(rentDays);
+        booking.setAverageValue(toolsService.averageValue(rentDays, booking.getAmountTotal()));
 
-        if(rentDays <= Long.valueOf(0)){
-            booking.setRentDays(Long.valueOf(1));
-            booking.setAverageValue(booking.getAmountTotal());
-        }else {
-            booking.setAverageValue(booking.getAmountTotal().divide(BigDecimal.valueOf(rentDays), 2, RoundingMode.HALF_UP));
-        }
         return booking;
     }
 

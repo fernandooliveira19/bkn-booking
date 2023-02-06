@@ -4,6 +4,7 @@ import com.fernando.oliveira.booking.domain.entity.Launch;
 import com.fernando.oliveira.booking.domain.enums.PaymentTypeEnum;
 import com.fernando.oliveira.booking.mother.LaunchMother;
 import com.fernando.oliveira.booking.repository.LaunchRepository;
+import com.fernando.oliveira.booking.service.impl.LaunchServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

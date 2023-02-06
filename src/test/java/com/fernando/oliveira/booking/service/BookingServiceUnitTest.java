@@ -13,6 +13,8 @@ import com.fernando.oliveira.booking.mother.TravelerMother;
 import com.fernando.oliveira.booking.repository.BookingRepository;
 import com.fernando.oliveira.booking.repository.LaunchRepository;
 import com.fernando.oliveira.booking.repository.TravelerRepository;
+import com.fernando.oliveira.booking.service.impl.BookingServiceImpl;
+import com.fernando.oliveira.booking.service.impl.LaunchServiceImpl;
 import com.fernando.oliveira.booking.utils.MessageUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,6 +62,9 @@ public class BookingServiceUnitTest {
 
     @Mock
     private MessageUtils messageUtils;
+
+    @Mock
+    private ToolsService toolsService;
 
     static Clock clock;
 
@@ -439,7 +444,8 @@ public class BookingServiceUnitTest {
         List<Booking> bookings = Arrays.asList(getBookingSaved02());
 
         when(bookingRepository.findByTraveler(anyLong())).thenReturn(bookings);
-
+        when(toolsService.rentDays(any(LocalDateTime.class), any(LocalDateTime.class))).thenReturn(Long.valueOf(14));
+        when(toolsService.averageValue(anyLong(), any(BigDecimal.class))).thenReturn(BigDecimal.valueOf(107.14));
         Long travelerId = 2L;
 
         List<Booking> result = bookingService.findBookingsByTraveler(travelerId);
