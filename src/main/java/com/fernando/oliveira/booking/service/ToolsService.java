@@ -11,5 +11,5 @@ public interface ToolsService {
 
     BigDecimal averageValue(Long rentDays, BigDecimal amount);
 
-    PreviewBookingDto calculateAmount(LocalDateTime checkIn, LocalDateTime checkOut, BigDecimal dailyValue);
+    PreviewBookingDto calculateAmount(LocalDateTime checkIn, LocalDateTime checkOut, BigDecimal dailyValue, BigDecimal cleaningFee);
 }

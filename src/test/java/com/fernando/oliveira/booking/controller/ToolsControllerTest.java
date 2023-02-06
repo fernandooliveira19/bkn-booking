@@ -56,20 +56,24 @@ public class ToolsControllerTest {
 		PreviewBookingRequest request = PreviewBookingRequest.builder()
 				.checkIn("2023-02-05T10:00:00")
 				.checkOut("2023-02-09T18:00:00")
-				.dailyValue(BigDecimal.valueOf(350.0))
+				.dailyRate(BigDecimal.valueOf(350.0))
+				.cleaningFee(BigDecimal.valueOf(120.0))
 				.build();
 		PreviewBookingDto dto = PreviewBookingDto.builder()
-				.amountTotal(BigDecimal.valueOf(1400.0))
+				.amountTotal(BigDecimal.valueOf(1520.0))
 				.rentDays(Long.valueOf(4))
 				.build();
 
 		PreviewBookingResponse response = PreviewBookingResponse.builder()
-				.amountTotal(BigDecimal.valueOf(1400.0))
+				.amountTotal(BigDecimal.valueOf(1520.0))
 				.rentDays(Long.valueOf(4))
 				.build();
 
-		when(toolsService.calculateAmount(any(LocalDateTime.class),
-				any(LocalDateTime.class),any(BigDecimal.class))).thenReturn(dto);
+		when(toolsService.calculateAmount(
+				any(LocalDateTime.class),
+				any(LocalDateTime.class),
+				any(BigDecimal.class),
+				any(BigDecimal.class))).thenReturn(dto);
 		when(toolsMapper.previewBookingDtoToResponse(any(PreviewBookingDto.class))).thenReturn(response);
 
 		String requestJson = getRequestJsonValue(request);
@@ -78,7 +82,7 @@ public class ToolsControllerTest {
 				.content(requestJson))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.rentDays").value(4))
-				.andExpect(jsonPath("$.amountTotal").value(1400));
+				.andExpect(jsonPath("$.amountTotal").value(1520));
 
 	}
 

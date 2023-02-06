@@ -39,7 +39,11 @@ public class ToolsController {
 
         PreviewBookingResponse response = toolsMapper
                 .previewBookingDtoToResponse(
-                        toolsService.calculateAmount(FormatterUtils.getIsoLocalDateTime(request.getCheckIn()), FormatterUtils.getIsoLocalDateTime(request.getCheckOut()), request.getDailyValue()));
+                        toolsService.calculateAmount(
+                                FormatterUtils.getIsoLocalDateTime(request.getCheckIn()),
+                                FormatterUtils.getIsoLocalDateTime(request.getCheckOut()),
+                                request.getDailyRate(),
+                                request.getCleaningFee()));
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

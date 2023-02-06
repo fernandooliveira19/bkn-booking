@@ -22,8 +22,12 @@ public class PreviewBookingRequest {
     @NotBlank(message = "Data de check-out é obrigatória")
     private String checkOut;
 
-    @ApiModelProperty(name="dailyValue", value="Valor da diária", example="350,00", required = true)
+    @ApiModelProperty(name="dailyValue", value="Valor da diária", example="350.00", required = true)
     @NotNull(message = "Valor da diária é obrigatório")
-    private BigDecimal dailyValue;
+    private BigDecimal dailyRate;
+
+    @ApiModelProperty(name="cleaningFee", value="Valor da taxa de limpeza", example="120.00", required = true)
+    private BigDecimal cleaningFee;
+
 
 }

@@ -102,11 +102,12 @@ public class ToolsServiceUnitTest {
     void givenRangeDateAndDailyValueThenReturnTotalAmount(){
         LocalDateTime checkIn = LocalDateTime.of(2023, Month.FEBRUARY,5,10,0);
         LocalDateTime checkOut = LocalDateTime.of(2023, Month.FEBRUARY,11,18,0);
-        BigDecimal dailyValue = BigDecimal.valueOf(350.0);
+        BigDecimal dailyRate = BigDecimal.valueOf(350.0);
+        BigDecimal cleaningFee = BigDecimal.valueOf(120.0);
 
-        PreviewBookingDto result = toolsService.calculateAmount(checkIn,checkOut,dailyValue);
+        PreviewBookingDto result = toolsService.calculateAmount(checkIn,checkOut,dailyRate, cleaningFee);
 
-        then(result.getAmountTotal()).isEqualByComparingTo(BigDecimal.valueOf(2100.0));
+        then(result.getAmountTotal()).isEqualByComparingTo(BigDecimal.valueOf(2220.0));
         then(result.getRentDays()).isEqualTo(6);
 
     }

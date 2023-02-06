@@ -41,12 +41,12 @@ public class ToolsServiceImpl implements ToolsService {
     }
 
     @Override
-    public PreviewBookingDto calculateAmount(LocalDateTime checkIn, LocalDateTime checkOut, BigDecimal dailyValue) {
+    public PreviewBookingDto calculateAmount(LocalDateTime checkIn, LocalDateTime checkOut, BigDecimal dailyValue, BigDecimal cleaningFee) {
 
         Long rentDays = this.rentDays(checkIn, checkOut);
         return PreviewBookingDto.builder()
                 .rentDays(rentDays)
-                .amountTotal(dailyValue.multiply(BigDecimal.valueOf(rentDays)))
+                .amountTotal(dailyValue.multiply(BigDecimal.valueOf(rentDays)).add(cleaningFee))
                 .build();
     }
 }
