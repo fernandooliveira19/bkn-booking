@@ -37,7 +37,7 @@ public class AuthorizationAccessServiceImpl extends PdfServiceImpl implements Au
             document.open();
             document.add(getTitle("AUTORIZAÇÃO DE LOCAÇÃO POR TEMPORADA"));
 
-            document.add(getSubtitle("Rua Rio de Janeiro, 50 - Apto 617/618 - Edfício Bandeirantes", Element.ALIGN_CENTER));
+            document.add(getSubtitle("Rua Rio de Janeiro, 50 - Apto 617/618 - Edifício Bandeirantes", Element.ALIGN_CENTER));
 
             getIdentificationParts(requestDto, document);
 
