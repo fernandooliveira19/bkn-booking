@@ -31,7 +31,7 @@ create network
 
 clean and package
 
-* $ .\mvnw clean package -DskipTests
+* $ .\mvnw clean package
 
 build docker image
 
