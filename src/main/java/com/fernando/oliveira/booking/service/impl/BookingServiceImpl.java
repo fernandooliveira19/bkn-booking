@@ -119,7 +119,7 @@ public class BookingServiceImpl implements BookingService {
             BookingSpec bookingSpec = new BookingSpec(request);
             List<Booking> result = bookingRepository.findAll(bookingSpec);
             return result.stream()
-                    .map((e) -> defineBookingDetails((Booking) e))
+                    .map((e) -> defineBookingDetails(e))
                     .collect(Collectors.toList());
         }
     }
@@ -309,6 +309,7 @@ public class BookingServiceImpl implements BookingService {
 
     private void defineAmountPaid(Booking booking) {
         booking.setAmountPaid(booking.getAmountTotal().subtract(booking.getAmountPending()));
+
     }
 
 }

@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.fernando.oliveira.booking.domain.enums.StatusEnum.ACTIVE;
@@ -43,7 +43,7 @@ public class TravelerServiceImpl implements TravelerService {
     private void validate(Traveler traveler) {
 
 
-        List<Traveler> travelers = new ArrayList<>();
+        List<Traveler> travelers;
 
         if(StringUtils.isBlank(traveler.getEmail())){
             travelers = findByName(traveler.getName());
@@ -64,18 +64,26 @@ public class TravelerServiceImpl implements TravelerService {
 
     private void validateUpdateTraveler(Traveler traveler, List<Traveler> travelers) {
 
-        for (Traveler t : travelers) {
-            if (!t.getId().equals(traveler.getId())) {
-                throw new TravelerException(messageUtils.getMessage(ExceptionMessageEnum.TRAVELER_ALREADY_EXISTS));
+        travelers.stream().forEach( e -> {
+            if(!e.getId().equals(traveler.getId())){
+                throw new TravelerException(
+                        messageUtils.getMessage(ExceptionMessageEnum.TRAVELER_ALREADY_EXISTS));
             }
-        }
+        });
+
+//        for (Traveler t : travelers) {
+//            if (!t.getId().equals(traveler.getId())) {
+//                throw new TravelerException(messageUtils.getMessage(ExceptionMessageEnum.TRAVELER_ALREADY_EXISTS));
+//            }
+//        }
 
     }
 
     @Override
     public List<Traveler> findTravelersByNameOrEmail(String name, String email) {
 
-        return repository.findByNameOrEmail(name, email);
+        return repository.findByNameOrEmail(name, email)
+                .orElse(Collections.emptyList());
 
     }
 
@@ -115,7 +123,8 @@ public class TravelerServiceImpl implements TravelerService {
     @Override
     public List<Traveler> findByNameContainingOrderByNameAsc(String name) {
 
-        return repository.findByNameContainingIgnoreCaseOrderByNameAsc(name);
+        return repository.findByNameContainingIgnoreCaseOrderByNameAsc(name)
+                .orElse(Collections.emptyList());
 
     }
 
@@ -128,7 +137,8 @@ public class TravelerServiceImpl implements TravelerService {
 
     @Override
     public List<Traveler> findActiveTravelers() {
-        return repository.findActiveTravelers();
+        return repository.findActiveTravelers()
+                .orElse(Collections.emptyList());
 
     }
 
@@ -142,7 +152,8 @@ public class TravelerServiceImpl implements TravelerService {
     }
 
     public List<Traveler> findByName(String name){
-        return repository.findByName(name);
+        return repository.findByName(name)
+                .orElse(Collections.emptyList());
     }
 
 }
