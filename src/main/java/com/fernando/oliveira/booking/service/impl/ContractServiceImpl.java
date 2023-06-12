@@ -96,7 +96,7 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
         document.add(getDefaultParagraph("Ainda possui Smart TV 49' na sala e duas 32' nos quartos, modem Wi-fi, lavadora de roupas, 3 ventiladores, armário para acomodação de bagagens, cômoda, panela de arroz, micro-ondas, cooktop de indução de quatro bocas"));
         document.add(getDefaultParagraph("Geladeira, liquidificador, sanduicheira grill, filtro de água e utensílios de cozinha, garrafa térmica"));
         document.add(getDefaultParagraph("Jogo de completo com 5 panelas Tognana de fundo triplo com tampas de vidro (2 frigideiras, 2 caçarolas, 1 panela), 1 fervedor Tramontina e 1 panela de pressão Brinox" ));
-        document.add(getDefaultParagraph("O edifício possui portaria 24 horas, monitoramento por câmeras, WI-FI no hall de entrada, 3 elevadores, serviço de praia com cadeiras e 2 guarda-sóis (a solicitar na recepção)"));
+        document.add(getDefaultParagraph("O edifício possui portaria 24 horas, monitoramento por câmeras, WI-FI no hall de entrada e 3 elevadores"));
         document.add(getEmptyLine());
         document.add(getSubtitle("Orientações para utilização do cooktop:", Element.ALIGN_LEFT));
         document.add(getItemList("Mantenha pressionado o botão de controle Lig./Desl. por 3 segundos até ouvir um \"bip\" para ligar o fogão."));
@@ -114,7 +114,7 @@ public class ContractServiceImpl extends PdfServiceImpl implements ContractServi
         document.add(getItemList("É necessário levar roupa de cama, mesa e banho"));
         document.add(getItemList("É recomendável levar travesseiros"));
         document.add(getItemList("NÃO possui garagem, porém há vagas nas ruas próximas e estacionamentos"));
-        document.add(getItemList("Para uso de guarda-sol e cadeiras de praia na faixa de areia, é preciso solicitá-los na recepção, informando o número do apartamento."));
+
         document.add(getEmptyLine());
     }
 
