@@ -7,7 +7,6 @@ import com.fernando.oliveira.booking.domain.enums.BookingStatusEnum;
 import com.fernando.oliveira.booking.domain.enums.ContractTypeEnum;
 import com.fernando.oliveira.booking.domain.enums.ExceptionMessageEnum;
 import com.fernando.oliveira.booking.domain.enums.PaymentStatusEnum;
-import com.fernando.oliveira.booking.domain.mapper.BookingMapper;
 import com.fernando.oliveira.booking.domain.request.SearchBookingRequest;
 import com.fernando.oliveira.booking.domain.spec.BookingSpec;
 import com.fernando.oliveira.booking.exception.BookingException;
@@ -40,13 +39,8 @@ public class BookingServiceImpl implements BookingService {
 
     @Autowired
     private TravelerService travelerService;
-
-    @Autowired
-    private BookingMapper bookingMapper;
-
     @Autowired
     private MessageUtils messageUtils;
-
 
     @Autowired
     private ToolsService toolsService;
@@ -58,11 +52,9 @@ public class BookingServiceImpl implements BookingService {
 
         Booking bookingToSave = prepareBookingToSave(booking);
         booking.setInsertDate(LocalDateTime.now());
-
         Booking bookingSaved = bookingRepository.save(bookingToSave);
 
         bookingSaved.getLaunches()
-                .stream()
                 .forEach(e -> launchService.createLaunch(e, bookingSaved));
 
         return bookingSaved;
@@ -87,7 +79,6 @@ public class BookingServiceImpl implements BookingService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         booking.setAmountPending(amountPending);
-
     }
 
 
@@ -95,7 +86,7 @@ public class BookingServiceImpl implements BookingService {
     public List<Booking> findAll() {
         return bookingRepository.findAll()
                 .stream()
-                .map((e) -> defineBookingDetails(e))
+                .map(this::defineBookingDetails)
                 .collect(Collectors.toList());
     }
 
@@ -103,9 +94,8 @@ public class BookingServiceImpl implements BookingService {
     public List<Booking> findNextBookings() {
         return bookingRepository.findNextBookings()
                 .stream()
-                .map((e) -> defineBookingDetails(e))
+                .map(this::defineBookingDetails)
                 .collect(Collectors.toList());
-
     }
 
     @Override
@@ -119,7 +109,7 @@ public class BookingServiceImpl implements BookingService {
             BookingSpec bookingSpec = new BookingSpec(request);
             List<Booking> result = bookingRepository.findAll(bookingSpec);
             return result.stream()
-                    .map((e) -> defineBookingDetails(e))
+                    .map(this::defineBookingDetails)
                     .collect(Collectors.toList());
         }
     }
@@ -161,10 +151,10 @@ public class BookingServiceImpl implements BookingService {
 
         return result
                 .orElseThrow(() -> new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_NOT_FOUND.getMessageKey(), new Object[] {id})));
-
     }
 
     public Booking detailBooking(Long id) {
+
         return defineBookingDetails(findById(id));
     }
 
@@ -172,7 +162,7 @@ public class BookingServiceImpl implements BookingService {
     public List<Booking> findBookingsByTraveler(Long travelerId) {
 
         return bookingRepository.findByTraveler(travelerId).stream()
-                .map((e) -> calculateRangeAndAverageRentals(e))
+                .map(this::calculateRangeAndAverageRentals)
                 .collect(Collectors.toList());
     }
 
@@ -206,7 +196,6 @@ public class BookingServiceImpl implements BookingService {
                 booking.setBookingStatus(BookingStatusEnum.RESERVED);
             }
         });
-
     }
 
     public void definePaymentStatus(Booking booking) {
@@ -216,7 +205,7 @@ public class BookingServiceImpl implements BookingService {
         }
         booking.setPaymentStatus(PaymentStatusEnum.PAID);
 
-        booking.getLaunches().stream().forEach(e -> {
+        booking.getLaunches().forEach(e -> {
             if (e.getPaymentStatus().equals(PaymentStatusEnum.PENDING)) {
                 booking.setPaymentStatus(PaymentStatusEnum.PENDING);
             }
@@ -226,7 +215,6 @@ public class BookingServiceImpl implements BookingService {
             }
         });
     }
-
 
     public void validateBooking(Booking booking) {
 
@@ -264,14 +252,13 @@ public class BookingServiceImpl implements BookingService {
         if (!amountTotal.equals(getTotalAmountByLaunches(booking.getLaunches()))) {
             throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_SUM_LAUNCHES_AMOUNT_ERROR));
         }
-
     }
 
     private void validateCancelBooking(Booking booking) {
         if (StringUtils.isBlank(booking.getObservation())) {
             throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_OBSERVATION_REQUIRED));
         }
-        booking.getLaunches().stream().forEach(e -> {
+        booking.getLaunches().forEach(e -> {
             if (e.getPaymentStatus().equals(PaymentStatusEnum.PAID)) {
                 throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_CANCEL_LAUNCHES_PAID_ERROR));
             }
@@ -286,7 +273,7 @@ public class BookingServiceImpl implements BookingService {
 
             throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_OBSERVATION_REQUIRED));
         }
-        booking.getLaunches().stream().forEach(e -> {
+        booking.getLaunches().forEach(e -> {
             if (e.getPaymentStatus().equals(PaymentStatusEnum.PENDING)) {
 
                 throw new BookingException(messageUtils.getMessage(ExceptionMessageEnum.BOOKING_FINISH_LAUNCHES_PENDING_ERROR));
@@ -309,7 +296,5 @@ public class BookingServiceImpl implements BookingService {
 
     private void defineAmountPaid(Booking booking) {
         booking.setAmountPaid(booking.getAmountTotal().subtract(booking.getAmountPending()));
-
     }
-
 }
