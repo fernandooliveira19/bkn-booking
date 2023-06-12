@@ -190,7 +190,7 @@ public class BookingServiceImpl implements BookingService {
 
         booking.setBookingStatus(BookingStatusEnum.PRE_RESERVED);
 
-        booking.getLaunches().stream().forEach(e -> {
+        booking.getLaunches().forEach(e -> {
             if (e.getPaymentStatus().equals(PaymentStatusEnum.PAID)
                    || e.getPaymentStatus().equals(PaymentStatusEnum.TO_RECEIVE) ) {
                 booking.setBookingStatus(BookingStatusEnum.RESERVED);
