@@ -115,7 +115,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Transactional(propagation = Propagation.REQUIRED)
     public Booking updateBooking(Booking booking, Long id) {
 
         booking.setId(id);
