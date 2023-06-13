@@ -42,7 +42,6 @@ public class TravelerServiceImpl implements TravelerService {
 
     private void validate(Traveler traveler) {
 
-
         List<Traveler> travelers;
 
         if(StringUtils.isBlank(traveler.getEmail())){
@@ -59,24 +58,16 @@ public class TravelerServiceImpl implements TravelerService {
                 validateUpdateTraveler(traveler, travelers);
             }
         }
-
     }
 
     private void validateUpdateTraveler(Traveler traveler, List<Traveler> travelers) {
 
-        travelers.stream().forEach( e -> {
+        travelers.forEach( e -> {
             if(!e.getId().equals(traveler.getId())){
                 throw new TravelerException(
                         messageUtils.getMessage(ExceptionMessageEnum.TRAVELER_ALREADY_EXISTS));
             }
         });
-
-//        for (Traveler t : travelers) {
-//            if (!t.getId().equals(traveler.getId())) {
-//                throw new TravelerException(messageUtils.getMessage(ExceptionMessageEnum.TRAVELER_ALREADY_EXISTS));
-//            }
-//        }
-
     }
 
     @Override
@@ -84,7 +75,6 @@ public class TravelerServiceImpl implements TravelerService {
 
         return repository.findByNameOrEmail(name, email)
                 .orElse(Collections.emptyList());
-
     }
 
     @Override
@@ -102,7 +92,6 @@ public class TravelerServiceImpl implements TravelerService {
     public List<Traveler> findAll() {
 
         return repository.findAll();
-
     }
 
     @Override
@@ -139,7 +128,6 @@ public class TravelerServiceImpl implements TravelerService {
     public List<Traveler> findActiveTravelers() {
         return repository.findActiveTravelers()
                 .orElse(Collections.emptyList());
-
     }
 
     private void formatFields(Traveler traveler) {
@@ -147,7 +135,6 @@ public class TravelerServiceImpl implements TravelerService {
         if (!StringUtils.isEmpty(traveler.getDocument())){
             traveler.setDocument(formatCpf(traveler.getDocument()));
         }
-
         traveler.setNumberPhone(formatPhoneNumber(traveler.getNumberPhone()));
     }
 
@@ -155,5 +142,4 @@ public class TravelerServiceImpl implements TravelerService {
         return repository.findByName(name)
                 .orElse(Collections.emptyList());
     }
-
 }
