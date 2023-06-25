@@ -1,4 +1,9 @@
+FROM maven:3.8.6-openjdk-11 as build
+WORKDIR /app
+COPY . .
+RUN mvn clean package
+
 FROM openjdk:11
-VOLUME /tmp
-ADD ./target/bkn-booking-1.0.4-SNAPSHOT.jar bkn-booking.jar
-ENTRYPOINT ["java","-jar","/bkn-booking.jar"]
+WORKDIR /app
+COPY --from=build ./app/target/*.jar ./bkn-booking.jar
+ENTRYPOINT ["java","-jar","bkn-booking.jar"]
