@@ -2,18 +2,43 @@ package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.entity.Launch;
+import com.fernando.oliveira.booking.exception.BookingException;
+import com.fernando.oliveira.booking.repository.LaunchRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-public interface LaunchService {
+@Service
+public class LaunchService {
 
-    Launch createLaunch(Launch launch, Booking booking);
+    @Autowired
+    private LaunchRepository launchRepository;
 
-    Launch updateLaunch(Launch launch);
+    public Launch createLaunch(Launch launch, Booking booking) {
+        launch.setBooking(booking);
+        return launchRepository.save(launch);
+    }
 
-    Launch findById(Long id);
+    public Launch updateLaunch(Launch launch) {
+        return launchRepository.save(launch);
+    }
 
-    void deleteLaunch(Long id);
+    public Launch findById(Long id) {
+        return launchRepository.findById(id)
+                .orElseThrow(() -> new BookingException("Nenhum lançamento encontrado pelo id: " + id));
+    }
 
-    List<Launch> findNextLaunches();
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+    public void deleteLaunch(Long id) {
+        launchRepository.delete(findById(id));
+    }
+
+    public List<Launch> findNextLaunches() {
+        return launchRepository.findNextLaunches();
+    }
+
 }

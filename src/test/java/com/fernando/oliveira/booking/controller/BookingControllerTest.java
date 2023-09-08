@@ -2,7 +2,7 @@ package com.fernando.oliveira.booking.controller;
 
 import com.fernando.oliveira.booking.builder.BookingBuilder;
 import com.fernando.oliveira.booking.domain.builder.ExceptionResponseBuilder;
-import com.fernando.oliveira.booking.service.impl.BookingServiceImpl;
+import com.fernando.oliveira.booking.service.BookingService;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,7 +24,7 @@ public class BookingControllerTest {
 	private BookingController controller;
 	
 	@MockBean
-	private BookingServiceImpl bookingService;
+	private BookingService bookingService;
 
 	@MockBean
 	private ExceptionResponseBuilder exceptionResponseBuilder;

@@ -9,7 +9,7 @@ import com.fernando.oliveira.booking.domain.dto.PreviewBookingDto;
 import com.fernando.oliveira.booking.domain.mapper.ToolsMapper;
 import com.fernando.oliveira.booking.domain.request.PreviewBookingRequest;
 import com.fernando.oliveira.booking.domain.response.PreviewBookingResponse;
-import com.fernando.oliveira.booking.service.impl.ToolsServiceImpl;
+import com.fernando.oliveira.booking.service.ToolsService;
 import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -41,7 +41,7 @@ public class ToolsControllerTest {
 	private ToolsController controller;
 	
 	@MockBean
-	private ToolsServiceImpl toolsService;
+	private ToolsService toolsService;
 
 	@MockBean
 	private ToolsMapper toolsMapper;
