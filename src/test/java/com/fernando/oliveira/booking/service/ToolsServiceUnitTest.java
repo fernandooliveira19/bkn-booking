@@ -3,7 +3,6 @@ package com.fernando.oliveira.booking.service;
 import com.fernando.oliveira.booking.domain.dto.PreviewBookingDto;
 import com.fernando.oliveira.booking.domain.enums.ExceptionMessageEnum;
 import com.fernando.oliveira.booking.exception.ToolsException;
-import com.fernando.oliveira.booking.service.impl.ToolsServiceImpl;
 import com.fernando.oliveira.booking.utils.MessageUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +22,7 @@ import static org.mockito.Mockito.when;
 public class ToolsServiceUnitTest {
 
     @InjectMocks
-    private ToolsServiceImpl toolsService;
+    private ToolsService toolsService;
 
     @Mock
     private MessageUtils messageUtils;

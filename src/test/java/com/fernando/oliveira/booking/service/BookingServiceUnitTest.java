@@ -13,8 +13,6 @@ import com.fernando.oliveira.booking.mother.TravelerMother;
 import com.fernando.oliveira.booking.repository.BookingRepository;
 import com.fernando.oliveira.booking.repository.LaunchRepository;
 import com.fernando.oliveira.booking.repository.TravelerRepository;
-import com.fernando.oliveira.booking.service.impl.BookingServiceImpl;
-import com.fernando.oliveira.booking.service.impl.LaunchServiceImpl;
 import com.fernando.oliveira.booking.utils.MessageUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,13 +41,13 @@ import static org.mockito.Mockito.when;
 public class BookingServiceUnitTest {
 
     @InjectMocks
-    private BookingServiceImpl bookingService;
+    private BookingService bookingService;
 
     @Mock
     private BookingRepository bookingRepository;
 
     @Mock
-    private LaunchServiceImpl launchService;
+    private LaunchService launchService;
 
     @Mock
     private LaunchRepository launchRepository;

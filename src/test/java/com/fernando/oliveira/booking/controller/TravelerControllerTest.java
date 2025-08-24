@@ -9,8 +9,8 @@ import com.fernando.oliveira.booking.domain.request.CreateTravelerRequest;
 import com.fernando.oliveira.booking.domain.response.TravelerDetailResponse;
 import com.fernando.oliveira.booking.mother.BookingMother;
 import com.fernando.oliveira.booking.mother.TravelerMother;
-import com.fernando.oliveira.booking.service.impl.BookingServiceImpl;
-import com.fernando.oliveira.booking.service.impl.TravelerServiceImpl;
+import com.fernando.oliveira.booking.service.BookingService;
+import com.fernando.oliveira.booking.service.TravelerService;
 import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -45,10 +45,10 @@ public class TravelerControllerTest {
 	private TravelerController controller;
 	
 	@MockBean
-	private TravelerServiceImpl travelerService;
+	private TravelerService travelerService;
 
 	@MockBean
-	private BookingServiceImpl bookingService;
+	private BookingService bookingService;
 
 	@MockBean
 	private ExceptionResponseBuilder exceptionResponseBuilder;

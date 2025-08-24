@@ -1,31 +1,119 @@
 package com.fernando.oliveira.booking.service;
 
 import com.fernando.oliveira.booking.domain.entity.Traveler;
+import com.fernando.oliveira.booking.domain.enums.ExceptionMessageEnum;
+import com.fernando.oliveira.booking.domain.enums.StatusEnum;
+import com.fernando.oliveira.booking.exception.TravelerException;
+import com.fernando.oliveira.booking.repository.TravelerRepository;
+import com.fernando.oliveira.booking.utils.MessageUtils;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import static com.fernando.oliveira.booking.domain.enums.StatusEnum.ACTIVE;
+import static com.fernando.oliveira.booking.utils.FormatterUtils.formatCpf;
+import static com.fernando.oliveira.booking.utils.FormatterUtils.formatPhoneNumber;
 
-public interface TravelerService {
+@Service
+public class TravelerService {
 
-	Traveler createTraveler(Traveler traveler) ;
+    @Autowired
+    private TravelerRepository repository;
+    @Autowired
+    private MessageUtils messageUtils;
 
-	List<Traveler> findTravelersByNameOrEmail(String name, String email);
+    public Traveler createTraveler(Traveler traveler) {
+        formatFields(traveler);
+        validate(traveler);
+        traveler.setStatus(ACTIVE.getCode());
+        traveler.setInsertDate(LocalDateTime.now());
+        return repository.save(traveler);
+    }
 
-	Traveler findById(Long id);
+    private void validate(Traveler traveler) {
+        List<Traveler> travelers = new ArrayList<>();
 
-	Traveler getTravelerDetail(Long id) ;
+        if(StringUtils.isBlank(traveler.getEmail())){
+            travelers = findByName(traveler.getName());
+        }else {
+            travelers = findTravelersByNameOrEmail(traveler.getName(), traveler.getEmail());
+        }
 
-	List<Traveler> findAll();
+        if (!travelers.isEmpty()) {
+            if (traveler.getId() == null) {
+                throw new TravelerException(messageUtils.getMessage(ExceptionMessageEnum.TRAVELER_ALREADY_EXISTS));
+            } else {
+                validateUpdateTraveler(traveler, travelers);
+            }
+        }
+    }
 
-	Traveler updateTraveler(Long id, Traveler traveler);
+    private void validateUpdateTraveler(Traveler traveler, List<Traveler> travelers) {
 
-	List<Traveler> findByNameContainingOrderByNameAsc(String name);
+        for (Traveler t : travelers) {
+            if (!t.getId().equals(traveler.getId())) {
+                throw new TravelerException(messageUtils.getMessage(ExceptionMessageEnum.TRAVELER_ALREADY_EXISTS));
+            }
+        }
+    }
 
-	void inactivateTraveler(Long id);
+    public List<Traveler> findTravelersByNameOrEmail(String name, String email) {
+        return repository.findByNameOrEmail(name, email);
+    }
 
-	List<Traveler> findActiveTravelers();
+    public Traveler findById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new TravelerException(messageUtils.getMessage(ExceptionMessageEnum.TRAVELER_NOT_FOUND.getMessageKey(), new Object[]{id})));
+    }
 
-	List<Traveler> findByName(String name);
+    public Traveler getTravelerDetail(Long id) {
+        return this.findById(id);
+    }
 
+    public List<Traveler> findAll() {
+        return repository.findAll();
+    }
 
+    public Traveler updateTraveler(Long id, Traveler traveler) {
+        Traveler travelerToUpdate = findById(id);
+        travelerToUpdate.setName(traveler.getName());
+        travelerToUpdate.setEmail(traveler.getEmail());
+        travelerToUpdate.setDocument(traveler.getDocument());
+        travelerToUpdate.setStatus(traveler.getStatus());
+        travelerToUpdate.setPrefixPhone(traveler.getPrefixPhone());
+        travelerToUpdate.setNumberPhone(traveler.getNumberPhone());
+        formatFields(travelerToUpdate);
+        validate(travelerToUpdate);
+        travelerToUpdate.setLastUpdateDate(LocalDateTime.now());
+        return repository.save(travelerToUpdate);
+    }
+
+    public List<Traveler> findByNameContainingOrderByNameAsc(String name) {
+        return repository.findByNameContainingIgnoreCaseOrderByNameAsc(name);
+    }
+
+    public void inactivateTraveler(Long id) {
+        Traveler traveler = findById(id);
+        traveler.setStatus(StatusEnum.INACTIVE.getCode());
+        repository.save(traveler);
+    }
+
+    public List<Traveler> findActiveTravelers() {
+        return repository.findActiveTravelers();
+    }
+
+    private void formatFields(Traveler traveler) {
+        if (!StringUtils.isEmpty(traveler.getDocument())){
+            traveler.setDocument(formatCpf(traveler.getDocument()));
+        }
+        traveler.setNumberPhone(formatPhoneNumber(traveler.getNumberPhone()));
+    }
+
+    public List<Traveler> findByName(String name){
+        return repository.findByName(name);
+    }
 }

@@ -5,9 +5,6 @@ import com.fernando.oliveira.booking.domain.entity.Booking;
 import com.fernando.oliveira.booking.domain.response.ReservedDateResponse;
 import com.fernando.oliveira.booking.mother.BookingMother;
 import com.fernando.oliveira.booking.mother.LaunchMother;
-import com.fernando.oliveira.booking.service.impl.BookingServiceImpl;
-import com.fernando.oliveira.booking.service.impl.HomeServiceImpl;
-import com.fernando.oliveira.booking.service.impl.LaunchServiceImpl;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,13 +24,13 @@ import static org.mockito.Mockito.when;
 public class HomeServiceUnitTest {
 
     @InjectMocks
-    private HomeServiceImpl homeService;
+    private HomeService homeService;
 
     @Mock
-    private BookingServiceImpl bookingService;
+    private BookingService bookingService;
 
     @Mock
-    private LaunchServiceImpl launchService;
+    private LaunchService launchService;
 
 
     @Test
