@@ -8,6 +8,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 @Service
+@Slf4j
 public class ContractService extends PdfService{
 
     @Autowired
@@ -59,11 +61,8 @@ public class ContractService extends PdfService{
 
             document.close();
 
-        } catch (IOException io) {
-            System.err.println(io.getCause());
-
-        } catch (DocumentException de) {
-            System.err.println(de.getCause());
+        } catch (IOException | DocumentException e) {
+            log.error(String.valueOf(e.getCause()));
         }
         return new ByteArrayInputStream(out.toByteArray());
     }
@@ -91,9 +90,9 @@ public class ContractService extends PdfService{
         document.add(getSubtitle("II. DO IMÓVEL LOCADO", Element.ALIGN_LEFT));
         document.add(getDefaultParagraph("O imóvel locado está situado na rua Rio de Janeiro, 50 – apto 617/618 – Centro – Guarujá – SP. Trata-se de imóvel com as seguintes características:"));
         document.add(getDefaultParagraph("Possui ambiente com 2 quartos, sendo 1 com suíte, sala, cozinha, banheiro. O apartamento possui 1 cama de casal, 2 bicamas, 2 colchões de solteiro extras, mesa com 6 cadeiras, banheiro social com box."));
-        document.add(getDefaultParagraph("Ainda possui Smart TV 49' na sala e duas 32' nos quartos, modem Wi-fi, lavadora de roupas, 3 ventiladores, armário para acomodação de bagagens, cômoda, panela de arroz, micro-ondas, cooktop de indução de quatro bocas"));
+        document.add(getDefaultParagraph("Ainda possui Smart TV 49' na sala e duas smart TV 32' nos quartos, modem Wi-fi, lavadora de roupas, 3 ventiladores, armário para acomodação de bagagens, cômoda, panela de arroz, micro-ondas, cooktop de indução de quatro bocas"));
         document.add(getDefaultParagraph("Geladeira, liquidificador, sanduicheira grill, filtro de água e utensílios de cozinha, garrafa térmica"));
-        document.add(getDefaultParagraph("Jogo de completo com 5 panelas Tognana de fundo triplo com tampas de vidro (2 frigideiras, 2 caçarolas, 1 panela), 1 fervedor Tramontina e 1 panela de pressão Brinox" ));
+        document.add(getDefaultParagraph("Jogo de completo com 5 panelas de fundo triplo (1 frigideira, 2 caçarolas, 1 panela), 1 fervedor 1 panela de pressão" ));
         document.add(getDefaultParagraph("O edifício possui portaria 24 horas, monitoramento por câmeras, WI-FI no hall de entrada, 3 elevadores, serviço de praia com cadeiras e 2 guarda-sóis (a solicitar na recepção)"));
         document.add(getEmptyLine());
         document.add(getSubtitle("Orientações para utilização do cooktop:", Element.ALIGN_LEFT));
@@ -112,13 +111,13 @@ public class ContractService extends PdfService{
         document.add(getItemList("É necessário levar roupa de cama, mesa e banho"));
         document.add(getItemList("É recomendável levar travesseiros"));
         document.add(getItemList("NÃO possui garagem, porém há vagas nas ruas próximas e estacionamentos"));
-        document.add(getItemList("Para uso de guarda-sol e cadeiras de praia na faixa de areia, é preciso solicitá-los na recepção, informando o número do apartamento."));
+
         document.add(getEmptyLine());
     }
 
     private void getBuildingDetails(Document document) throws DocumentException {
         document.add(getSubtitle("III. DO REGULAMENTO INTERNO DO EDIFICIO", Element.ALIGN_LEFT));
-        document.add(getItemList("O imóvel pode acomodar no máximo 8 pessoas. Sendo que crianças até 5 anos não contam."));
+        document.add(getItemList("O imóvel pode acomodar no máximo 8 pessoas e duas crianças até 12 anos."));
         document.add(getItemList("Banhistas devem entrar e sair pela porta lateral e usar o elevador reservado para banhistas, sem areia no corpo"));
         document.add(getItemList("Estacionamento é reservado para embarque e desembarque de bagagem e é limitado a 15 minutos"));
         document.add(getItemList("Animais devem ser levados no colo e ou com coleira. Não será tolerada sujeira produzida por animais em áreas comuns"));
