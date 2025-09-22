@@ -65,7 +65,7 @@ public class TravelerServiceTest {
 
 		String name = "Bianca Silva";
 		String email = "bianca.silva@gmail.com";
-		when(repository.findByNameOrEmail(name, email)).thenReturn(Optional.of(Arrays.asList(getTravelerSaved02())));
+		when(repository.findByNameOrEmail(name, email)).thenReturn(Arrays.asList(getTravelerSaved02()));
 		List<Traveler> result = travelerService.findTravelersByNameOrEmail(name, email);
 
 		then(result.get(0).getId()).isEqualTo(2);
@@ -113,7 +113,7 @@ public class TravelerServiceTest {
 		String name = "Bianca Silva";
 		String email = "";
 		when(repository.findByNameOrEmail(Mockito.anyString(), Mockito.anyString()))
-				.thenReturn(Optional.of(Arrays.asList(traveler)));
+				.thenReturn(Arrays.asList(traveler));
 
 		List<Traveler> result = travelerService.findTravelersByNameOrEmail(name, email);
 
@@ -173,7 +173,7 @@ public class TravelerServiceTest {
 		Traveler travelerToSave = getNewTraveler(name, email,prefixPhone,numberPhone,document);
 
 		when(repository.findByNameOrEmail(Mockito.anyString(), Mockito.anyString()))
-				.thenReturn(Optional.of(getTravelerSavedList()));
+				.thenReturn(getTravelerSavedList());
 		when(messageUtils.getMessage(any())).thenReturn("Já existe outro viajante cadastrado com mesmo nome ou email");
 
 		Exception exception = assertThrows(TravelerException.class, () ->{
@@ -194,7 +194,7 @@ public class TravelerServiceTest {
 		when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(travelerToUpdate));
 
 		when(repository.findByNameOrEmail(Mockito.anyString(), Mockito.anyString()))
-				.thenReturn(Optional.of(Arrays.asList(travelerSaved)));
+				.thenReturn(Arrays.asList(travelerSaved));
 		when(messageUtils.getMessage(any())).thenReturn("Já existe outro viajante cadastrado com mesmo nome ou email");
 
 		Exception exception = assertThrows(TravelerException.class, () ->{
@@ -209,7 +209,7 @@ public class TravelerServiceTest {
 	public void givenNameWhenFindByNameThenReturnListOfTravelers(){
 		List<Traveler> travelers = getTravelerSavedList();
 		when(repository.findByNameContainingIgnoreCaseOrderByNameAsc(Mockito.anyString()))
-				.thenReturn(Optional.of(travelers));
+				.thenReturn(travelers);
 		String name = "travelerName";
 		List<Traveler> result = travelerService.findByNameContainingOrderByNameAsc(name);
 
@@ -223,7 +223,7 @@ public class TravelerServiceTest {
 		CreateTravelerRequest request = TravelerMother.getNewTravelerRequest("Hugo Carvalho", "", 88, "98888-7677", "");
 		Traveler travelerToSave = TravelerMother.createTravelerRequestToTraveler(request);
 
-		when(repository.findByName(anyString())).thenReturn(Optional.of(Arrays.asList()));
+		when(repository.findByName(anyString())).thenReturn(Arrays.asList());
 		when(repository.save(any(Traveler.class))).thenReturn(TravelerMother.getNewTraveler(request.getName(), request.getEmail(), request.getPrefixPhone(), request.getNumberPhone(), request.getDocument()));
 
 		Traveler result = travelerService.createTraveler(travelerToSave);
@@ -238,7 +238,7 @@ public class TravelerServiceTest {
 		CreateTravelerRequest request = TravelerMother.getNewTravelerRequest("Hugo Carvalho", null, 88, "98888-7677", "");
 		Traveler travelerToSave = TravelerMother.createTravelerRequestToTraveler(request);
 
-		when(repository.findByName(anyString())).thenReturn(Optional.of(Arrays.asList()));
+		when(repository.findByName(anyString())).thenReturn(Arrays.asList());
 		when(repository.save(any(Traveler.class))).thenReturn(TravelerMother.getNewTraveler(request.getName(), request.getEmail(), request.getPrefixPhone(), request.getNumberPhone(), request.getDocument()));
 
 		Traveler result = travelerService.createTraveler(travelerToSave);
@@ -254,7 +254,7 @@ public class TravelerServiceTest {
 		Traveler travelerToUpdate = TravelerMother.updateTravelerRequestToTraveler(request);
 
 		when(repository.findById(anyLong())).thenReturn(Optional.of(TravelerMother.getTravelerSaved01()));
-		when(repository.findByName(anyString())).thenReturn(Optional.of(Arrays.asList(TravelerMother.getTravelerSaved01())));
+		when(repository.findByName(anyString())).thenReturn(Arrays.asList(TravelerMother.getTravelerSaved01()));
 		when(repository.save(any(Traveler.class))).thenReturn(TravelerMother.getTravelerSaved01());
 
 		Traveler result = travelerService.updateTraveler(id, travelerToUpdate);
@@ -270,7 +270,7 @@ public class TravelerServiceTest {
 		UpdateTravelerRequest request = TravelerMother.getUpdateTravelerRequest(id,"Ana Maria", null, 11, "98888-1111", "50042806739");
 		Traveler travelerToUpdate = TravelerMother.updateTravelerRequestToTraveler(request);
 		when(repository.findById(anyLong())).thenReturn(Optional.of(TravelerMother.getTravelerSaved01()));
-		when(repository.findByName(anyString())).thenReturn(Optional.of(Arrays.asList(TravelerMother.getTravelerSaved01())));
+		when(repository.findByName(anyString())).thenReturn(Arrays.asList(TravelerMother.getTravelerSaved01()));
 		when(repository.save(any(Traveler.class))).thenReturn(TravelerMother.getTravelerSaved01());
 
 		Traveler result = travelerService.updateTraveler(id, travelerToUpdate);

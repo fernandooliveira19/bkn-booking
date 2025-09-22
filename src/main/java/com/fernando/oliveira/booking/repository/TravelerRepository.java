@@ -11,12 +11,12 @@ import java.util.Optional;
 @Repository
 public interface TravelerRepository extends JpaRepository<Traveler, Long> {
 
-    Optional<List<Traveler>> findByNameOrEmail(String name, String email);
+    List<Traveler> findByNameOrEmail(String name, String email);
 
-    Optional<List<Traveler>> findByNameContainingIgnoreCaseOrderByNameAsc(String name);
+    List<Traveler> findByNameContainingIgnoreCaseOrderByNameAsc(String name);
 
     @Query("select t from traveler t where t.status = 'A' order by t.name")
-    Optional<List<Traveler>> findActiveTravelers();
+    List<Traveler> findActiveTravelers();
 
-    Optional<List<Traveler>> findByName(String email);
+    List<Traveler> findByName(String email);
 }
