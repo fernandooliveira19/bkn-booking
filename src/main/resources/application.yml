@@ -6,12 +6,12 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: none
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
     show-sql: false
   datasource:
-    url: jdbc:postgresql://localhost:5432/bkn-booking
-    username: postgres
-    password: PGFamo2369
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
   mandatory-file-encoding: UTF-8
   http:
     encoding:

@@ -8,6 +8,7 @@ import com.fernando.oliveira.booking.exception.TravelerException;
 import com.fernando.oliveira.booking.mother.TravelerMother;
 import com.fernando.oliveira.booking.repository.TravelerRepository;
 import com.fernando.oliveira.booking.utils.MessageUtils;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,6 +39,7 @@ public class TravelerServiceTest {
 	private MessageUtils messageUtils;
 
 	@Test
+	@DisplayName("Should create a traveler and return traveler's details")
 	public void shouldCreateTravelerAndReturnTravelerDetails() {
 
 		Traveler travelerToSave = TravelerMother.getTravelerToSaved01();
@@ -58,11 +60,11 @@ public class TravelerServiceTest {
 	}
 
 	@Test
+	@DisplayName("Should return list of travelers by name or email")
 	public void shouldReturnTravelerListByNameOrEmail(){
 
 		String name = "Bianca Silva";
 		String email = "bianca.silva@gmail.com";
-
 		when(repository.findByNameOrEmail(name, email)).thenReturn(Arrays.asList(getTravelerSaved02()));
 		List<Traveler> result = travelerService.findTravelersByNameOrEmail(name, email);
 
@@ -72,10 +74,10 @@ public class TravelerServiceTest {
 		then(result.get(0).getDocument()).isEqualTo("18421484869");
 		then(result.get(0).getPrefixPhone()).isEqualTo(22);
 		then(result.get(0).getNumberPhone()).isEqualTo("98888-2222");
-
 	}
 
 	@Test
+	@DisplayName("Should return traveler by id")
 	public void shouldReturnTravelerById(){
 		Long id = 1L;
 		Traveler traveler = getTravelerSaved01();
@@ -91,10 +93,10 @@ public class TravelerServiceTest {
 		then(traveler.getDocument()).isEqualTo( result.getDocument());
 		then(traveler.getPrefixPhone()).isEqualTo( result.getPrefixPhone());
 		then(traveler.getNumberPhone()).isEqualTo( result.getNumberPhone());
-
 	}
 
 	@Test
+	@DisplayName("Should return list of all travelers")
 	public void shouldReturnAllTravelers(){
 
 		when(repository.findAll()).thenReturn(getTravelerSavedList());
@@ -102,10 +104,10 @@ public class TravelerServiceTest {
 		List<Traveler> result = travelerService.findAll();
 
 		then(result.size()).isEqualTo( 6);
-
 	}
 
 	@Test
+	@DisplayName("Should return all travelers ny name or email")
 	public void shouldReturnAllTravelersByNameOrEmail(){
 		Traveler traveler = getTravelerSaved02();
 		String name = "Bianca Silva";
@@ -117,15 +119,14 @@ public class TravelerServiceTest {
 
 		then(result.get(0).getName()).isEqualTo( "Bianca Silva");
 		then(result.get(0).getEmail()).isEqualTo( "bianca_silva@gmail.com");
-
 	}
 
 	@Test
+	@DisplayName("Should update traveler and return traveler's details")
 	public void shouldUpdateTravelerAndReturnTravelerDetails() {
 
 		Long id = 1L;
 		Traveler travelerToUpdate = getTravelerToSaved01();
-
 		Traveler travelerUpdated = getTravelerSaved01();
 
 		when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(travelerToUpdate));
@@ -137,7 +138,6 @@ public class TravelerServiceTest {
 		then(travelerUpdated.getId()).isEqualTo(result.getId());
 		then(travelerUpdated.getName()).isEqualTo(result.getName() );
 		then(travelerUpdated.getEmail()).isEqualTo( result.getEmail() );
-
 		then(travelerUpdated.getStatus()).isEqualTo( result.getStatus());
 		then(travelerUpdated.getPrefixPhone()).isEqualTo( result.getPrefixPhone());
 		then(travelerUpdated.getNumberPhone()).isEqualTo(result.getNumberPhone() );
@@ -146,10 +146,10 @@ public class TravelerServiceTest {
 
 
 	@Test
+	@DisplayName("Should exception message when traveler not found")
 	public void shouldReturnMessageExceptionWhenTravelerNotFoundById() {
 
 		Long id = 123L;
-
 		when(repository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 		when(messageUtils.getMessage(any(),any())).thenReturn("Nenhum viajante encontrado pelo id: 123");
 
@@ -158,11 +158,10 @@ public class TravelerServiceTest {
 		});
 
 		then(exception.getMessage()).isEqualTo( "Nenhum viajante encontrado pelo id: " + id);
-
-
 	}
 
 	@Test
+	@DisplayName("Should exception message when create a traveler with same name of other traveler")
 	public void shouldReturnExceptionWhenCreateTravelerAlreadyExistsWithSameName() {
 
 		String name = "Carlos Garcia";
@@ -177,7 +176,6 @@ public class TravelerServiceTest {
 				.thenReturn(getTravelerSavedList());
 		when(messageUtils.getMessage(any())).thenReturn("Já existe outro viajante cadastrado com mesmo nome ou email");
 
-
 		Exception exception = assertThrows(TravelerException.class, () ->{
 			travelerService.createTraveler(travelerToSave);
 		});
@@ -186,6 +184,7 @@ public class TravelerServiceTest {
 	}
 
 	@Test
+	@DisplayName("Should return exception message when update a traveler with same name of other traveler")
 	public void shouldReturnExceptionWhenUpdateTravelerAlreadyExistsWithSameName() {
 
 		Traveler travelerToUpdate = getTravelerSaved01();
@@ -206,9 +205,11 @@ public class TravelerServiceTest {
 	}
 
 	@Test
+	@DisplayName("Should return list of travelers when find by name")
 	public void givenNameWhenFindByNameThenReturnListOfTravelers(){
 		List<Traveler> travelers = getTravelerSavedList();
-		when(repository.findByNameContainingIgnoreCaseOrderByNameAsc(Mockito.anyString())).thenReturn(travelers);
+		when(repository.findByNameContainingIgnoreCaseOrderByNameAsc(Mockito.anyString()))
+				.thenReturn(travelers);
 		String name = "travelerName";
 		List<Traveler> result = travelerService.findByNameContainingOrderByNameAsc(name);
 
@@ -216,6 +217,7 @@ public class TravelerServiceTest {
 	}
 
 	@Test
+	@DisplayName("Should create a traveler with empty email")
 	public void givenNewTravelerWithEmptyEmailWhenCreateTravelerThenSaveTraveler(){
 
 		CreateTravelerRequest request = TravelerMother.getNewTravelerRequest("Hugo Carvalho", "", 88, "98888-7677", "");
@@ -227,11 +229,10 @@ public class TravelerServiceTest {
 		Traveler result = travelerService.createTraveler(travelerToSave);
 
 		then(result).isNotNull();
-
-
 	}
 
 	@Test
+	@DisplayName("Should create a traveler with null email")
 	public void givenNewTravelerWithNullEmailWhenCreateTravelerThenSaveTraveler(){
 
 		CreateTravelerRequest request = TravelerMother.getNewTravelerRequest("Hugo Carvalho", null, 88, "98888-7677", "");
@@ -243,10 +244,10 @@ public class TravelerServiceTest {
 		Traveler result = travelerService.createTraveler(travelerToSave);
 
 		then(result).isNotNull();
-
 	}
 
 	@Test
+	@DisplayName("Should update a traveler with empty email")
 	public void givenNewTravelerWithEmptyEmailWhenUpdateTravelerThenSaveTraveler(){
 		Long id = 1L;
 		UpdateTravelerRequest request = TravelerMother.getUpdateTravelerRequest(id,"Ana Maria", null, 11, "98888-1111", "50042806739");
@@ -259,12 +260,10 @@ public class TravelerServiceTest {
 		Traveler result = travelerService.updateTraveler(id, travelerToUpdate);
 
 		then(result.getId()).isEqualTo(1);
-
-
-
 	}
 
 	@Test
+	@DisplayName("Should update a traveler with null email")
 	public void givenNewTravelerWithNullEmailWhenUpdateTravelerThenSaveTraveler(){
 
 		Long id = 1L;
@@ -277,7 +276,5 @@ public class TravelerServiceTest {
 		Traveler result = travelerService.updateTraveler(id, travelerToUpdate);
 
 		then(result.getId()).isEqualTo(1);
-
 	}
-
 }
